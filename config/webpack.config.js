@@ -74,7 +74,10 @@ module.exports = function(webpackEnv) {
       isEnvDevelopment && require.resolve('style-loader'),
       isEnvProduction && {
         loader: MiniCssExtractPlugin.loader,
-        options: shouldUseRelativeAssetPaths ? { publicPath: '../../' } : {},
+        options: Object.assign(
+          {},
+          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+        ),
       },
       {
         loader: require.resolve('css-loader'),
@@ -256,9 +259,7 @@ module.exports = function(webpackEnv) {
       // We placed these paths second because we want `node_modules` to "win"
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
-      modules: ['node_modules', paths.appNodeModules].concat(
-        modules.additionalModulePaths || []
-      ),
+      modules: ['node_modules', paths.appNodeModules].concat(modules.additionalModulePaths || []),
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
       // some tools, although we do not recommend using it, see:
@@ -272,7 +273,8 @@ module.exports = function(webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
-        '@': path.join(__dirname, '..', 'src')
+         // xwx683487
+        '@':path.join(__dirname,'..','./src') //@表示项目目录中src的这一层目录 ,使用别名
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -283,7 +285,7 @@ module.exports = function(webpackEnv) {
         // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
         // please link the files into your node_modules/ and let module-resolution kick in.
         // Make sure your source files are compiled, as they will not be processed in any way.
-        new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+        new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),       
       ],
     },
     resolveLoader: {
@@ -354,6 +356,8 @@ module.exports = function(webpackEnv) {
                       },
                     },
                   ],
+                   //xwx683487 按需导入antd组件库下载babel-plugin-import配置
+                  [require.resolve('babel-plugin-import'), { libraryName: 'antd', style: 'css' }] 
                 ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -396,6 +400,18 @@ module.exports = function(webpackEnv) {
             // to a file, but in development "style" loader enables hot editing
             // of CSS.
             // By default we support CSS Modules with the extension .module.css
+            // xwx683487 开启css模块化后，antd按需加载样式无效后的配置，exclude
+            {
+              test: cssRegex,
+              exclude: /node_modules|antd\.css/,
+              use: getStyleLoaders({
+                importLoaders: 1,
+                sourceMap: isEnvProduction && shouldUseSourceMap,
+                modules: true, //开启css模块化
+                localIdentName: `[name]_[local]_[hash:base64:5]`
+              }),
+              sideEffects: true,
+            },
             {
               test: cssRegex,
               exclude: cssModuleRegex,
@@ -476,6 +492,9 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new webpack.ProvidePlugin({
+        sdk:path.resolve(__dirname, './src/sdk1.js')
+     }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -590,12 +609,6 @@ module.exports = function(webpackEnv) {
           async: isEnvDevelopment,
           useTypescriptIncrementalApi: true,
           checkSyntacticErrors: true,
-          resolveModuleNameModule: process.versions.pnp
-            ? `${__dirname}/pnpTs.js`
-            : undefined,
-          resolveTypeReferenceDirectiveModule: process.versions.pnp
-            ? `${__dirname}/pnpTs.js`
-            : undefined,
           tsconfig: paths.appTsConfig,
           reportFiles: [
             '**',
