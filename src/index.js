@@ -8,7 +8,6 @@ import { LocaleProvider } from 'antd';
 import { antd_locale } from '@/config/i18n'
 import store from './store.js';
 
-const sdk = require('./app.bundle.js')
 
 class App extends React.Component {
     constructor() {
@@ -37,3 +36,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+console.log(csm)
+let param = {username: "admin", password: "Change_Me", callback: function(data){ console.log(data)} }
+csm.start();
+csm.setServerAddress("127.0.0.1");
