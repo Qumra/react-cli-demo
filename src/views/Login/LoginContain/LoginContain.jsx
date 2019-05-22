@@ -28,6 +28,14 @@ class LoginContain extends Component {
         csm.login(values)
       }
     });
+      componentDidMount() {
+    let cusername = getCookie('userName');
+    let cpassword = getCookie('password')
+    if (cusername != "" && cpassword != "") {
+      this.props.form.setFieldsValue({ "username": cusername });
+      this.props.form.setFieldsValue({ "password": cpassword });
+    }
+  }
   }
 
   render() {
