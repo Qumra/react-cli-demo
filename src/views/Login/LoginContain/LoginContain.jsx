@@ -4,25 +4,28 @@ import history from '@/config/history';
 import { regExpConfig } from '@/config/Reg.confing'
 import cssObj from './LoginContain.css'
 import intl from '@/config/i18n'
+import {setCookie,getCookie} from '@/util/cookie'
 
-// import sdk from '@/sdk.js'
 const FormItem = Form.Item;
 class LoginContain extends Component {
-  handleSubmit = (e) => {
+   handleSubmit = (e) => {
     e.preventDefault();
-
-    this.props.form.validateFields(['userName', 'password'], (err, values) => {
-      // values.callback=function(res){
-      //   if(res.code!=0){
-
-      //   }
-      // }
+    this.props.form.validateFields((err, values) => {
+      values.callback = function (res) {
+        console.log(res)
+        if (res.status != 200) {
+          console.log("请求失败")
+        } else {
+          if (values.remember) {
+            setCookie('userName',values.username,7);
+            setCookie('userName',values.password,7);
+          }
+          history.push({ pathname: '/main' })
+        }
+      }
       if (!err) {
         console.log('Received values of form: ', values);
-        history.push({ pathname: '/main' })
-
-        // sdk.SMCSDK_User_Auth.login(values)
-
+        csm.login(values)
       }
     });
   }
