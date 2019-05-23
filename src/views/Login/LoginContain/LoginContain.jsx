@@ -4,11 +4,25 @@ import history from '@/config/history';
 import { regExpConfig } from '@/config/Reg.confing'
 import cssObj from './LoginContain.css'
 import intl from '@/config/i18n'
-import {setCookie,getCookie} from '@/util/cookie'
-
+import { setCookie, getCookie,clearCookie } from '@/util/cookie'
 const FormItem = Form.Item;
 class LoginContain extends Component {
-   handleSubmit = (e) => {
+  constructor(){
+    super()
+    this.state={
+      username:"",
+      password:""
+    }
+  }
+  componentDidMount() {
+    this.setState({
+      username:getCookie('userName'),
+      password: getCookie('password')
+    })
+  }
+
+
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       values.callback = function (res) {
@@ -17,8 +31,11 @@ class LoginContain extends Component {
           console.log("请求失败")
         } else {
           if (values.remember) {
-            setCookie('userName',values.username,7);
-            setCookie('userName',values.password,7);
+            setCookie('userName', values.username, 7);
+            setCookie('password', values.password, 7);
+          }else{
+            clearCookie('userName');
+            clearCookie('password')
           }
           history.push({ pathname: '/main' })
         }
@@ -28,22 +45,16 @@ class LoginContain extends Component {
         csm.login(values)
       }
     });
-      componentDidMount() {
-    let cusername = getCookie('userName');
-    let cpassword = getCookie('password')
-    if (cusername != "" && cpassword != "") {
-      this.props.form.setFieldsValue({ "username": cusername });
-      this.props.form.setFieldsValue({ "password": cpassword });
-    }
   }
-  }
+
 
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className={cssObj.loginForm}>
         <FormItem>
-          {getFieldDecorator('userName', {
+          {getFieldDecorator('username', {
+            initialValue: this.state.username,
             rules: [
               { required: true, message: 'Please input your username!' },
               { pattern: regExpConfig.policeNo, message: '账号4-10位数字或字母组成' },
@@ -55,12 +66,13 @@ class LoginContain extends Component {
         </FormItem>
         <FormItem>
           {getFieldDecorator('password', {
+            initialValue: this.state.password,
             rules: [
               { required: true, message: 'Please input your Password!' },
               { pattern: regExpConfig.pwd, message: '密码由6-16位数字或者字母组成' },
             ],
           })(
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder={intl.get('password')}/>
+            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder={intl.get('password')} />
           )}
         </FormItem>
         <FormItem>
@@ -71,8 +83,8 @@ class LoginContain extends Component {
             <Checkbox>{intl.get('remember_me')}</Checkbox>
           )}
           <Button type="primary" htmlType="submit" className={cssObj.formButton}>
-          {intl.get('login')}
-              </Button>
+            {intl.get('login')}
+          </Button>
         </FormItem>
       </Form>
     );
