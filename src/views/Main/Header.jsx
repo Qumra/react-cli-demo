@@ -1,75 +1,104 @@
 import { Menu, Icon } from 'antd';
 import React, { Component } from "react";
+import { NavLink } from 'react-router-dom';
 import Logo from '@/components/Logo/Logo'
 import LangDrop from '@/components/LangDrop/LangDrop'
 import cssObj from './Header.css'
 import intl from '@/config/i18n'
 const SubMenu = Menu.SubMenu;
+global.menus = [
+    {
+        title: '首页',
+        icon: 'page',
+        key: '/main'
+    }, {
+        title: '会议',
+        icon: 'bulb',
+        key: '/meeting',
+        subs: [
+            { key: '/page/AlertDemo', title: '弹出框', icon: '' },
+        ]
+    },
+    {
+        title: '设置',
+        icon: 'bulb',
+        key: '/setting',
+        subs: [
+            { key: '/page/1', title: '弹出框', icon: '' },
+            { key: '/page/2', title: '弹出框', icon: '' },
+        ]
+    },
+]
+const menus = global.menus;
 class Header extends Component {
-    constructor(){
+    renderSubMenu = ({ key, icon, title, subs }) => {
+        return (
+            <Menu.SubMenu key={key} title={<span>{icon && <Icon type={icon} />}<span>{title}</span></span>}>
+                {
+                    subs && subs.map(item => {
+                        return item.subs && item.subs.length > 0 ? this.renderSubMenu(item) : this.renderMenuItem(item)
+                    })
+                }
+            </Menu.SubMenu>
+        )
+    }
+    renderMenuItem = ({ key, icon, title, }) => {
+        return (
+            <Menu.Item key={key}>
+                <NavLink to={key}>
+                    {icon && <Icon type={icon} />}
+                    <span>{title}</span>
+                </NavLink>
+            </Menu.Item>
+        )
+    }
+    constructor() {
         super()
         this.state = {
-            theme:"light" 
+            theme: "light"
         }
     }
     getInitialState() {
         return {
-          current: 'mail'
+            current: 'mail'
         };
     };
     handleClick(e) {
         console.log('click ', e);
         this.setState({
-          current: e.key
+            current: e.key
         })
     };
-    render(){
-        return <div className = {cssObj.navStyle}>
-        <div className={cssObj.LogoBox}><Logo width='120px' height='45px' float='left'></Logo></div>
-           
-            <Menu 
-        onClick={this.handleClick}
-        selectedKeys={[this.state.current]}
-        theme={this.state.theme}
-        mode="horizontal">
-        <Menu.Item key="mail">
-          <Icon type="mail" />{intl.get('home')}
-        </Menu.Item>
-        <SubMenu key="sub1" title={<span><Icon type="mail" /><span>{intl.get('meet')}</span></span>}>
-            <Menu.Item key="1">选项1</Menu.Item>
-            <Menu.Item key="2">选项2</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>{intl.get('setting')}</span></span>}>
-          <Menu.Item key="3">选项3</Menu.Item>
-          <Menu.Item key="4">选项4</Menu.Item>
-          <SubMenu key="sub3" title="三级导航">
-            <Menu.Item key="5">选项5</Menu.Item>
-            <Menu.Item key="6">选项6</Menu.Item>
-          </SubMenu>
-        </SubMenu>
-        <SubMenu title={<span><Icon type="setting" />{intl.get('table')}</span>}>
-            <Menu.Item key="setting:1">选项1</Menu.Item>
-            <Menu.Item key="setting:2">选项2</Menu.Item>
-        </SubMenu>
-        <SubMenu title={<span><Icon type="setting" />{intl.get('task')}</span>}>
-            <Menu.Item key="setting:1">选项1</Menu.Item>
-            <Menu.Item key="setting:2">选项2</Menu.Item>
-        </SubMenu>
-        
-      </Menu>
+    render() {
+        return <div className={cssObj.navStyle}>
+            <div className={cssObj.LogoBox}><Logo width='120px' height='45px' float='left'></Logo></div>
+            <Menu
+                defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub1']}
+                theme={this.state.theme}
+                mode="horizontal"
+                className={cssObj.middleNav}
+            >
+                {
+                    menus.map(item => {
+                        return item.subs && item.subs.length > 0 ? this.renderSubMenu(item) : this.renderMenuItem(item)
+                    })
+                }
+            </Menu>
 
-      {/* <Menu theme={this.state.theme}
-        mode="horizontal">>
-         <Menu.Item key="alipay">
-        <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />修改</a>
-      </Menu.Item>
-      <Menu.Item>
-        <LangDrop></LangDrop>
-        </Menu.Item>
-      <Menu.Item key="alipay">
-        <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />帮助</a>
-      </Menu.Item>
-      </Menu> */}
+
+            <Menu theme={this.state.theme}
+                mode="horizontal" className={cssObj.toolBox}>
+                <Menu.Item key="alipay1">
+                    <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />修改</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <LangDrop></LangDrop>
+                </Menu.Item>
+                <Menu.Item key="alipay2">
+                    <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />帮助</a>
+                </Menu.Item>
+            </Menu>
         </div>
     }
 }
