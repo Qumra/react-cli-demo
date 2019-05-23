@@ -1,4 +1,9 @@
+const CryptoJS = require("crypto-js");
+
+const encrypt=CryptoJS.AES.encrypt;
+const decrypt=CryptoJS.AES.decrypt;
 // 设置cookie
+var passKey = '4c05c54d952b11e691d76c0b843ea7f9';
 export function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
