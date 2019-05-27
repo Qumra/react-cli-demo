@@ -16,7 +16,8 @@ global.menus = [
         icon: 'bulb',
         key: '/meeting',
         subs: [
-            { key: '/page/AlertDemo', title: '弹出框', icon: '' },
+             { key: '/main/c1cbd7', title: '蓝色', icon: '' },
+            { key: '/main/meetCreate', title: '创建会议', icon: '' },
         ]
     },
     {
