@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Icon } from 'antd';
 import cssObj from './Bottom.css'
+var timer;
 class Bottom extends Component {
     constructor(){
         super()
@@ -10,11 +11,14 @@ class Bottom extends Component {
         }
     }
     componentWillMount() {
-        setInterval(()=>{
+        timer=setInterval(()=>{
             this.setState({
                 date: this.formatDateTime(new Date())
             })
         }, 60000)
+    }
+     componentWillUnMount = () => {
+        clearTimeout(timer)
     }
     formatDateTime = function (date) {
         var y = date.getFullYear();
