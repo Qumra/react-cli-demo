@@ -10,23 +10,43 @@ global.menus = [
     {
         title: '首页',
         icon: 'page',
-        key: '/main'
+        key: '/main/default'
     }, {
         title: '会议',
         icon: 'bulb',
-        key: '/meeting',
+        key: '/main/meeting/blue',
         subs: [
-             { key: '/main/c1cbd7', title: '蓝色', icon: '' },
-            { key: '/main/meetCreate', title: '创建会议', icon: '' },
+            { key: '/main/meeting/blue', title: '蓝色', icon: '' },
+            { key: '/main/meeting/meetCreate', title: '新建会议', icon: '' },
+            { key: '/main/meeting/ConferenceTemplate', title: '会议模板', icon: '' },
+            { key: '/main/meeting/ScheduledConference', title: '会议列表', icon: '' },
+            { key: '/main/meeting/HistoryConference', title: '历史会议', icon: '' },
         ]
     },
     {
-        title: '设置',
+        title: '设备',
         icon: 'bulb',
-        key: '/setting',
+        key: '/device/1',
         subs: [
-            { key: '/page/1', title: '弹出框', icon: '' },
-            { key: '/page/2', title: '弹出框', icon: '' },
+            { key: '/main/device/sites', title: '会场', icon: '' },
+            { key: '/main/device/mcu', title: 'mcu', icon: '' },
+            { key: '/main/device/sc', title: 'sc', icon: '' },
+            { key: '/main/device/SoftwareManage', 
+            title: '升级', 
+            icon: '' ,
+            subs:[
+                { key: '/main/device/SoftwareManage', title: '软件管理', icon: '' },
+                { key: '/main/device/DeviceUpgrade', title: '会场/mcu升级', icon: '' },
+            ]},
+        ]
+    },
+    {
+        title: '系统',
+        icon: 'bulb',
+        key: '/system/1',
+        subs: [
+            { key: '/main/system/Config', title: '配置', icon: '' },
+            { key: '/main/system/user', title: '用户&组织类型', icon: '' },
         ]
     },
 ]
