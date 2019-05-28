@@ -1,10 +1,25 @@
 const zh_CN = {
-    lang:"语言",
+     lang:"语言",
     login:"登录",
     group1:"分组1",
     remember_me:"记住",
     redirect:"跳转",
     username:"用户名",
-    password:"密码"
+    password:"密码",
+    changePassword:"修改密码",
+    help:"帮助",
+    home:"首页",
+    setting:"设置",
+    meeting:"会议",
+    table:"报表",
+    task:"我的任务",
+    main:"视频管理",
+    meetCreate:"创建会议",
+    ConferenceTemplate:"会议模板",
+    ScheduledConference:"会议列表",
+    HistoryConference:"历史会议",
+    Device:"设备",
+    ParticipantsHelp:"会场",
+    System:"系统"
 }
 export default zh_CN;  
