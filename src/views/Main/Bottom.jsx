@@ -18,7 +18,7 @@ class Bottom extends Component {
         }, 60000)
     }
      componentWillUnMount = () => {
-        clearTimeout(timer)
+        clearInterval(timer)
     }
     formatDateTime = function (date) {
         var y = date.getFullYear();
