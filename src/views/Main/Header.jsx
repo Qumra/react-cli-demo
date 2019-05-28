@@ -8,45 +8,44 @@ import intl from '@/config/i18n'
 const SubMenu = Menu.SubMenu;
 global.menus = [
     {
-        title: '首页',
+        title: intl.get('home'),
         icon: 'page',
-        key: '/main/default'
+        key: '/main/home'
     }, {
-        title: '会议',
+        title: intl.get('meeting'),
         icon: 'bulb',
         key: '/main/meeting/blue',
         subs: [
-            { key: '/main/meeting/blue', title: '蓝色', icon: '' },
-            { key: '/main/meeting/meetCreate', title: '新建会议', icon: '' },
-            { key: '/main/meeting/ConferenceTemplate', title: '会议模板', icon: '' },
-            { key: '/main/meeting/ScheduledConference', title: '会议列表', icon: '' },
-            { key: '/main/meeting/HistoryConference', title: '历史会议', icon: '' },
+            { key: '/main/meeting/meetCreate', title: intl.get('meetCreate'), icon: '' },
+            { key: '/main/meeting/ConferenceTemplate', title: intl.get('ConferenceTemplate'), icon: '' },
+            { key: '/main/meeting/ScheduledConference', title: intl.get('ScheduledConference'), icon: '' },
+            { key: '/main/meeting/HistoryConference', title: intl.get('HistoryConference'), icon: '' },
         ]
     },
     {
-        title: '设备',
+        title: intl.get('Device'),
         icon: 'bulb',
-        key: '/device/1',
+        key: '/main/device/1',
         subs: [
-            { key: '/main/device/sites', title: '会场', icon: '' },
-            { key: '/main/device/mcu', title: 'mcu', icon: '' },
-            { key: '/main/device/sc', title: 'sc', icon: '' },
-            { key: '/main/device/SoftwareManage', 
+            { key: '/main/Device/ParticipantsHelp', title: '会场', icon: '' },
+            { key: '/main/Device/mcu', title: 'mcu', icon: '' },
+            { key: '/main/Device/sc', title: 'sc', icon: '' },
+            { key: '/main/Device/SoftwareManage', 
             title: '升级', 
             icon: '' ,
             subs:[
-                { key: '/main/device/SoftwareManage', title: '软件管理', icon: '' },
-                { key: '/main/device/DeviceUpgrade', title: '会场/mcu升级', icon: '' },
+                { key: '/main/Device/SoftwareManage', title: '软件管理', icon: '' },
+                { key: '/main/Device/DeviceUpgrade', title: '会场/mcu升级', icon: '' },
             ]},
         ]
     },
     {
-        title: '系统',
+        title: intl.get('System'),
         icon: 'bulb',
-        key: '/system/1',
+        key: '/main/System/1',
         subs: [
-            { key: '/main/system/Config', title: '配置', icon: '' },
-            { key: '/main/system/user', title: '用户&组织类型', icon: '' },
+            { key: '/main/System/Config', title: '配置', icon: '' },
+            { key: '/main/System/user', title: '用户&组织类型', icon: '' },
         ]
     },
 ]
