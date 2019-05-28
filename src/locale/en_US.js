@@ -1,10 +1,25 @@
 const en_US = {
-    lang:"Language",
+    llang:"Language",
     login:"login",
     group1:"group1",
     remember_me:"Remember Me",
     redirect:"Redirect",
     username:"Username",
-    password:"Password"
+    password:"Password",
+    changePassword:"change password",
+    help:"help",
+    home:"Home",
+    setting:"Setting",
+    table:"Table",
+    task:"My Task",
+    main:"Videoconferencing Management",
+    meeting:"meeting",
+    meetCreate:"meetCreate",
+    ConferenceTemplate:"ConferenceTemplate",
+    ScheduledConference:"ScheduledConference",
+    HistoryConference:"HistoryConference",
+    Device:"Device",
+    ParticipantsHelp:"ParticipantsHelp",
+    System:"System"
 }    
 export default en_US;
