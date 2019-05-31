@@ -37,6 +37,6 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 console.log(csm)
-let param = {username: "admin", password: "Change_Me", callback: function(data){ console.log(data)} }
-csm.start();
-csm.setServerAddress("127.0.0.1");
+// let param = {username: "admin", password: "Change_Me", callback: function(data){ console.log(data)} }
+// csm.start();
+// csm.setServerAddress("127.0.0.1");
