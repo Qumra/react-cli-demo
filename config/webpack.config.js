@@ -28,6 +28,9 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 const postcssNormalize = require('postcss-normalize');
 
+//xwx683487
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -492,9 +495,20 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      
+      //xwx683487  这个主要是将axios.min.js文件插入到index页面中
+      new AddAssetHtmlPlugin([{
+        filepath: path.resolve(__dirname,'../src/axios.min.js')
+      }]),  
+      // xwx683487 内置模块提供全局变量
       new webpack.ProvidePlugin({
-        sdk:path.resolve(__dirname, './src/sdk1.js')
+        csm:path.resolve(__dirname, '../src/app.bundle.js'),
      }),
+
+     // xwx683487 
+      new OpenBrowserPlugin({
+        url: `http://localhost:3000/#/login`,
+      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
