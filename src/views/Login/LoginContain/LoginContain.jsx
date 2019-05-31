@@ -24,8 +24,8 @@ class LoginContain extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      values.callback = function (res) {
+   this.props.form.validateFields((err, values) => {
+        function logincallback (res) {
         console.log(res)
         if (res.status != 200) {
           console.log("请求失败")
@@ -37,14 +37,16 @@ class LoginContain extends Component {
             clearCookie('userName');
             clearCookie('password')
           }
-          history.push({ pathname: '/main' })
+          history.push({ pathname: '/main/home' })
         }
       }
       if (!err) {
-        console.log('Received values of form: ', values);
-        csm.login(values)
+        csm.getConfig().setUsername(values.username)
+          .setPassword(values.password)
+          .setServerAddress("127.0.0.1")
+          csm.registOpCallback("login", logincallback)
+          csm.start()
       }
-    });
   }
 
 
