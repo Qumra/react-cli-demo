@@ -13,13 +13,21 @@ const en_US = {
     table:"Table",
     task:"My Task",
     main:"Videoconferencing Management",
-    meeting:"meeting",
+    Conference:"Conference",
     meetCreate:"meetCreate",
     ConferenceTemplate:"ConferenceTemplate",
     ScheduledConference:"ScheduledConference",
     HistoryConference:"HistoryConference",
     Device:"Device",
     ParticipantsHelp:"ParticipantsHelp",
-    System:"System"
+    System:"System",
+    mcu:"mcu",
+    sc:"sc",
+    Upgrade:"Upgrade",
+    SoftwareManage:'SoftwareManage',
+    DeviceUpgrade:'DeviceUpgrade',
+    Config:"Config",
+    UserNode:"User&Node",
+    Range:"Range Setting Policy"
 }    
 export default en_US;
