@@ -1,22 +1,46 @@
 import React, { Component } from "react";
-import { Row, Col} from 'antd';
+import {  Layout, Icon, Button } from 'antd';
 import LeftNav from './LeftNav'
-import { Route} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Conference from './Conference/Conference'
-const match='';
+const { Sider, Content } = Layout;
+let match = '';
 class Config extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        const {match}  = props.match;
+        match = props.match;
+        this.state = {
+            collapsed: false,
+        }
+    }
+    toggleCollapsed = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
     }
     render() {
         return <div>
-            <Row>
-                <Col span={4}><LeftNav></LeftNav></Col>
-                <Col span={20}>.col-16
-                <Route  path={`${match.url}/Conference`} component={Conference}></Route>
-                </Col>
-            </Row>
+           
+            <Layout>
+                
+                <Sider
+                    trigger={null}
+                    collapsible
+                    collapsed={this.state.collapsed}
+                    width={280}
+                    theme="light"
+                >
+                <Button type="primary" onClick={this.toggleCollapsed} style={{ }}>
+                    <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
+                </Button>
+                    <LeftNav></LeftNav>
+                </Sider>
+                <Layout>
+                    <Content style={{ margin: '24px 16px 0 16px',padding:'16px' ,background: '#fff', minHeight: 300 }}>
+                    <Route  path={`${match.url}/Conference`} component={Conference}></Route>
+                    </Content>
+                </Layout>
+            </Layout>
         </div>
     }
 }
