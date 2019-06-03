@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Menu, Icon, Button } from 'antd';
+import { Menu, Icon} from 'antd';
 import cssObj from './Config.css';
 import { NavLink } from 'react-router-dom';
 import intl from '@/config/i18n'
 class LeftNav extends Component {
     state = {
-        collapsed: false,
         meaus:[
             {
                 icon: 'desktop',
@@ -17,12 +16,7 @@ class LeftNav extends Component {
             },
         ]
       }
-    
-      toggleCollapsed = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-      }
+  
       renderMenuItem = ({ key, icon }) => {
         return (
             <Menu.Item key={key}>
@@ -35,14 +29,10 @@ class LeftNav extends Component {
     }
     render(){
         return  <div style={{ width: 280}}>
-        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
-          <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-        </Button>
         <Menu
           defaultSelectedKeys={['1']}
           mode="inline"
           theme="light"
-          inlineCollapsed={this.state.collapsed}
           className={cssObj.leftnav}
         >
            {
