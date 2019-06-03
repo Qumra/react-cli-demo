@@ -5,55 +5,64 @@ import Logo from '@/components/Logo/Logo'
 import LangDrop from '@/components/LangDrop/LangDrop'
 import cssObj from './Header.css'
 import intl from '@/config/i18n'
-const SubMenu = Menu.SubMenu;
-global.menus = [
-    {
-        title: intl.get('home'),
-        icon: 'page',
-        key: '/main/home'
-    }, {
-        title: intl.get('meeting'),
-        icon: 'bulb',
-        key: '/main/meeting/blue',
-        subs: [
-            { key: '/main/meeting/meetCreate', title: intl.get('meetCreate'), icon: '' },
-            { key: '/main/meeting/ConferenceTemplate', title: intl.get('ConferenceTemplate'), icon: '' },
-            { key: '/main/meeting/ScheduledConference', title: intl.get('ScheduledConference'), icon: '' },
-            { key: '/main/meeting/HistoryConference', title: intl.get('HistoryConference'), icon: '' },
-        ]
-    },
-    {
-        title: intl.get('Device'),
-        icon: 'bulb',
-        key: '/main/device/1',
-        subs: [
-            { key: '/main/Device/ParticipantsHelp', title: '会场', icon: '' },
-            { key: '/main/Device/mcu', title: 'mcu', icon: '' },
-            { key: '/main/Device/sc', title: 'sc', icon: '' },
-            { key: '/main/Device/SoftwareManage', 
-            title: '升级', 
-            icon: '' ,
-            subs:[
-                { key: '/main/Device/SoftwareManage', title: '软件管理', icon: '' },
-                { key: '/main/Device/DeviceUpgrade', title: '会场/mcu升级', icon: '' },
-            ]},
-        ]
-    },
-    {
-        title: intl.get('System'),
-        icon: 'bulb',
-        key: '/main/System/1',
-        subs: [
-            { key: '/main/System/Config', title: '配置', icon: '' },
-            { key: '/main/System/user', title: '用户&组织类型', icon: '' },
-        ]
-    },
-]
-const menus = global.menus;
+import history from '@/config/history';
+
+const selectedStyle = {
+    color: 'aqua',
+}
 class Header extends Component {
-    renderSubMenu = ({ key, icon, title, subs }) => {
+    constructor() {
+        super()
+
+        this.state = {
+            theme: "light",
+            current:"/main/home",
+            menus: [
+                {
+                    icon: 'page',
+                    key: '/main/home'
+                }, {
+                    icon: 'bulb',
+                    key: '/main/Conference',
+                    subs: [
+                        { key: '/main/Conference/meetCreate', icon: '' },
+                        { key: '/main/Conference/ConferenceTemplate', icon: '' },
+                        { key: '/main/Conference/ScheduledConference', icon: '' },
+                        { key: '/main/Conference/HistoryConference', icon: '' },
+                    ]
+                },
+                {
+                    icon: 'bulb',
+                    key: '/main/Device',
+                    subs: [
+                        { key: '/main/Device/ParticipantsHelp', icon: '' },
+                        { key: '/main/Device/mcu', icon: '' },
+                        { key: '/main/Device/sc', icon: '' },
+                        {
+                            key: '/main/Device/Upgrade',
+                            icon: '',
+                            subs: [
+                                { key: '/main/Device/SoftwareManage', icon: '' },
+                                { key: '/main/Device/DeviceUpgrade', icon: '' },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    icon: 'bulb',
+                    key: '/main/System',
+                    subs: [
+                        { key: '/main/System/Config', icon: '' },
+                        { key: '/main/System/UserNode', icon: '' },
+                    ]
+                },
+            ]
+        }
+    }
+
+    renderSubMenu = ({ key, icon, subs }) => {
         return (
-            <Menu.SubMenu key={key} title={<span>{icon && <Icon type={icon} />}<span>{title}</span></span>}>
+            <Menu.SubMenu key={key} title={<span>{icon && <Icon type={icon} />}<span>{intl.get(key.split('/').filter(i => i).pop())}</span></span>}>
                 {
                     subs && subs.map(item => {
                         return item.subs && item.subs.length > 0 ? this.renderSubMenu(item) : this.renderMenuItem(item)
@@ -62,45 +71,41 @@ class Header extends Component {
             </Menu.SubMenu>
         )
     }
-    renderMenuItem = ({ key, icon, title, }) => {
+    renderMenuItem = ({ key, icon }) => {
         return (
             <Menu.Item key={key}>
-                <NavLink to={key}>
+                <NavLink to={key} activeStyle={selectedStyle}>
                     {icon && <Icon type={icon} />}
-                    <span>{title}</span>
+                    <span>{intl.get(key.split('/').filter(i => i).pop())}</span>
                 </NavLink>
             </Menu.Item>
         )
     }
-    constructor() {
-        super()
-        this.state = {
-            theme: "light"
-        }
-    }
+
     getInitialState() {
         return {
-            current: 'mail'
+
         };
     };
     handleClick(e) {
         console.log('click ', e);
+        history.push({ pathname: e.key });
         this.setState({
-            current: e.key
-        })
+            current: e.key,
+        });
     };
     render() {
         return <div className={cssObj.navStyle}>
             <div className={cssObj.LogoBox}><Logo width='120px' height='45px' float='left'></Logo></div>
             <Menu
-                defaultSelectedKeys={['1']}
+                defaultSelectedKeys={[this.state.current]}
                 defaultOpenKeys={['sub1']}
                 theme={this.state.theme}
                 mode="horizontal"
                 className={cssObj.middleNav}
             >
                 {
-                    menus.map(item => {
+                    this.state.menus.map(item => {
                         return item.subs && item.subs.length > 0 ? this.renderSubMenu(item) : this.renderMenuItem(item)
                     })
                 }
@@ -110,13 +115,13 @@ class Header extends Component {
             <Menu theme={this.state.theme}
                 mode="horizontal" className={cssObj.toolBox}>
                 <Menu.Item key="alipay1">
-                    <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />修改</a>
+                    <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />{intl.get('changePassword')}</a>
                 </Menu.Item>
                 <Menu.Item>
                     <LangDrop></LangDrop>
                 </Menu.Item>
                 <Menu.Item key="alipay2">
-                    <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />帮助</a>
+                    <a href="http://www.alipay.com/" ><Icon type="question-circle" theme="outlined" />{intl.get('help')}</a>
                 </Menu.Item>
             </Menu>
         </div>
