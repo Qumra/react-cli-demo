@@ -10,7 +10,7 @@ const zh_CN = {
     help:"帮助",
     home:"首页",
     setting:"设置",
-    meeting:"会议",
+    Conference:"会议",
     table:"报表",
     task:"我的任务",
     main:"视频管理",
@@ -20,6 +20,14 @@ const zh_CN = {
     HistoryConference:"历史会议",
     Device:"设备",
     ParticipantsHelp:"会场",
-    System:"系统"
+    System:"系统",
+      mcu:"mcu",
+    sc:"sc",
+    Upgrade:"升级",
+    SoftwareManage:"软件管理",
+    DeviceUpgrade:"设备更新",
+    Config:"配置",
+    UserNode:"用户&组织结构",
+    Range:"分区策略配置"
 }
 export default zh_CN;  
