@@ -32,8 +32,8 @@ const Main = withRouter(props => {
             <div className={cssObj.content}>
             <Breadcrumb>{breadcrumbItems}</Breadcrumb>
             <Route  path={`${match.url}/home`} component={defaultIndex}></Route>
-            <Route  path={`${match.url}/meeting/blue`}  component={Topic} />
-            <Route  path={`${match.url}/meeting/meetCreate`}  component={meetCreate}></Route>
+            <Route  path={`${match.url}/Conference/blue`}  component={Topic} />
+            <Route  path={`${match.url}/Conference/meetCreate`}  component={meetCreate}></Route>
             <Route  path={`${match.url}/system/Config`}  component={Config}></Route>
             </div>
             <Bottom></Bottom>
