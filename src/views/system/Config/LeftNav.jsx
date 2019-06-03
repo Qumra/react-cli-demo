@@ -1,8 +1,21 @@
 import React, { Component } from "react";
 import { Menu, Icon, Button } from 'antd';
+import cssObj from './Config.css';
+import { NavLink } from 'react-router-dom';
+import intl from '@/config/i18n'
 class LeftNav extends Component {
     state = {
         collapsed: false,
+        meaus:[
+            {
+                icon: 'desktop',
+                key: '/main/System/Config/Conference'
+            },
+            {
+                icon: 'inbox',
+                key: '/main/System/Config/Range'
+            },
+        ]
       }
     
       toggleCollapsed = () => {
@@ -10,6 +23,16 @@ class LeftNav extends Component {
           collapsed: !this.state.collapsed,
         });
       }
+      renderMenuItem = ({ key, icon }) => {
+        return (
+            <Menu.Item key={key}>
+                <NavLink to={key}>
+                    {icon && <Icon type={icon} />}
+                    <span>{intl.get(key.split('/').filter(i => i).pop())}</span>
+                </NavLink>
+            </Menu.Item>
+        )
+    }
     render(){
         return  <div style={{ width: 280}}>
         <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
@@ -20,19 +43,13 @@ class LeftNav extends Component {
           mode="inline"
           theme="light"
           inlineCollapsed={this.state.collapsed}
+          className={cssObj.leftnav}
         >
-          <Menu.Item key="1">
-            <Icon type="pie-chart" />
-            <span>Option 1</span>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Icon type="desktop" />
-            <span>Option 2</span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Icon type="inbox" />
-            <span>Option 3</span>
-          </Menu.Item>
+           {
+                    this.state.meaus.map(item => {
+                        return this.renderMenuItem(item)
+                    })
+                }
         </Menu>
       </div>
     }
