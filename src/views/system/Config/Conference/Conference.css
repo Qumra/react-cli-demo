@@ -18,3 +18,12 @@
     border-top: 1px solid #C2D3D8;
     margin-bottom: 15px;
 }
+.ConfigOperateDiv {
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    line-height: 38px;
+}
+.saveButton {
+    margin-right: 10px;
+}
