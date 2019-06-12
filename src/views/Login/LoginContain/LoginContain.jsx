@@ -7,8 +7,8 @@ import intl from '@/config/i18n'
 import { setCookie, getCookie,clearCookie } from '@/util/cookie'
 import zh_CN from '../locale/zh_CN'
 import en_US from '../locale/en_US'
-intl.options.locales['zh-CN'] = zh_CN;
-intl.options.locales['en-US'] = en_US;
+intl.options.locales['zh-CN'] = Object.assign(intl.options.locales['zh-CN'],zh_CN);
+intl.options.locales['en-US'] =  Object.assign(intl.options.locales['en-US'],en_US);
 const FormItem = Form.Item;
 class LoginContain extends Component {
   constructor(){
