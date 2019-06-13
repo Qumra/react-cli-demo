@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import cssObj from './Conference.css'
-import { Form, Input, Slider, Select, Checkbox, Button } from 'antd';
+import { Form, Input, Slider, Select, Checkbox, Button, Icon, Tooltip, Upload,Modal } from 'antd';
 import { regExpConfig } from '@/config/Reg.confing'
 import intl, { SUPPOER_LOCALES } from '@/config/i18n'
 const FormItem = Form.Item;
@@ -15,26 +15,27 @@ const marks = {
         label: '灵敏',
     },
 }
-const kbitArry =[
-    {1:'128 kbit/s'},
-    {2:'192 kbit/s'},
-    {3:'256 kbit/s'},
-    {4:'320 kbit/s'},
-    {5:'384 kbit/s'},
-    {6:'512 kbit/s'},
-    {7:'768 kbit/s'},
-    {8:'1152 kbit/s'},
-    {9:'1472 kbit/s'},
-    {10:'1536 kbit/s'},
-    {11:'1920 kbit/s'},
+// ISDN会场最大带宽
+const kbitArry = [
+    { value: 1, bites: '128 kbit/s' },
+    { value: 2, bites: '192 kbit/s' },
+    { value: 3, bites: '256 kbit/s' },
+    { value: 4, bites: '320 kbit/s' },
+    { value: 5, bites: '384 kbit/s' },
+    { value: 6, bites: '512 kbit/s' },
+    { value: 7, bites: '768 kbit/s' },
+    { value: 8, bites: '1152 kbit/s' },
+    { value: 9, bites: '1472 kbit/s' },
+    { value: 10, bites: '1536 kbit/s' },
+    { value: 11, bites: '1920 kbit/s' },
 
 ]
 class Conference extends Component {
-
+// checkout
     onChange = (e) => {
         console.log(`checked = ${e.target.checked}`);
     }
-
+// 表单提交
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -43,6 +44,15 @@ class Conference extends Component {
             }
         })
     }
+    // 上传文件
+    normFile = (e) => {
+        console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+          return e;
+        }
+        return e && e.fileList;
+      }
+    
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -715,7 +725,7 @@ class Conference extends Component {
                         label="SVC通道会场数"
                     >
                         {getFieldDecorator('SVC', {
-                            initialValue: '16',
+                            initialValue: 16,
                             normalize: (e) => e ? parseInt(e) : '',
                             rules: [{
                                 type: 'number', min: 1, max: 49, message: 'must be 15~50'
@@ -750,7 +760,7 @@ class Conference extends Component {
                         {getFieldDecorator(' recordingNumber', {
                             initialValue: '9900',
                             rules: [{
-                                type: 'number', 
+                                type: 'number',
                             }, {
                                 required: true, message: 'Please input your recordingNumber '
                             },
@@ -833,7 +843,7 @@ class Conference extends Component {
                         {getFieldDecorator('maxnumberID', {
                             initialValue: '10000',
                             rules: [{
-                                 type: 'number', min: 1, max: 999999998, message: 'must be 1~999999998'
+                                type: 'number', min: 1, max: 999999998, message: 'must be 1~999999998'
                             }, {
                                 required: true, message: 'Please input your maxnumberID '
                             },
@@ -841,15 +851,15 @@ class Conference extends Component {
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="最大子会议号"
                     >
                         {getFieldDecorator('minnumberID', {
                             initialValue: '99999',
                             rules: [{
-                                 type: 'number', min: 2, max: 999999999, message: 'must be 2~999999999'
+                                type: 'number', min: 2, max: 999999999, message: 'must be 2~999999999'
                             }, {
                                 required: true, message: 'Please input your minnumberID '
                             },
@@ -857,15 +867,15 @@ class Conference extends Component {
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="统一接入号"
                     >
                         {getFieldDecorator('unifiedAccess', {
                             initialValue: '9002',
                             rules: [{
-                                 type: 'number', 
+                                type: 'number',
                             }, {
                                 required: true, message: 'Please input your unifiedAccess '
                             },
@@ -873,8 +883,8 @@ class Conference extends Component {
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="接入MCU"
                     >
@@ -887,14 +897,14 @@ class Conference extends Component {
                             </Select>
                         )}
                     </FormItem>
-                        <FormItem
+                    <FormItem
                         {...formItemLayout}
                         label="预留端口数"
                     >
                         {getFieldDecorator('reservablePorts', {
                             initialValue: '1',
                             rules: [{
-                                 type: 'number', min: 1, max: 152, message: 'must be 1~152'
+                                type: 'number', min: 1, max: 152, message: 'must be 1~152'
                             }, {
                                 required: true, message: 'Please input your reservablePorts '
                             },
@@ -902,42 +912,42 @@ class Conference extends Component {
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="会议特服号"
                     >
                         {getFieldDecorator('serviceNumber', {
                             initialValue: '168',
                             rules: [{
-                                 type: 'number',
+                                type: 'number',
                             }, {
                                 required: true, message: 'Please input your serviceNumber '
                             },
-                            {pattern:'',message:'只能是数字，少于12位'}
+                            { pattern: '', message: '只能是数字，少于12位' }
                             ],
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="CTS接入前缀"
                     >
                         {getFieldDecorator('CTS', {
                             initialValue: '9002',
                             rules: [{
-                                 type: 'number',
+                                type: 'number',
                             }, {
                                 required: true, message: 'Please input your CTS '
                             },
-                            {pattern:'',message:'只能是数字，少于12位'}
+                            { pattern: '', message: '只能是数字，少于12位' }
                             ],
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="允许未定义终端创建会议"
                     >
@@ -959,14 +969,14 @@ class Conference extends Component {
                             <Checkbox />
                         )}
                     </FormItem>
-                        <FormItem
+                    <FormItem
                         {...formItemLayout}
                         label="两点变多点接入号"
                     >
                         {getFieldDecorator('Point-to-point ID', {
                             initialValue: '8008',
                             rules: [{
-                                 type: 'number', 
+                                type: 'number',
                             }, {
                                 required: true, message: 'Please input your Point-to-point ID '
                             },
@@ -974,16 +984,16 @@ class Conference extends Component {
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <div className={cssObj.GroupTitle}>前缀</div>
-                        <FormItem
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>前缀</div>
+                    <FormItem
                         {...formItemLayout}
                         label="IP-ISDN点对点呼叫前缀"
                     >
                         {getFieldDecorator('IP-ISDN', {
                             initialValue: '8600',
                             rules: [{
-                                 type: 'number', 
+                                type: 'number',
                             }, {
                                 required: true, message: 'Please input your IP-ISDN '
                             },
@@ -991,21 +1001,400 @@ class Conference extends Component {
                         })(
                             <Input />
                         )}
-                        </FormItem>
-                        <FormItem
+                    </FormItem>
+                    <FormItem
                         {...formItemLayout}
                         label="ISDN会场最大带宽"
                     >
                         {getFieldDecorator('ISDNkbit', {
-                            initialValue: '1',
+                            initialValue: 6,
                         })(
                             <Select>
-                                 {kbitArry.map(item => (
-                                    <Option key={item.key} value={item.key}>{item.value}</Option>
+                                {kbitArry.map(item => (
+                                    <Option key={item.value} value={item.value}>{item.bites}</Option>
                                 ))}
                             </Select>
                         )}
                     </FormItem>
+                    <div className={cssObj.GroupTitle}>融合会议参数</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="融合会议组网"
+                    >
+                        {getFieldDecorator('convergentConference', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="开启SMC2.0融合会议能力"
+                    >
+                        {getFieldDecorator('SMC2.0Capability', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="启用passcode"
+                    >
+                        {getFieldDecorator('passcode', {
+                            valuePropName: 'checked',
+                            initialValue: true,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="Passcode前缀"
+                    >
+                        {getFieldDecorator('"PasscodePrefix', {
+                            initialValue: 1,
+                            rules: [{
+                                type: 'number', min: 1, max: 99, message: 'must be 1~99'
+                            }, {
+                                required: true, message: 'Please input your PasscodePrefix '
+                            },
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="Web会场前缀"
+                    >
+                        {getFieldDecorator('WebPrefix', {
+                            initialValue: 9800,
+                            rules: [{
+                                type: 'number',
+                            }, {
+                                required: true, message: 'Please input your WebPrefix '
+                            },
+                            { pattern: '', message: '只能是数字，4~32位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="Web虚拟通道前缀"
+                    >
+                        {getFieldDecorator('WebVirtualPrefix', {
+                            initialValue: 9600,
+                            rules: [{
+                                type: 'number',
+                            }, {
+                                required: true, message: 'Please input your WebVirtualPrefix '
+                            },
+                            { pattern: '', message: '只能是数字，4~32位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>CloudLink参数</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="启用CloudLink会议链接入会"
+                    >
+                        {getFieldDecorator('CloudLink', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(
+                            <Checkbox />
+                        )}
+                        <Tooltip title="启用CloudLink会议链接入会,需要先开启融合会议组网配置项">
+                            <Icon type="info-circle" />
+                        </Tooltip>
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>Web入会参数</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="链接入会接入地址"
+                    >
+                        {getFieldDecorator('linkAccessAddress', {
+                            initialValue: '128.105.66.23',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your linkAccessAddress '
+                            },
+                            { pattern: '', message: '' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>数据会议参数</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="终端召集时启用数据会议"
+                    >
+                        {getFieldDecorator('dataConference', {
+                            valuePropName: 'checked',
+                            initialValue: true,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="数据会议客户端下载地址"
+                    >
+                        {getFieldDecorator('clientDownloadURL', {
+                            initialValue: '128.105.66.23',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your clientDownloadURL '
+                            },
+                            { pattern: '', message: '' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="数据会议客户端上传"
+                    >
+                        {getFieldDecorator('uploadTE', {
+                            valuePropName: 'fileList',
+                            getValueFromEvent: this.normFile,
+                        })(
+                            <Upload name="logo" action="/upload.do" listType="picture">
+                                <Button>
+                                    <Icon type="upload" /> 上传
+              </Button>
+                            </Upload>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="数据会议默认分辨率"
+                    >
+                        {getFieldDecorator('defaultResolution', {
+                            initialValue: '1',
+                        })(
+                            <Select>
+                                <Option  value='1'>4k*2k</Option>
+                                <Option  value='2'>1080</Option>
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="启用高清实时数据会议"
+                    >
+                        {getFieldDecorator('HDrealTime', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>WebRTC参数</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="启用WebRTC"
+                    >
+                        {getFieldDecorator('WebRTC', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>会场提示信息</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="开启点名提示音"
+                    >
+                        {getFieldDecorator('enableAnnouncement', {
+                            valuePropName: 'checked',
+                            initialValue: false,
+                        })(
+                            <Checkbox />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="会场点名提示"
+                    >
+                        {getFieldDecorator('givenFloor', {
+                            initialValue: '',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your givenFloor '
+                            },
+                            { pattern: '', message: '最大长度64位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="点名前提示"
+                    >
+                        {getFieldDecorator('aboutGivenFloor', {
+                            initialValue: '开始点名',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your WebVirtualPrefix '
+                            },
+                            { pattern: '', message: '最大长度64位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="广播会场提示"
+                    >
+                        {getFieldDecorator('Broadcast', {
+                            initialValue: '',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your Broadcast '
+                            },
+                            { pattern: '', message: '最大长度64位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="被主席观看提示"
+                    >
+                        {getFieldDecorator('ViewedByChair', {
+                            initialValue: '',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your ViewedByChair '
+                            },
+                            { pattern: '', message: '最大长度64位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="主席轮询会场被观看前提示"
+                    >
+                        {getFieldDecorator('broadcastInTurn', {
+                            initialValue: '',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your broadcastInTurn '
+                            },
+                            { pattern: '', message: '最大长度64位' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="会场入会"
+                    >
+                        {getFieldDecorator('joinConference:', {
+                            initialValue: '',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your joinConference '
+                            },
+                            { pattern: '', message: '示例：%s会场已加入会议。  实际显示的会场入会提示信息，将会以入会的会场名称自动填充“%s”字段。' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="会场离会"
+                    >
+                        {getFieldDecorator('exitConference', {
+                            initialValue: '',
+                            rules: [{
+                                type: 'string',
+                            }, {
+                                required: true, message: 'Please input your exitConference '
+                            },
+                            { pattern: '', message: '示例：%s会场已离开会议。  实际显示的会场离会提示信息，将会以离会的会场名称自动填充“%s”字段。' }
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="提示显示时长(秒)"
+                    >
+                        {getFieldDecorator(' displayDuration', {
+                            initialValue: 15,
+                            rules: [{
+                                type: 'number', min: 5, max: 60, message: 'must be 5~60'
+                            }, {
+                                required: true, message: 'Please input your PasscodePrefix '
+                            },
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>会场分区阈值</div>
+                    <FormItem
+                        {...formItemLayout}
+                        label="ISDN会场分区阈值"
+                    >
+                        {getFieldDecorator(' ISDNthreshold', {
+                            initialValue: 1,
+                            rules: [{
+                                type: 'number', min: 1, max: 999, message: 'must be 1~999'
+                            }, {
+                                required: true, message: 'Please input your ISDNthreshold '
+                            },
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="IP会场分区阈值"
+                    >
+                        {getFieldDecorator(' IPthreshold', {
+                            initialValue: 1,
+                            rules: [{
+                                type: 'number', min: 1, max: 999, message: 'must be 1~999'
+                            }, {
+                                required: true, message: 'Please input your IPthreshold '
+                            },
+                            ],
+                        })(
+                            <Input />
+                        )}
+                    </FormItem>
+                    <div className={cssObj.GroupTitle}>文本模板管理</div>
+                        
                 </Form>
             </div>
             <div className={cssObj.ConfigOperateDiv}>
