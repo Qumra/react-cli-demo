@@ -34,17 +34,20 @@ const CollectionCreateForm = Form.create()(
   );
  
 let selectedData = [];
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      selectedData.length=0
-      selectedData.push(...selectedRowKeys);
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    getCheckboxProps: record => ({
-      disabled: record.type === 'Disabled User', // Column configuration not to be checked
-      type: record.type,
-    }),
-  };
+  // const rowSelection = {
+  //   onChange: (selectedRowKeys, selectedRows) => {
+  //     selectedData.length=0
+  //     selectedData.push(...selectedRowKeys);
+  //     if(selectedData.length==1){
+  //       this.setState({isDisable:false})
+  //     }
+  //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  //   },
+  //   getCheckboxProps: record => ({
+  //     disabled: record.type === 'Disabled User', // Column configuration not to be checked
+  //     type: record.type,
+  //   }),
+  // };
 class Conference extends Component {
     constructor(props){
         super(props)
@@ -69,47 +72,70 @@ class Conference extends Component {
                 content: 42,
               }, ],
             count:2,
+            isDisable:true,
+            delDisable:true
           };
     }
     
     
-      showModal = (key=-1) => {
-        console.log(key);
-        const newData = [...this.state.dataSource];
+      showModal = () => {
+        // const newData = [...this.state.dataSource];
+        // const index = newData.findIndex(item => key === item.key);
+        // console.log(index)
+        // if(index>-1){
+        //   this.setState({ collectionData: newData[index], visible: true });
+        // }else{
+        //   this.setState({ collectionData:{},visible: true });
+        // }
+        this.setState({ collectionData:{},visible: true });
+      }
+      croShowModal=(key)=>{
+         const newData = [...this.state.dataSource];
         const index = newData.findIndex(item => key === item.key);
-        console.log(index)
-        if(index>-1){
-          this.setState({ collectionData: newData[index], visible: true });
-        }else{
-          this.setState({ collectionData:{},visible: true });
-        }
-        
+        this.setState({ collectionData: newData[index], visible: true });
       }
     
       handleCancel = () => {
         this.setState({ visible: false });
       }
     
-      handleCreate = () => {
+      handleCreate = (key=-1) => {
         const form = this.formRef.props.form;
         form.validateFields((err, values) => {
           if (err) {
             return;
           }
-    
           console.log('Received values of form: ', values);
+          const newData = [...this.state.dataSource];
+          const index = newData.findIndex(item => key === item.key);
+          console.log(index)
+          if(index>-1){
+            let item = newData[index];
+            newData.splice(index, 1, {
+             key:item.key,
+             type:item.type,
+             content:values.title
+            });
+            this.setState({ dataSource: newData });
+          }else {
+            this.handleAdd(values.title)}
           form.resetFields();
+          
           this.setState({ visible: false });
-          this.handleAdd(values.title)
+         
         });
       }
     
       saveFormRef = (formRef) => {
         this.formRef = formRef;
       }
-      handleDelete = (key) => {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+      handleDelete = (keys) => {
+        let dataSource = [...this.state.dataSource];
+        console.log(keys)
+        keys.forEach(key=>{
+           dataSource= dataSource.filter(item=>item.key !==key)
+        })
+        this.setState({ dataSource: dataSource });
       }
       handleAdd = (params) => {
         const { count, dataSource } = this.state;
@@ -134,24 +160,36 @@ class Conference extends Component {
         this.setState({ dataSource: newData });
       }
     render(){
-        
+      const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+          selectedData.length=0
+          selectedData.push(...selectedRowKeys);
+          if(selectedData.length==1){
+            this.setState({isDisable:false})
+          }else{
+            this.setState({isDisable:true})
+          }
+          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: record => ({
+          disabled: record.type === 'Disabled User', // Column configuration not to be checked
+          type: record.type,
+        }),
+      };
         return <div>
           <Button onClick={() => {
-          if(selectedData.length==0){
-              this.showModal()
-          }
-          else if(selectedData.length==1){
-              this.showModal(selectedData[0])
-          }
-          else{
-              console.log('不能选中多个')
-          }
-          
-          }}>新增/编辑</Button>
-          <Button onClick={()=>{
+            this.showModal()
+          }}>新增</Button>
+          <Button disabled={this.state.isDisable} onClick={() => {
+             if(selectedData.length==1){
+              this.croShowModal(selectedData[0])
+          }else{
+          //  this.setState({isDisable:true})
+        }
+          }}>修改</Button>
+          <Button disabled={this.state.delDisable} onClick={()=>{
             if(selectedData.length>0){
-              selectedData.forEach(element=>{this.handleDelete(element)})
-              
+              this.handleDelete(selectedData )
             }else{
               console.log("请选择要删除的项")
             }
@@ -162,7 +200,13 @@ class Conference extends Component {
           data={this.state.collectionData}
           visible={this.state.visible}
           onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
+          onCreate={()=>{
+            if(selectedData.length==0){
+                  this.handleCreate()
+              }else if(selectedData.length==1){
+                this.handleCreate(selectedData[0])
+              }
+          }}
       />
         </div> 
     }
