@@ -1,19 +1,12 @@
 import React, { Component } from "react";
 import { Button, Modal, Form, Input, Table  } from 'antd';
-
 const FormItem = Form.Item;
 const { TextArea } = Input;
-const EditableContext = React.createContext();
-const EditableRow = ({ form, index, ...props }) => (
-    <EditableContext.Provider value={form}>
-      <tr {...props} />
-    </EditableContext.Provider>
-  );
-  const EditableFormRow = Form.create()(EditableRow);
+
 const CollectionCreateForm = Form.create()(
     class extends React.Component {
       render() {
-        const { visible, onCancel, onCreate, form } = this.props;
+        const { visible, onCancel, onCreate, form,data } = this.props;
         const { getFieldDecorator } = form;
         return (
           <Modal
@@ -27,6 +20,7 @@ const CollectionCreateForm = Form.create()(
             <Form layout="vertical">
               <FormItem label="Title">
                 {getFieldDecorator('title', {
+                  initialValue: data.content,
                   rules: [{ required: true, message: 'Please input the title of collection!' }],
                 })(
                     <TextArea autosize={{ minRows: 2, maxRows: 6 }} />
@@ -38,103 +32,12 @@ const CollectionCreateForm = Form.create()(
       }
     }
   );
-  class EditableCell extends React.Component {
-    state = {
-      editing: false,
-    }
-  
-    componentDidMount() {
-      if (this.props.editable) {
-        document.addEventListener('click', this.handleClickOutside, true);
-      }
-    }
-  
-    componentWillUnmount() {
-      if (this.props.editable) {
-        document.removeEventListener('click', this.handleClickOutside, true);
-      }
-    }
-  
-    toggleEdit = () => {
-      const editing = !this.state.editing;
-      this.setState({ editing }, () => {
-        if (editing) {
-          this.input.focus();
-        }
-      });
-    }
-  
-    handleClickOutside = (e) => {
-      const { editing } = this.state;
-      if (editing && this.cell !== e.target && !this.cell.contains(e.target)) {
-        this.save();
-      }
-    }
-  
-    save = () => {
-      const { record, handleSave } = this.props;
-      this.form.validateFields((error, values) => {
-        if (error) {
-          return;
-        }
-        this.toggleEdit();
-        handleSave({ ...record, ...values });
-      });
-    }
-  
-    render() {
-      const { editing } = this.state;
-      const {
-        editable,
-        dataIndex,
-        title,
-        record,
-        index,
-        handleSave,
-        ...restProps
-      } = this.props;
-      return (
-        <td ref={node => (this.cell = node)} {...restProps}>
-          {editable ? (
-            <EditableContext.Consumer>
-              {(form) => {
-                this.form = form;
-                return (
-                  editing ? (
-                    <FormItem style={{ margin: 0 }}>
-                      {form.getFieldDecorator(dataIndex, {
-                        rules: [{
-                          required: true,
-                          message: `${title} is required.`,
-                        }],
-                        initialValue: record[dataIndex],
-                      })(
-                        <Input
-                          ref={node => (this.input = node)}
-                          onPressEnter={this.save}
-                        />
-                      )}
-                    </FormItem>
-                  ) : (
-                    <div
-                      className="editable-cell-value-wrap"
-                      style={{ paddingRight: 24 }}
-                      onClick={this.toggleEdit}
-                    >
-                      {restProps.children}
-                    </div>
-                  )
-                );
-              }}
-            </EditableContext.Consumer>
-          ) : restProps.children}
-        </td>
-      );
-    }
-  }
-
+ 
+let selectedData = [];
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
+      selectedData.length=0
+      selectedData.push(...selectedRowKeys);
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: record => ({
@@ -143,8 +46,8 @@ const CollectionCreateForm = Form.create()(
     }),
   };
 class Conference extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.columns = [{
             title: '类型',
             dataIndex: 'type',
@@ -155,6 +58,7 @@ class Conference extends Component {
           }];
         this.state = {
             visible: false,
+            collectionData:{},
             dataSource : [{
                 key: '0',
                 type: '横幅',
@@ -169,9 +73,17 @@ class Conference extends Component {
     }
     
     
-      showModal = () => {
-        this.setState({ visible: true });
-
+      showModal = (key=-1) => {
+        console.log(key);
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex(item => key === item.key);
+        console.log(index)
+        if(index>-1){
+          this.setState({ collectionData: newData[index], visible: true });
+        }else{
+          this.setState({ collectionData:{},visible: true });
+        }
+        
       }
     
       handleCancel = () => {
@@ -194,6 +106,10 @@ class Conference extends Component {
     
       saveFormRef = (formRef) => {
         this.formRef = formRef;
+      }
+      handleDelete = (key) => {
+        const dataSource = [...this.state.dataSource];
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
       }
       handleAdd = (params) => {
         const { count, dataSource } = this.state;
@@ -218,39 +134,37 @@ class Conference extends Component {
         this.setState({ dataSource: newData });
       }
     render(){
-        const { dataSource } = this.state;
-        const components = {
-          body: {
-            row: EditableFormRow,
-            cell: EditableCell,
-          },
-        };
-        const columns = this.columns.map((col) => {
-          if (!col.editable) {
-            return col;
-          }
-          return {
-            ...col,
-            onCell: record => ({
-              record,
-              editable: col.editable,
-              dataIndex: col.dataIndex,
-              title: col.title,
-              handleSave: this.handleSave,
-            }),
-          };
-        });
+        
         return <div>
-             <Button type="primary" onClick={this.showModal}>新增</Button>
-             <Button type="primary" onClick={this.showModal()}>修改</Button>
-        <CollectionCreateForm
+          <Button onClick={() => {
+          if(selectedData.length==0){
+              this.showModal()
+          }
+          else if(selectedData.length==1){
+              this.showModal(selectedData[0])
+          }
+          else{
+              console.log('不能选中多个')
+          }
+          
+          }}>新增/编辑</Button>
+          <Button onClick={()=>{
+            if(selectedData.length>0){
+              selectedData.forEach(element=>{this.handleDelete(element)})
+              
+            }else{
+              console.log("请选择要删除的项")
+            }
+          }}>删除</Button>
+          <Table rowSelection={rowSelection} columns={this.columns} dataSource={this.state.dataSource} />,
+      <CollectionCreateForm
           wrappedComponentRef={this.saveFormRef}
+          data={this.state.collectionData}
           visible={this.state.visible}
           onCancel={this.handleCancel}
           onCreate={this.handleCreate}
-        />
-          <Table components={components} rowSelection={rowSelection} columns={columns} dataSource={dataSource} />,
-        </div>
+      />
+        </div> 
     }
 }
 export default Conference
