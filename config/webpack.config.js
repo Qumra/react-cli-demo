@@ -497,9 +497,12 @@ module.exports = function(webpackEnv) {
     plugins: [
       
       //xwx683487  这个主要是将axios.min.js文件插入到index页面中
-      new AddAssetHtmlPlugin([{
-        filepath: path.resolve(__dirname,'../src/axios.min.js')
-      }]),  
+      new AddAssetHtmlPlugin([new AddAssetHtmlPlugin([
+        {filepath: path.resolve(__dirname,'../src/axios.min.js')},
+        {filepath: path.resolve(__dirname,'../src/sockjs.min.js')},
+        {filepath: path.resolve(__dirname,'../src/stomp.min.js')},
+        {filepath: path.resolve(__dirname,'../src/vendor.dll.js')},
+      ]),  
       // xwx683487 内置模块提供全局变量
       new webpack.ProvidePlugin({
         csm:path.resolve(__dirname, '../src/app.bundle.js'),
