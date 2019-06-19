@@ -20,7 +20,8 @@ const kbitArry = [
 const minLimit = Form.create()(
     class extends  React.Component {
         render() {
-            const { getFieldDecorator } = this.props.form;
+            const { form } = this.props;
+            const { getFieldDecorator } = form;
             const formItemLayout = {
                 labelCol: {
                     xs: { span: 12 },
@@ -31,12 +32,12 @@ const minLimit = Form.create()(
                     sm: { span: 4 },
                 },
             };
-            return <Form>
+            return (<Form>
                 <FormItem
                     {...formItemLayout}
                     label="最小速率下限"
                 >
-                    {getFieldDecorator('ISDNkbit', {
+                    {getFieldDecorator('floorLevel', {
                         initialValue: 6,
                     })(
                         <Select>
@@ -47,10 +48,14 @@ const minLimit = Form.create()(
                     )}
                 </FormItem>
             </Form>
+            );
         }
     }
 )
 class ConfAreaConfig extends Component {
+    saveFormRef = (formRef) => {
+        this.formRef = formRef;
+      }
     render() {
 
         return <div>
@@ -60,7 +65,9 @@ class ConfAreaConfig extends Component {
                     <Button className={cssObj.mr}>保存</Button>
                     <Button className={cssObj.mr}>取消</Button>
                 </div>
-                <minLimit />
+                <minLimit
+                wrappedComponentRef={this.saveFormRef}
+                />
             </div>
         </div>
     }
