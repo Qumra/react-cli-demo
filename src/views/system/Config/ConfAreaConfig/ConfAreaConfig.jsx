@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import cssObj from './ConfAreaConfig.css'
-import { Button, Select, Form,Table } from 'antd';
+import { Button, Select, Form,Table,Input,Menu,Dropdown,Icon } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const kbitArry = [
@@ -26,7 +26,7 @@ const kbitArry = [
     { value: 20, bites: '8Mbit/s' },
 ]
 
-const CollectionCreateForm = Form.create()(
+const RateCreateForm = Form.create()(
     class extends React.Component {
       render() {
         const {  form} = this.props;
@@ -64,15 +64,83 @@ const CollectionCreateForm = Form.create()(
       }
     }
   );
+  const SubConfArea = Form.create()(
+    class extends React.Component {
+      render() {
+        const {  form,onBlur} = this.props;
+        const { getFieldDecorator } = form;
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 12 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 12 },
+                sm: { span: 4 },
+            },
+        };
+        return (
+          
+            <Form>
+              <FormItem
+                    {...formItemLayout}
+                    label="子会议区间个数"
+                >
+                    {getFieldDecorator('SubConfArea', {
+                        initialValue: 0,
+                        normalize: (e) => e ? parseInt(e) : '',
+                            rules: [{
+                                type: 'number', min: 1, max: 50, message: 'must be 1~50'
+                            }, {
+                                required: true, message: 'Please input your SubConfArea '
+                            },
+                                // { pattern: regExpConfig.SVC , message: ' 1~49 }
+                            ],
+                    })(
+                        <Input onBlur={onBlur} />
+                    )}
+                </FormItem>
+            </Form>
+      
+        );
+      }
+    }
+  );
+  const menuDrop = (
+    <Menu>
+      <Menu.Item>
+        <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+          1st menu item
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+          2nd menu item
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+          3rd menu item
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
 class ConfAreaConfig extends Component {
     constructor(props) {
         super(props)
-        this.columns = [{
+        this.columns1 = [{
             title: '区间',
             dataIndex: 'range',
           }, {
             title: '视频协议',
             dataIndex: 'videoProtocol',
+            reder: text => {
+                return <Dropdown overlay={menuDrop}>
+                    <a className="ant-dropdown-link" href="#">
+                        Hover me <Icon type="down" />
+                    </a>
+                </Dropdown>
+            }
           }, {
             title: '视频格式',
             dataIndex: 'videoResolution',
@@ -94,9 +162,51 @@ class ConfAreaConfig extends Component {
             dataIndex: 'lowestRate',
           },
         ];
+        this.columns2 = [
+        {
+            title: '序号',
+            dataIndex: 'number',
+        },
+        {
+            title: '最小值',
+            dataIndex: 'min',
+        },
+        {
+            title: '最大值',
+            dataIndex: 'max',
+        }
+        
+    ,]
+        this.state={
+            data1:[
+                {key: '0',range:'1',videoProtocol:'H.264',videoResolution:'1080p',audioProtocol:'AAC-LD 单声道',Threshold:'1',highestRate:'7680',lowestRate:'4 Mbit/s'}
+            ],
+            data2:[
+             
+            ]
+        }
+
+            
     }
     saveFormRef = (formRef) => {
         this.formRef = formRef;
+      }
+      handleBlur=()=>{
+        const form = this.formRef.props.form;
+        form.validateFields((err, values) => {
+          if (err) {
+            return;
+          }
+          console.log('Received values of form: ', values);
+        const  data2  = this.state.data2;
+        for(let i=0;i<values;i++){
+            let newData = {key:i+1,min:0,max:0}
+            data2.push(newData)
+        }
+        this.setState({
+            data2:data2
+        })
+    })
       }
     render() {
 
@@ -107,10 +217,21 @@ class ConfAreaConfig extends Component {
                     <Button className={cssObj.mr}>保存</Button>
                     <Button className={cssObj.mr}>取消</Button>
                 </div>
-                <CollectionCreateForm
-                wrappedComponentRef={this.saveFormRef}
+                <RateCreateForm
                 />
-                <Table  columns={this.columns}  pagination={false}/>
+                <Table  columns={this.columns1}  pagination={false} size="small" dataSource={this.state.data1}/>
+            </div>
+            <div className={cssObj.GroupTitle}>子会议区间设置</div>
+            <div className={cssObj.GroupContent}>
+            <div className={cssObj.right}>
+                    <Button className={cssObj.mr}>保存</Button>
+                    <Button className={cssObj.mr}>取消</Button>
+                </div>
+            <SubConfArea 
+            wrappedComponentRef={this.saveFormRef}
+            onBlur={this.handleBlur}
+            />
+            <Table  columns={this.columns2}  pagination={false} size="small" dataSource={this.state.data2}/>
             </div>
         </div>
     }
