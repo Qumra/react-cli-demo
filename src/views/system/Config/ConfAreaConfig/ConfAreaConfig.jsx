@@ -24,8 +24,51 @@ const kbitArry = [
     { value: 18, bites: '6Mbit/s' },
     { value: 19, bites: '7Mbit/s' },
     { value: 20, bites: '8Mbit/s' },
+];
+const videoProtocolArry = [
+    { value: 1, bites: 'H.263' },
+    { value: 2, bites: 'H.264' },
+    { value: 3, bites: 'H.264HP' },
+    { value: 4, bites: 'H.265' },
+];
+const resolutionArry =[
+    { value: 1, bites: 'QCIF' },
+    { value: 2, bites: 'CIF' },
+    { value: 3, bites: '360p' },
+    { value: 4, bites: 'VAG' },
+    { value: 5, bites: '4CIF' },
+    { value: 6, bites: '16CIF' },
+    { value: 7, bites: '480i' },
+    { value: 8, bites: '480p' },
+    { value: 9, bites: '720p' },
+    { value: 10, bites: '720p60' },
+    { value: 11, bites: '1080i' },
+    { value: 12, bites: '1080p' },
+    { value: 13, bites: '1080p60' },
 ]
-
+const audioProtocolArry = [
+    { value: 1, bites: 'G.719' },
+    { value: 2, bites: 'G.728' },
+    { value: 3, bites: 'G.729' },
+    { value: 4, bites: 'G.711A' },
+    { value: 5, bites: 'G.711U' },
+    { value: 6, bites: 'G.722.1C_32K' },
+    { value: 7, bites: 'G.722.1C_24K' },
+    { value: 8, bites: 'G.722.1C_48K' },
+    { value: 9, bites: 'G.722_48K' },
+    { value: 10, bites: 'G.722_56K' },
+    { value: 11, bites: 'G.722_64K' },
+    { value: 12, bites: 'iLBC' },
+    { value: 13, bites: 'AAC-LD 单声道' },
+    { value: 14, bites: 'AAC-LC 单声道' },
+    { value: 15, bites: 'HWA-LD 单声道' },
+    { value: 16, bites: 'AAC-LD 双声道' },
+    { value: 17, bites: 'AAC-LC 双声道' },
+    { value: 18, bites: 'HWA-LD 双声道' },
+    { value: 19, bites: 'AAC-LD 三声道' },
+    { value: 20, bites: 'opus' },
+    
+]
 const RateCreateForm = Form.create()(
     class extends React.Component {
       render() {
@@ -106,25 +149,7 @@ const RateCreateForm = Form.create()(
       }
     }
   );
-  const menuDrop = (
-    <Menu>
-      <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-          1st menu item
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-          2nd menu item
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-          3rd menu item
-        </a>
-      </Menu.Item>
-    </Menu>
-  );
+  
 class ConfAreaConfig extends Component {
     constructor(props) {
         super(props)
@@ -134,20 +159,34 @@ class ConfAreaConfig extends Component {
           }, {
             title: '视频协议',
             dataIndex: 'videoProtocol',
-            reder: text => {
-                return <Dropdown overlay={menuDrop}>
-                    <a className="ant-dropdown-link" href="#">
-                        Hover me <Icon type="down" />
-                    </a>
-                </Dropdown>
+            render: text => {
+                return <Select defaultValue= {2} size="large">
+                {videoProtocolArry.map(item => (
+                    <Option key={item.value} value={item.value}>{item.bites}</Option>
+                ))}
+            </Select>
             }
           }, {
             title: '视频格式',
             dataIndex: 'videoResolution',
+            render: text => {
+                return <Select defaultValue= {1} size="large">
+                {resolutionArry.map(item => (
+                    <Option key={item.value} value={item.value}>{item.bites}</Option>
+                ))}
+            </Select>
+            }
           },
           {
             title: '音频协议',
             dataIndex: 'audioProtocol',
+            render: text => {
+                return <Select defaultValue= {13} size="large">
+                {audioProtocolArry.map(item => (
+                    <Option key={item.value} value={item.value}>{item.bites}</Option>
+                ))}
+            </Select>
+            }
           },
           {
             title: '阀值',
@@ -160,6 +199,13 @@ class ConfAreaConfig extends Component {
           {
             title: '最小速率',
             dataIndex: 'lowestRate',
+            render:text=>{
+                return  <Select defaultValue= {16} size="large">
+                {kbitArry.map(item => (
+                    <Option key={item.value} value={item.value}>{item.bites}</Option>
+                ))}
+            </Select>
+            }
           },
         ];
         this.columns2 = [
@@ -198,9 +244,9 @@ class ConfAreaConfig extends Component {
             return;
           }
           console.log('Received values of form: ', values);
-        const  data2  = this.state.data2;
-        for(let i=0;i<values;i++){
-            let newData = {key:i+1,min:0,max:0}
+        const  data2  = []
+        for(let i=0;i<values.SubConfArea;i++){
+            let newData = {key:i+1,number:i+1,min:0,max:0}
             data2.push(newData)
         }
         this.setState({
