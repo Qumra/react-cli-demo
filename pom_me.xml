@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.huawei.smc</groupId>
+    <artifactId>reactjs</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>   
+
+     <parent>
+        <groupId>com.huawei.smc</groupId>
+        <artifactId>conference-service-management</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+ 
+    <properties>
+        <npm.app.dir>./src/main/resources</npm.app.dir>
+        <npm.app.build.base>${npm.app.dir}/build</npm.app.build.base>
+        <npm.app.build.dir>${npm.app.dir}/build</npm.app.build.dir>
+    </properties>
+
+    <dependencies>
+
+
+    </dependencies>
+
+     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>node-module-download</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${npm.app.dir}</workingDirectory>
+                            <executable>${npm}</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>sencha-app-build</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${npm.app.dir}</workingDirectory>
+                            <executable>${npm}</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                <executions>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>src/**</exclude>
+                    <exclude>node_modules/**/*</exclude>
+                    <exclude>**/*.json</exclude>
+                    <exclude>**/**/*.config.js</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+     <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <npm>npm.cmd</npm>
+            </properties>
+        </profile>
+        <profile>
+            <id>unix</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <npm>npm</npm>
+            </properties>
+        </profile>
+    </profiles>
+</project>
