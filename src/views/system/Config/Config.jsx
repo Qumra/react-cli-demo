@@ -5,6 +5,10 @@ import LeftNav from './LeftNav'
 import { Route } from 'react-router-dom';
 import Conference from './Conference/Conference'
 import ConfAreaConfig from './ConfAreaConfig/ConfAreaConfig'
+import NlogV2Config from './NlogV2Config/NlogV2Config'
+import DeviceConfig from './DeviceConfig/DeviceConfig'
+import EmailConfig  from './EmailConfig/EmailConfig'
+import NetConfig from './NetConfig/NetConfig'
 const { Sider, Content } = Layout;
 let match = '';
 class Config extends Component {
@@ -42,6 +46,10 @@ class Config extends Component {
                         <div className={cssObj.scrollDiv}>
                             <Route path={`${match.url}/ConferenceConfig`} component={Conference}></Route>
                             <Route path={`${match.url}/ConfAreaConfig`} component={ConfAreaConfig}></Route>
+                            <Route path={`${match.url}/NlogV2Config`} component={NlogV2Config}></Route>
+                            <Route path={`${match.url}/DeviceConfig`} component={DeviceConfig}></Route>
+                            <Route path={`${match.url}/EmailConfig`} component={EmailConfig}></Route>
+                            <Route path={`${match.url}/NetConfig`} component={NetConfig}></Route>
                         </div>
                     </Content>
                 </Layout>
