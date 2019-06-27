@@ -22,6 +22,22 @@ class LeftNav extends Component {
                     icon: 'inbox',
                     key: '/main/System/Config/ConfAreaConfig'
                 },
+                {
+                    icon: 'inbox',
+                    key: '/main/System/Config/NlogV2Config'
+                },
+                {
+                    icon: 'inbox',
+                    key: '/main/System/Config/DeviceConfig'
+                },
+                {
+                    icon: 'inbox',
+                    key: '/main/System/Config/EmailConfig'
+                },
+                {
+                    icon: 'inbox',
+                    key: '/main/System/Config//NetConfig'
+                },
             ]
           }
     }
