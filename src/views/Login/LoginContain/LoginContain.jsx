@@ -1,26 +1,27 @@
 import React, { Component } from "react";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import history from '@/config/history';
+// import history from '@/config/history';
+import { withRouter  } from 'react-router-dom'
 import { regExpConfig } from '@/config/Reg.confing'
 import cssObj from './LoginContain.css'
 import intl from '@/config/i18n'
-import { setCookie, getCookie,clearCookie } from '@/util/cookie'
+import { setCookie, getCookie, clearCookie } from '@/util/cookie'
 import zh_CN from '../locale/zh_CN'
 import en_US from '../locale/en_US'
-intl.options.locales['zh-CN'] = Object.assign(intl.options.locales['zh-CN'],zh_CN);
-intl.options.locales['en-US'] =  Object.assign(intl.options.locales['en-US'],en_US);
 const FormItem = Form.Item;
 class LoginContain extends Component {
-  constructor(){
-    super()
-    this.state={
-      username:"",
-      password:""
+  constructor(props) {
+    super(props)
+    this.state = {
+      username: "",
+      password: ""
     }
+    Object.assign(intl.options.locales['zh-CN'], zh_CN);
+    Object.assign(intl.options.locales['en-US'], en_US);
   }
   componentDidMount() {
     this.setState({
-      username:getCookie('userName'),
+      username: getCookie('userName'),
       password: getCookie('password')
     })
   }
@@ -28,10 +29,10 @@ class LoginContain extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-   this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields((err, values) => {
         function logincallback (res) {
         console.log(res)
-        if (res.status != 200) {
+        if (res.status !== 200) {
           console.log("请求失败")
         } else {
           if (values.remember) {
@@ -41,7 +42,8 @@ class LoginContain extends Component {
             clearCookie('userName');
             clearCookie('password')
           }
-          history.push({ pathname: '/main/home' })
+          // history.push({ pathname: '/main/home' })
+          this.props.history.push({ pathname: '/main/home' })
         }
       }
       if (!err) {
@@ -51,6 +53,8 @@ class LoginContain extends Component {
           csm.registOpCallback("login", logincallback)
           csm.start()
       }
+
+    });
   }
 
 
@@ -97,4 +101,4 @@ class LoginContain extends Component {
   }
 }
 LoginContain = Form.create()(LoginContain);
-export default LoginContain
+export default withRouter(LoginContain)
