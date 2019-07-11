@@ -1,0 +1,6 @@
+.panelDiv {
+    padding: 0 5px 0 5px
+}
+.checkAll :global(.ant-checkbox-group){
+    display: block;
+}
