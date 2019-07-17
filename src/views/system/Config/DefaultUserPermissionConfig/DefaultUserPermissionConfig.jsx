@@ -1,121 +1,124 @@
 import React, { Component } from "react";
-import { Tabs, Checkbox, Row, Col, Tree } from 'antd';
+import { Tabs, Checkbox, Row, Col, Tree, Divider } from 'antd';
 import cssObj from './DefaultUserPermissionConfig.css'
 const TabPane = Tabs.TabPane;
 const TreeNode = Tree.TreeNode;
 
-const plainOptions1 = ['查看系统参数', '修改系统参数', '系统日志', '系统告警', '设备配置模板', '设备软件', '查看拓扑', '设置拓扑', '查看报表', '设备巡检'];
-const plainOptions2 = ['添加组织', '修改组织', '删除组织']
-const plainOptions = plainOptions1.concat(plainOptions2)
+const plainOptionsSystem = ['查看系统参数', '修改系统参数', '系统日志', '系统告警', '设备配置模板', '设备软件', '查看拓扑', '设置拓扑', '查看报表', '设备巡检'];
+const plainOptionsNode = ['添加组织', '修改组织', '删除组织']
 const defaultCheckedList = ['Apple', 'Orange'];
 class DefaultUserPermissionConfig extends Component {
     constructor() {
         super()
         this.state = {
-            checkAll1: false,
-            checkedList1: defaultCheckedList,
-            checkAll2: false,
-            checkedList2: defaultCheckedList,
+            checkAllSystem: false,
+            checkedListSystem: defaultCheckedList,
+            checkAllNode: false,
+            checkedListNode: defaultCheckedList,
         };
     }
+    // 全选
     onCheckAllChange = (e) => {
         this.setState({
-            checkAll: e.target.checked,
-            checkedList: e.target.checked ? plainOptions : [],
+            checkedListSystem: e.target.checked ? plainOptionsSystem : [],
+            checkedListNode: e.target.checked ? plainOptionsNode : [],
+            indeterminateSystem: false,
+            indeterminateNode: false,
+            checkAllSystem: e.target.checked,
+            checkAllNode: e.target.checked,
         });
     }
-    onChange = (checkedList) => {
+    // 系统管理
+    onCheckAllChangeSystem = (e) => {
         this.setState({
-            checkedList,
-            checkAll1: checkedList.length === plainOptions.length,
+            checkAllSystem: e.target.checked,
+            indeterminateSystem: false,
+            checkedListSystem: e.target.checked ? plainOptionsSystem : [],
         });
     }
-    onCheckAllChange1 = (e) => {
+    onChangeSystem = (checkedListSystem) => {
         this.setState({
-            checkAll1: e.target.checked,
-            checkedList1: e.target.checked ? plainOptions1 : [],
+            checkedListSystem,
+            indeterminateSystem: !!checkedListSystem.length && (checkedListSystem.length < plainOptionsSystem.length),
+            checkAllSystem: checkedListSystem.length === plainOptionsSystem.length,
         });
     }
-    onChange1 = (checkedList1) => {
+    // 组织结构管理
+    onCheckAllChangeNode = (e) => {
         this.setState({
-            checkedList1,
-            // indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
-            checkAll1: checkedList1.length === plainOptions1.length,
+            checkAllNode: e.target.checked,
+            indeterminateNode: false,
+            checkedListNode: e.target.checked ? plainOptionsNode : [],
         });
     }
-    onCheckAllChange2 = (e) => {
+    onChangeNode = (checkedListNode) => {
         this.setState({
-            checkAll2: e.target.checked,
-            checkedList2: e.target.checked ? plainOptions2 : [],
-        });
-    }
-    onChange2 = (checkedList2) => {
-        this.setState({
-            checkedList2,
-            checkAll1: checkedList2.length === plainOptions2.length,
+            checkedListNode,
+            indeterminateNode: !!checkedListNode.length && (checkedListNode.length < plainOptionsNode.length),
+            checkAllNode: checkedListNode.length === plainOptionsNode.length,
         });
     }
     render() {
         return <div className={cssObj.panelDiv}>
             <Tabs type="card">
-                <TabPane tab="外部用户" key="1">
-                    <Checkbox
-                        onChange={this.onCheckAllChange}
-                        checked={this.state.checkAll}
-                    >
-                        全选
+                <TabPane tab="外部用户" key="System">
+                    <Divider orientation="left">
+                        <Checkbox
+                            onChange={this.onCheckAllChange}
+                            checked={this.state.checkAllSystem && this.state.checkAllSystem}
+                            indeterminate={this.state.indeterminateSystem || this.state.indeterminateNode || (this.state.checkAllSystem || this.state.checkAllNode) && !(this.state.checkAllSystem && this.state.checkAllNode)}
+                        >
+                            全选
                             </Checkbox>
-                    <fieldset>
-                        <legend>
-                            <Checkbox
-                                onChange={this.onCheckAllChange1}
-                                checked={this.state.checkAll1}
-                            >
-                                系统管理
+                    </Divider>
+                    <Divider orientation="left">
+                        <Checkbox
+                            onChange={this.onCheckAllChangeSystem}
+                            checked={this.state.checkAllSystem}
+                            indeterminate={this.state.indeterminateSystem}
+                        >
+                            系统管理
                             </Checkbox>
-                        </legend>
-                        <div className={cssObj.checkAll}>
-                            <Checkbox.Group onChange={this.onChange1} value={this.state.checkedList1}>
-                                <Row>{
-                                    plainOptions1.map((el, index) => {
-                                        return (
-                                            <Col span={6}>
-                                                <Checkbox value={el} key={index} >{el}</Checkbox>
-                                            </Col>
-                                        )
-                                    })
-                                }
-                                </Row>
-                            </Checkbox.Group>
+                    </Divider >
+                    <div className={cssObj.checkAll}>
+                        <Checkbox.Group onChange={this.onChangeSystem} value={this.state.checkedListSystem}>
+                            <Row>{
+                                plainOptionsSystem.map((el, index) => {
+                                    return (
+                                        <Col span={6} key={index}>
+                                            <Checkbox value={el}>{el}</Checkbox>
+                                        </Col>
+                                    )
+                                })
+                            }
+                            </Row>
+                        </Checkbox.Group>
 
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>
-                            <Checkbox
-                                // indeterminate={this.state.indeterminate}
-                                onChange={this.onCheckAllChange2}
-                                checked={this.state.checkAll2}
-                            >
-                                组织结构管理
+                    </div>
+                    <Divider orientation="left">
+                        <Checkbox
+                            indeterminate={this.state.indeterminateNode}
+                            onChange={this.onCheckAllChangeNode}
+                            checked={this.state.checkAllNode}
+                        >
+                            组织结构管理
                             </Checkbox>
-                        </legend>
-                        <div className={cssObj.checkAll}>
-                            <Checkbox.Group onChange={this.onChange2} value={this.state.checkedList2}>
-                                <Row>{
-                                    plainOptions2.map((el, index) => {
-                                        return (
-                                            <Col span={6}>
-                                                <Checkbox value={el} key={index} >{el}</Checkbox>
-                                            </Col>
-                                        )
-                                    })
-                                }
-                                </Row>
-                            </Checkbox.Group>
+                    </Divider>
+                    <div className={cssObj.checkAll}>
+                        <Checkbox.Group onChange={this.onChangeNode} value={this.state.checkedListNode}>
+                            <Row>{
+                                plainOptionsNode.map((el, index) => {
+                                    return (
+                                        <Col span={6} key={index}>
+                                            <Checkbox value={el}  >{el}</Checkbox>
+                                        </Col>
+                                    )
+                                })
+                            }
+                            </Row>
+                        </Checkbox.Group>
 
-                        </div>
-                    </fieldset>
+                    </div>
                     <div className={cssObj.EditExtUserOrgRelation}>
                         <div className={cssObj.dxtlControl}>
                             <div className={cssObj.controlHead}>
