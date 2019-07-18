@@ -112,6 +112,25 @@ class ServiceAreas extends Component {
     showModal = () => {
         this.setState({  collectionData: { serveName:'', remark: '', key: this.state.count },visible: true });
     }
+    onClickRow = (record) => {
+        return {
+          onClick: () => {
+            const id=record.key;
+            console.log(id)
+            if(id>-1){
+                this.setState({ delDisable: false, isDisable: false, });
+               return id
+            }
+          },
+        };
+      }
+      croShowModal = () => {
+        let key = this.onClickRow()
+        console.log(key)
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex(item => key === item.key);
+        this.setState({ collectionData: newData[index], visible: true });
+      }
     render() {
         return <div>
             <div className={cssObj.GroupTitle}>
@@ -119,12 +138,12 @@ class ServiceAreas extends Component {
                     <Button size='small' onClick={() => {
                         this.showModal()
                     }}>添加服务区</Button>
-                    <Button size='small' disabled>修改服务区</Button>
-                    <Button size='small' disabled>删除服务区</Button>
+                    <Button size='small' disabled={this.state.isDisable} onClick={()=>{this.croShowModal()}}>修改服务区</Button>
+                    <Button size='small' disabled={this.state.delDisable}>删除服务区</Button>
                     <Button size='small'>SBC管理</Button>
                 </div>
             </div>
-            <Table className={cssObj.tableScroll} columns={this.columns} dataSource={this.state.dataSource} pagination={false} size="small" />
+            <Table className={cssObj.tableScroll} columns={this.columns} dataSource={this.state.dataSource}  onRow={this.onClickRow} pagination={false} size="small" />
             <CollectionCreateForm
                 wrappedComponentRef={this.saveFormRef}
                 data={this.state.collectionData}
