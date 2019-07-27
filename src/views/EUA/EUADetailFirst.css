@@ -17,9 +17,10 @@
     color: #666666;
     letter-spacing: 0;
     position: relative;
+    display: flex;
+    align-items: center;
 }
 .euaContentMid {
-    width: 97.7%;
     height: 608px;
     background: #FFFFFF;
     border: 1px solid #EDEDED;
@@ -27,10 +28,8 @@
 .questionIcon{
     font-size: 13px; 
     color: #B7C1CF;
-    position:absolute; 
+    position: absolute; 
     right:0; 
-    top:50%;
-    margin-top:-0.5px;
 }
 .unlinkImg{
     width:152px;
@@ -60,6 +59,9 @@
     margin-top: 14px;
     margin-left: 25.6%;
 }
+.firstLink {
+    padding: 0 32px;
+}
 .firstLink :global(.ant-tabs-nav .ant-tabs-tab-active) {
     font-family: PingFangSC-Medium;
     font-size: 14px;
@@ -72,7 +74,7 @@
     margin-bottom: 16px;
 }
 .firstLink :global(.ant-form-item-label){
-    width: 190px;
+    width: 160px;
     text-align: left;
 }
 .firstLink :global(.ant-form-item-control-wrapper){
