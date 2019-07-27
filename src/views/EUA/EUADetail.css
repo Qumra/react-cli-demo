@@ -1,0 +1,81 @@
+.euaContentTitleMid {
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #333333;
+    margin-left: 60px;
+    display: flex;
+    flex: 1;
+}
+.midContent {
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+}
+.status .greenCircle{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #6ECE7E;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.mainIp .mainIpIcon{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #D8D8D8;
+    margin-right: 10px;
+}
+.euaContentTitleRight{
+    width: 330px;
+    display: flex;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #0D94FF;
+    justify-content: space-between;
+    margin-right: 9.3px;
+}    
+.vtsImg {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+.more :global(.ant-dropdown-menu-item){
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #333333;
+    line-height: 20px;
+}
+.more :global(.ant-dropdown-menu-item-active){
+    background: #F0F0F0;
+    color: #0D94FF;
+}
+.baseInfo .formItem {
+    display: flex;
+    width: 100%;
+    margin-top: 18px;
+}
+.baseInfo .formItem .labelDiv{
+    width: 160px;
+    text-align: left;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+    padding-left: 0.7%;
+}
+.baseInfo .formItem .wrapperDiv {
+    width: 280px;
+    height: 30px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #333333;
+}
+.baseInfo .editBtn {
+    margin: 40px 0 0 160px;
+}
+.baseInfo :global(.ant-btn){
+    width: 120px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular;
+    border-radius: 2px;
+}
