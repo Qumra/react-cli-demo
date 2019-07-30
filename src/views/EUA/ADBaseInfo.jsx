@@ -1,22 +1,27 @@
+// 基本信息
 import React, { Component } from 'react';
 import { Button } from 'antd';
 import styleObj from './EUADetail.css';
+import FirstBaseForm from './FirstBaseForm';
 class ADBaseInfo extends Component {
     constructor() {
         super();
         this.state = {
-            display_name:'block'
+            display_name:'block',
+            display_edit:'none'
         };
        
     }
     toggleEdit  = ()=>{
         if (this.state.display_name === 'none') {
             this.setState({
-                display_name: 'block'
+                display_name: 'block',
+                display_edit:'none'
             });
         } else if (this.state.display_name === 'block') {
             this.setState({
-                display_name: 'none'
+                display_name: 'none',
+                display_edit:'block'
             });
         }
     };
@@ -48,9 +53,11 @@ class ADBaseInfo extends Component {
                         <div className={styleObj.labelDiv}><span>备用通讯录服务器</span> </div>
                         <div className={styleObj.wrapperDiv}>********</div>
                     </div>
-                    <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit()}>编辑</Button>
+                    <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}>编辑</Button>
                 </div>
-
+                <div style={{display:this.state.display_edit}}>
+                    <FirstBaseForm></FirstBaseForm>
+                </div>
             </div>
         );
     }
