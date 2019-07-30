@@ -33,7 +33,7 @@
     font-size: 13px;
     color: #0D94FF;
     justify-content: space-between;
-    margin-right: 9.3px;
+    margin-right: 20px;
 }    
 .vtsImg {
     width: 24px;
@@ -50,6 +50,7 @@
     background: #F0F0F0;
     color: #0D94FF;
 }
+/* 基本信息 */
 .baseInfo .formItem {
     display: flex;
     width: 100%;
@@ -78,4 +79,72 @@
     font-size: 13px;
     font-family: PingFangSC-Regular;
     border-radius: 2px;
+}
+/* 业务地址 */
+.serviceAddress .btnGroup{
+    margin: 10px 0;
+}
+.addBtn {
+    margin-right: 8px;
+}
+.btnGroup :global(.ant-btn){
+    width: 60px;
+    height: 32px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+}
+.deleteIcon {
+    margin-left: 2px;
+}
+.serviceAddress :global(.ant-table-body){
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #333333;
+}
+.serviceAddress :global(.ant-table-body .ant-table-thead tr){
+    color: #999;
+}
+.quetionIconModal {
+    font-size: 13px; 
+    color: #B7C1CF;
+    margin-left: 11.3px;
+    margin-top: 25px;
+}
+.tipDiv {
+    display: flex;
+}
+.tipDiv :global(.ant-form-item){
+    margin-top: 16px;
+    display: flex;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.tipDiv :global(.ant-form-item-label){
+    width: 120px;
+    text-align: left;
+}
+.tipDiv :global(.ant-form-item-control-wrapper){
+    width: 300px;
+    height: 32px;
+}
+:global(.ant-modal-footer .ant-btn){
+    width: 120px;
+    height: 32px;
+}
+/* AD同步配置 */
+.ADConfig .btnGroup {
+    margin: 10px 0;
+}
+.ADConfig .btnGroup :global(.ant-btn){
+    width: 60px;
+    height: 32px;
+}
+.ADConfig .btnGroup .addBtn,.ADConfig .btnGroup .delBtn {
+    margin-right: 8px;
+}
+.operationDiv {
+    display: flex;
+}
+.operationDiv .editDiv {
+    margin-right: 14px;
 }
