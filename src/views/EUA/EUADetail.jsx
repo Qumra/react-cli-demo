@@ -3,6 +3,10 @@ import { Menu, Dropdown, Icon, Tabs } from 'antd';
 import cssObj from './EUADetailFirst.css';
 import styleObj from './EUADetail.css';
 import ADBaseInfo from './ADBaseInfo';
+import ServiceAddress from './ServiceAddress';
+import ADSynchronization from './ADSynchronization';
+import ShareNode from './ShareNode';
+import OtherSettings from './OtherSettings';
 const {TabPane} = Tabs;
 const menu = (
     <Menu>
@@ -66,10 +70,18 @@ class EUADetail extends Component {
                             <TabPane tab="基本信息" key="1">
                                 <ADBaseInfo></ADBaseInfo>
                             </TabPane>
-                            <TabPane tab="业务地址" key="2">Content of Tab Pane 2</TabPane>
-                            <TabPane tab="AD同步配置" key="3">Content of Tab Pane 3</TabPane>
-                            <TabPane tab="共享组织" key="4">Content of Tab Pane 3</TabPane>
-                            <TabPane tab="其他配置" key="5">Content of Tab Pane 3</TabPane>
+                            <TabPane tab="业务地址" key="2">
+                                <ServiceAddress></ServiceAddress>
+                            </TabPane>
+                            <TabPane tab="AD同步配置" key="3">
+                                <ADSynchronization></ADSynchronization>
+                            </TabPane>
+                            <TabPane tab="共享组织" key="4">
+                                <ShareNode></ShareNode>
+                            </TabPane>
+                            <TabPane tab="其他配置" key="5">
+                                <OtherSettings></OtherSettings>
+                            </TabPane>
                             <TabPane tab="日志" key="6">Content of Tab Pane 3</TabPane>
                             <TabPane tab="告警" key="7">Content of Tab Pane 3</TabPane>
                         </Tabs>
