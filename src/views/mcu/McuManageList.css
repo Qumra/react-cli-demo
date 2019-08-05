@@ -1,0 +1,75 @@
+.mcuManage {
+    display: flex;
+}
+.mcuContent {
+    padding: 0 2.3% 5.5%;
+    flex: 1;
+    width: 100%
+}
+.mcuContentTitle {
+    height: 60px;
+    line-height:60px;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: #666666;
+    letter-spacing: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.questionIcon{
+    font-size: 13px; 
+    color: #B7C1CF;
+    position: absolute; 
+    right:0; 
+}
+.mcuContentMid{
+    height: 582px;
+    background: #FFFFFF;
+    border: 1px solid #EDEDED;
+}
+.mcuContentMidpadding {
+    padding: 0 32px;
+}
+.btnGroup{
+    margin: 10px 0;
+    width: 196px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btnGroup :global(.ant-btn){
+    width: 60px;
+    height: 32px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+}
+.mcuContentMidHeader {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mcuContentMidHeader :global(.ant-input-search .ant-input){
+    border-radius: 20px;
+}
+.mcuStatus {
+    display: flex;
+}
+.mcuStatus .mcuStatusBtn {
+    margin-right: 6px;
+ padding: 3px;
+    text-align: center;
+    border: 1px solid #E9E5E5;
+    font-size: 7px;
+}
+.operationDiv {
+    display: flex;
+}
+.operationDiv :global(.ant-btn){
+    width: 59px;
+    height: 22px;
+    padding: 0px 3px;
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+}
