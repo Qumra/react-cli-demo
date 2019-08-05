@@ -1,0 +1,67 @@
+.addMcu {
+    display: flex;
+}
+.mcuContent {
+    padding: 0 2.3% 5.5%;
+    flex: 1;
+    width: 100%
+}
+.mcuContentTitle {
+    height: 60px;
+    line-height:60px;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: #666666;
+    letter-spacing: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.leftIcon {
+    font-size: 24px;
+    color: #0D94FF;
+    margin-right: 10px;
+}
+.questionIcon{
+    font-size: 13px; 
+    color: #B7C1CF;
+    position: absolute; 
+    right:0; 
+}
+.mcuContentMid{
+    height: 582px;
+    background: #FFFFFF;
+    border: 1px solid #EDEDED;
+}
+.mcuContentMidpadding {
+    padding: 0 32px;
+}
+.steps {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #EDEDED;
+}
+.steps :global(.ant-steps){
+    width: 65%;
+
+}
+.mcuContentMidTitle {
+    line-height: 70px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+}
+/* 连接设备 */
+.LinkMcuDevice :global(.ant-form-item){
+    display: flex;
+    margin-bottom: 16px;
+}
+.LinkMcuDevice :global(.ant-form-item-label){
+    width: 130px;
+    text-align: left;
+}
+.LinkMcuDevice :global(.ant-form-item-control-wrapper){
+    width: 300px;
+    height: 32px;
+}
