@@ -1,0 +1,120 @@
+.mcuMain {
+    display: flex;
+}
+.mcuContent {
+    padding: 0 2.3% 5.5%;
+    flex: 1;
+    width: 100%
+}
+.mcuContentTitle {
+    height: 60px;
+    line-height:60px;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: #666666;
+    letter-spacing: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.mcuContentTitleMid {
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #333333;
+    margin-left: 60px;
+    display: flex;
+    flex: 1;
+}
+.midContent {
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+}
+.status .greenCircle{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #6ECE7E;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.mcuStatus {
+    display: flex;
+    align-items: center;
+}
+.mcuStatus .mcuStatusIcon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    text-align: center;
+    border: 1px solid #E9E5E5;
+    background: #666666;
+}
+
+.mainIp span {
+    color: #0D94FF;
+}
+.questionIcon{
+    font-size: 13px; 
+    color: #B7C1CF;
+    position: relative; 
+    right:0; 
+}
+.mcuContentTitleRight {
+    width: 243px;
+    display: flex;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #0D94FF;
+    justify-content: space-between;
+    margin-right: 25px;
+    align-items: center;
+}
+.mcuContentTitleRight .schedulingDisabledIcon, .mcuContentTitleRight .backUpConfigurationIcon{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: #ccc;
+}
+.mcuContentMid{
+    height: 740px;
+    background: #FFFFFF;
+    border: 1px solid #EDEDED;
+}
+.mcuContentMidpadding {
+    padding: 20px 32px;
+    /* height: 100%; */
+}
+.mcuContentMidpadding :global(.ant-tabs){
+    height: 100%;
+}
+/* 基本信息 */
+.mcuBaseInfo .formItem {
+    display: flex;
+    width: 100%;
+    margin-top: 18px;
+}
+.mcuBaseInfo .formItem .labelDiv{
+    width: 160px;
+    text-align: left;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+    padding-left: 0.7%;
+}
+.mcuBaseInfo .formItem .wrapperDiv {
+    width: 280px;
+    height: 30px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #333333;
+}
+.mcuBaseInfo .editBtn {
+    margin: 40px 0 0 160px;
+}
+.mcuBaseInfo :global(.ant-btn){
+    width: 120px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular;
+    border-radius: 2px;
+}
