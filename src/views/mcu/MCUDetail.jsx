@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Tabs } from 'antd';
 import styleObj from './MCUDetail.css';
 import MCUBaseInfo from './MCUBaseInfo';
+import ParamConfig from './ParamConfig';
 const menu = (
     <Menu >
         <Menu.Item key="1">修改链接</Menu.Item>
@@ -62,7 +63,7 @@ class MCUDetail extends Component {
                                     <MCUBaseInfo></MCUBaseInfo>
                                 </TabPane>
                                 <TabPane tab="参数配置" key="2">
-                                Content of Tab Pane 3
+                                    <ParamConfig></ParamConfig>
                                 </TabPane>
                                 <TabPane tab="MCU利用率" key="3">
                                 Content of Tab Pane 3
