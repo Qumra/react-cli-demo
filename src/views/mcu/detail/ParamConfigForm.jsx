@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import {Form, Switch, Icon, Input, Button, Menu, Tooltip, Select} from 'antd';
 import styleObj from './MCUDetail.css';
+import {zh_CN_Device} from '@/locale/zh_CN';
+import {en_US_Device} from '@/locale/en_US';
+import {setLocale} from '@/config/i18n';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const {SubMenu} = Menu;
 const FormItem = Form.Item;
 const rootSubmenuKeys = ['sub1', 'sub2', 'sub3'];
@@ -8,6 +12,8 @@ const {Option} = Select;
 class ParamConfigForm extends Component {
     constructor() {
         super();
+        setLocale('zh-CN', zh_CN_Device);
+        setLocale('en-US', en_US_Device);
         this.state = {
             openKeys: ['sub1']
         };
@@ -26,6 +32,7 @@ class ParamConfigForm extends Component {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { intl } = this.props;
         return(
             <div className={styleObj.paramConfigForm}>
                 <Form>
@@ -38,7 +45,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem 
-                                        label="注册GK"
+                                        label={intl.formatMessage({id: 'MCU_RegisterGK'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('registeGK', {
@@ -50,7 +57,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="H.323 ID "
+                                        label={intl.formatMessage({id: 'MCU_H323ID'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('H.323ID', {
@@ -59,7 +66,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                     <Tooltip title="What do you want others to call you?">
@@ -68,7 +75,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="H.323 ID "
+                                        label={intl.formatMessage({id: 'MCU_SC'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('SC', {
@@ -89,7 +96,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="认证密码"
+                                        label={intl.formatMessage({id: 'MCU_Authpassword'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('authenticationPassword', {
@@ -98,13 +105,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="RAS端口"
+                                        label={intl.formatMessage({id: 'MCU_RASPort'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('RASPort', {
@@ -113,7 +120,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
@@ -121,7 +128,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.rightForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem 
-                                        label="启用H.235加密"
+                                        label={intl.formatMessage({id: 'MCU_EnableEncryptionH235'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('enableH.235', {
@@ -136,7 +143,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="GK地址 "
+                                        label={intl.formatMessage({id: 'MCU_GKAddress'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('GKIP', {
@@ -157,7 +164,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="GK备用服务器地址 "
+                                        label={intl.formatMessage({id: 'MCU_StandbyGK'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('StandbyGK', {
@@ -178,7 +185,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="注册状态"
+                                        label={intl.formatMessage({id: 'MCU_RegisteStatus'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('registeStatus', {
@@ -197,7 +204,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="本地端口"
+                                        label={intl.formatMessage({id: 'MCU_LocalPort'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('localPort', {
@@ -206,13 +213,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="重注册间隔(秒)"
+                                        label={intl.formatMessage({id: 'MCU_RegisteIntervalSec'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('registrationInterval', {
@@ -221,13 +228,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="认证用户名"
+                                        label={intl.formatMessage({id: 'MCU_AuthUserName'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('authenticationUserName', {
@@ -236,13 +243,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem 
-                                        label="注册服务器"
+                                        label={intl.formatMessage({id: 'MCU_RegisteServer'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('registerServer', {
@@ -254,7 +261,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="服务器地址"
+                                        label={intl.formatMessage({id: 'MCU_ServerAddress'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('serverIP', {
@@ -263,13 +270,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="服务器端口"
+                                        label={intl.formatMessage({id: 'MCU_ServerPort'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('serverPort', {
@@ -278,7 +285,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
@@ -286,7 +293,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.rightForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="服务器类型 "
+                                        label={intl.formatMessage({id: 'MCU_ServerType'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('serverType', {
@@ -304,7 +311,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="注册刷新间隔(秒)"
+                                        label={intl.formatMessage({id: 'MCU_RegisteRefreshSec'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('registrationRefreshInterval', {
@@ -313,13 +320,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="SIP URI"
+                                        label={intl.formatMessage({id: 'MCU_SIPURI'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('SIPURI', {
@@ -328,7 +335,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
@@ -340,7 +347,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="SIP备用服务器地址"
+                                        label={intl.formatMessage({id: 'MCU_SIPStandbyServer'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('SIPStandbyServerAddress', {
@@ -349,13 +356,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="传输类型"
+                                        label={intl.formatMessage({id: 'MCU_ProtocolType'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('protocolType', {
@@ -380,7 +387,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="位置"
+                                        label={intl.formatMessage({id: 'MCU_Location'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('Location', {
@@ -389,13 +396,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap超时时间(秒)"
+                                        label={intl.formatMessage({id: 'MCU_TrapTimeoutSec'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapTimeoutTime', {
@@ -404,13 +411,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap服务器地址1"
+                                        label={intl.formatMessage({id: 'MCU_TrapServerAddress1'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapServerAddress1', {
@@ -419,43 +426,43 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap服务器地址3"
+                                        label={intl.formatMessage({id: 'MCU_TrapServerAddress3'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress1', {
+                                        {getFieldDecorator('TrapServerAddress3', {
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress3!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap服务器地址5"
+                                        label={intl.formatMessage({id: 'MCU_TrapServerAddress5'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress1', {
+                                        {getFieldDecorator('TrapServerAddress5', {
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress5!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap用户名"
+                                        label={intl.formatMessage({id: 'MCU_TrapUserName'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapUserName', {
@@ -464,13 +471,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap认证协议"
+                                        label={intl.formatMessage({id: 'MCU_TrapAuthProtocol'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapAuthenticationProtocol', {
@@ -490,7 +497,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.rightForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="联系人"
+                                        label={intl.formatMessage({id: 'MCU_Participant'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('participant', {
@@ -499,13 +506,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap重试次数"
+                                        label={intl.formatMessage({id: 'MCU_TrapRetryTimes'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapAttempts', {
@@ -514,37 +521,37 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap服务器地址2"
+                                        label={intl.formatMessage({id: 'MCU_TrapServerAddress2'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress1', {
+                                        {getFieldDecorator('TrapServerAddress2', {
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress2!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap服务器地址4"
+                                        label={intl.formatMessage({id: 'MCU_TrapServerAddress4'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress1', {
+                                        {getFieldDecorator('TrapServerAddress4', {
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress4!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
@@ -556,7 +563,7 @@ class ParamConfigForm extends Component {
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Engine ID"
+                                        label={intl.formatMessage({id: 'MCU_EngineID'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('Engine ID', {
@@ -565,13 +572,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="Trap加密协议"
+                                        label={intl.formatMessage({id: 'MCU_TrapEncryption'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('encryptionProtocol', {
@@ -580,7 +587,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
@@ -590,7 +597,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="主机名"
+                                        label={intl.formatMessage({id: 'MCU_DNSHostName'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('DNSHostName', {
@@ -599,13 +606,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="DNS服务器地址"
+                                        label={intl.formatMessage({id: 'MCU_DNSServerIP'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('DNSServerAddress', {
@@ -614,7 +621,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>
@@ -622,7 +629,7 @@ class ParamConfigForm extends Component {
                             <div className={styleObj.rightForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="域名后缀"
+                                        label={intl.formatMessage({id: 'MCU_DomainSuffix'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('DomainNameSuffix', {
@@ -631,13 +638,13 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>   
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
-                                        label="备DNS服务器地址"
+                                        label={intl.formatMessage({id: 'MCU_AlternateDNSServer'})}
                                         colon={false}
                                     >
                                         {getFieldDecorator('DNSStandbyServerAddress', {
@@ -646,7 +653,7 @@ class ParamConfigForm extends Component {
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <Input placeholder="请输入" />
+                                            <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                                         )}
                                     </FormItem>
                                 </div>        
@@ -654,8 +661,8 @@ class ParamConfigForm extends Component {
                         </SubMenu>
                     </Menu>
                     <div className={styleObj.btnGroup}>
-                        <Button type="primary" htmlType="submit">保存</Button>
-                        <Button type="default" className={styleObj.cancelBtn}>取消</Button>
+                        <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/> </Button>
+                        <Button type="default" className={styleObj.cancelBtn}><FormattedMessage id="Cancel"/></Button>
                     </div>
                 </Form>
             </div>
@@ -663,4 +670,4 @@ class ParamConfigForm extends Component {
     }
 }
 ParamConfigForm = Form.create()(ParamConfigForm);
-export default ParamConfigForm;
+export default injectIntl(ParamConfigForm);
