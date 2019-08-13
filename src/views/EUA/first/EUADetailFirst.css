@@ -1,13 +1,10 @@
 .euaMain {
     display: flex;
 }
-.leftNav {
-    width:200px;
-    height: 708px;
-}
 .euaContent {
     padding: 0 2.3% 5.5%;
     flex: 1;
+    width: 100%
 }
 .euaContentTitle {
     height: 58px;
@@ -19,6 +16,19 @@
     position: relative;
     display: flex;
     align-items: center;
+}
+.euaContentTitle .status{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #333333;
+    margin-left: 60px;
+}
+.euaContentTitle .statusIcon{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #ccc;
+    margin-right: 10px;
 }
 .euaContentMid {
     height: 608px;
@@ -36,28 +46,25 @@
     height:122px;
     display: inline-block;
     margin-top: 16.7%;
-    margin-left:34.8%;
+    margin-left:45%;
     background: #D6D5D5;
 }
-.linkButton {
+.unlink :global(.ant-btn){
     width: 148px;
     height: 32px;
-    background: #0D94FF;
-    border-radius: 2px;
     font-family: PingFangSC-Regular;
     font-size: 13px;
-    color: #FFFFFF;
-    text-align: center;
-    line-height: 32px;
-    margin-top: 30px;
-    margin-left:34.8%;
 }
-.unlink span {
+.linkButton {
+    margin-top: 30px;
+    text-align: center;
+}
+.unlink .tip {
     font-family: PingFangSC-Regular;
     font-size: 25px;
     color: #666666;
     margin-top: 14px;
-    margin-left: 25.6%;
+    text-align: center;
 }
 .firstLink {
     padding: 0 32px;
@@ -68,16 +75,28 @@
     color: #333333;
     letter-spacing: 0;  
     border-bottom: 1px solid #EDEDED;
+    font-weight: 600;
 }
-.firstLink :global(.ant-form-item){
+.firstLink :global(.ant-tabs){
+    height: 100%;
+}
+.firstBaseForm {
+    height: 588px;
+    overflow: auto;
+}
+.tipDiv{
+    display: flex;
+}
+.tipDiv :global(.ant-form-item){
     display: flex;
     margin-bottom: 16px;
 }
-.firstLink :global(.ant-form-item-label){
+.tipDiv :global(.ant-form-item-label){
     width: 160px;
     text-align: left;
+    margin-right: 20px;
 }
-.firstLink :global(.ant-form-item-control-wrapper){
+.tipDiv :global(.ant-form-item-control-wrapper){
     width: 300px;
     height: 32px;
 }
@@ -89,6 +108,9 @@
     color: #B7C1CF;
     margin-left: 11.3px;
     margin-top: 13px;
+}
+.tipDiv .btnGroup {
+    margin-top: 24px;
 }
 .firstLink .cancelBtn {
     margin-left: 19px;
