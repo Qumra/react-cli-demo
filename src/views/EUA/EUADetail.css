@@ -27,14 +27,23 @@
     margin-right: 10px;
 }
 .euaContentTitleRight{
-    width: 330px;
     display: flex;
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #0D94FF;
     justify-content: space-between;
     margin-right: 20px;
-}    
+    align-items: center;
+}   
+.manualSync{
+    margin-right: 20px;
+} 
+.manualSyncIcon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: #ccc;
+}
 .vtsImg {
     width: 24px;
     height: 24px;
@@ -51,18 +60,23 @@
     color: #0D94FF;
 }
 /* 基本信息 */
+.baseInfo {
+    height: 608px;
+    overflow: auto;
+}
 .baseInfo .formItem {
     display: flex;
     width: 100%;
     margin-top: 18px;
 }
 .baseInfo .formItem .labelDiv{
-    width: 160px;
+    width: 140px;
     text-align: left;
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #999999;
     padding-left: 0.7%;
+    margin-right: 20px;
 }
 .baseInfo .formItem .wrapperDiv {
     width: 280px;
@@ -92,6 +106,8 @@
     height: 32px;
     font-family: PingFangSC-Regular;
     font-size: 13px;
+    text-align: center;
+    padding: 0;
 }
 .deleteIcon {
     margin-left: 2px;
@@ -122,6 +138,7 @@
 .tipDiv :global(.ant-form-item-label){
     width: 120px;
     text-align: left;
+    margin-right: 20px;
 }
 .tipDiv :global(.ant-form-item-control-wrapper){
     width: 300px;
@@ -176,7 +193,7 @@
 /* AD同步配置modal */
 :global(.ant-modal-body){
     height: 554px;
-    overflow: scroll;
+    overflow: auto;
     padding:25px 20px 25px 40px;
 }
 .tipADConfigDiv {
@@ -189,8 +206,10 @@
     margin-bottom: 0;
 }
 .tipADConfigDiv :global(.ant-form-item-label){
-    width: 130px;
+    /* 按最长宽度定宽 */
+    width: 220px;
     text-align: left;
+    margin-right: 20px
 }
 .tipADConfigDiv :global(.ant-form-item-control-wrapper){
     width: 400px;
@@ -211,6 +230,12 @@
     justify-content: space-between;
     align-items: center;
 }
+.shareNode .formHeader :global(.ant-form-item){
+    display: flex;
+}
+.shareNode .formHeader :global(.ant-form-item .ant-form-item-label){
+ margin-right: 20px;
+}
 .shareNode .formHeader span {
     font-family: PingFangSC-Regular;
     font-size: 13px;
@@ -218,7 +243,7 @@
 }
 .shareNode .formBody {
     height: 378px;
-    overflow: scroll;
+    overflow: auto;
     border-bottom: 1px solid #EDEDED;
 }
 .shareNode .formBody :global(.ant-tree-switcher_open .ant-tree-switcher-line-icon){
@@ -227,6 +252,9 @@
 }
 .shareNode .formBody :global(.ant-tree-switcher-noop .ant-tree-switcher-line-icon){
     display: none;
+}
+.shareNode .formBody :global(.ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected){
+    background-color: #fff;
 }
 .shareNode .formFooter .btnGroup {
     text-align: center;
@@ -240,7 +268,7 @@
 }
 /* 其他配置 */
 .otherSettings {
-    overflow: scroll;
+    overflow: auto;
     height: 670px;
 }
 .tipOtherDiv {
@@ -253,8 +281,10 @@
     margin-bottom: 0;
 }
 .tipOtherDiv :global(.ant-form-item-label){
-    width: 140px;
+    /* 按最长宽度定宽 */
+    width: 280px;
     text-align: left;
+    margin-right: 20px;
 }
 .tipOtherDiv :global(.ant-form-item-control-wrapper){
     width: 300px;
