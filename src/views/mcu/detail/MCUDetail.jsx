@@ -3,28 +3,43 @@ import { Menu, Dropdown, Icon, Tabs } from 'antd';
 import styleObj from './MCUDetail.css';
 import MCUBaseInfo from './MCUBaseInfo';
 import ParamConfig from './ParamConfig';
+import {zh_CN_Device} from '@/locale/zh_CN';
+import {en_US_Device} from '@/locale/en_US';
+import {setLocale} from '@/config/i18n';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const menu = (
     <Menu >
-        <Menu.Item key="1">修改链接</Menu.Item>
-        <Menu.Item key="2">备份配置</Menu.Item>
-        <Menu.Item key="3">恢复配置</Menu.Item>
-        <Menu.Item key="4">诊断</Menu.Item>
-        <Menu.Item key="5">删除</Menu.Item>
+        <Menu.Item key="1"> <FormattedMessage id="MCU_ChangeLink"/></Menu.Item>
+        <Menu.Item key="2"><FormattedMessage id="MCU_BackUpConfig"/></Menu.Item>
+        <Menu.Item key="3"><FormattedMessage id="MCU_RestoreConfig"/></Menu.Item>
+        <Menu.Item key="4"><FormattedMessage id="MCU_RestoreConfig"/></Menu.Item>
+        <Menu.Item key="5"><FormattedMessage id="Delete"/></Menu.Item>
     </Menu>
 );
 const {TabPane} = Tabs;
 class MCUDetail extends Component {
+    constructor(props) {
+        super(props);
+        setLocale('zh-CN', zh_CN_Device);
+        setLocale('en-US', en_US_Device);
+        this.state = {...this.props.location.state};
+    }
+    goback=()=>{
+        this.props.history.goBack();
+    }
     render() {
+        const { intl } = this.props;
         return (
             <div  className={styleObj.mcuMain}>
                 <div className={styleObj.mcuContent}>
                     <div className={styleObj.mcuContentTitle}>
-                        <span>南京区域MCU详情</span>
+                        <Icon type="left-circle" theme="outlined" className={styleObj.leftIcon} onClick={this.goback}/>
+                        <FormattedMessage id="MCU_Detail" values={{MCUName:this.state.MCUName}}/>
                         <div className={styleObj.mcuContentTitleMid}>
                             <div className={styleObj.midContent}>
                                 <div className={styleObj.status}>
                                     <div className={styleObj.greenCircle}></div>
-                                    <span>在线</span>
+                                    <FormattedMessage id="MCU_Online"/>
                                 </div>
                                 <div className={styleObj.mcuStatus}>
                                     <div className={styleObj.mcuStatusIcon}></div>
@@ -40,16 +55,16 @@ class MCUDetail extends Component {
                         <div className={styleObj.mcuContentTitleRight}>
                             <div className={styleObj.schedulingDisabled}>
                                 <div className={styleObj.schedulingDisabledIcon}></div>
-                                <span className={styleObj.schedulingDisabledText}>暂停预约</span>
+                                <FormattedMessage className={styleObj.schedulingDisabledText} id="MCU_DisScheduling"/>
                             </div>
                             <div className={styleObj.backUpConfiguration}>
                                 <div className={styleObj.backUpConfigurationIcon}></div>
-                                <span className={styleObj.backUpConfigurationText}>备份配置</span>
+                                <FormattedMessage className={styleObj.schedulingDisabledText} id="MCU_BackUpConfig"/>
                             </div>
                             <div className={styleObj.more}>
                                 <Dropdown overlay={menu}>
                                     <div>
-                                        <Icon type="ellipsis" theme="outlined" />更多
+                                        <Icon type="ellipsis" theme="outlined" /> <FormattedMessage id="More"/>
                                     </div> 
                                 </Dropdown>
                             </div>
@@ -59,17 +74,17 @@ class MCUDetail extends Component {
                     <div className={styleObj.mcuContentMid}>
                         <div className={styleObj.mcuContentMidpadding}>
                             <Tabs defaultActiveKey="1">
-                                <TabPane tab="基本信息" key="1">
+                                <TabPane tab={intl.formatMessage({id: 'BasicInfo'})} key="1">
                                     <MCUBaseInfo></MCUBaseInfo>
                                 </TabPane>
-                                <TabPane tab="参数配置" key="2">
+                                <TabPane tab={intl.formatMessage({id: 'MCU_ParamConfig'})} key="2">
                                     <ParamConfig></ParamConfig>
                                 </TabPane>
-                                <TabPane tab="MCU利用率" key="3">
+                                <TabPane tab={intl.formatMessage({id: 'MCU_UtilizationRatio'})} key="3">
                                 Content of Tab Pane 3
                                 </TabPane>
-                                <TabPane tab="日志" key="4">Content of Tab Pane 3</TabPane>
-                                <TabPane tab="告警" key="5">Content of Tab Pane 3</TabPane>
+                                <TabPane tab={intl.formatMessage({id: 'Alarm'})} key="4">Content of Tab Pane 3</TabPane>
+                                <TabPane tab={intl.formatMessage({id: 'Log'})} key="5">Content of Tab Pane 3</TabPane>
                             </Tabs>
                         </div>
                     </div>
@@ -78,4 +93,4 @@ class MCUDetail extends Component {
         );
     }
 }
-export default MCUDetail;
+export default injectIntl(MCUDetail);
