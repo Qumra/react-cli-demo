@@ -2,10 +2,16 @@
 import React, { Component } from 'react';
 import { Button } from 'antd';
 import styleObj from './EUADetail.css';
-import FirstBaseForm from './FirstBaseForm';
+import FirstBaseForm from '../first/FirstBaseForm';
+import {zh_CN_Device} from '@/locale/zh_CN';
+import {en_US_Device} from '@/locale/en_US';
+import {setLocale} from '@/config/i18n';
+import { FormattedMessage, injectIntl } from 'react-intl';
 class ADBaseInfo extends Component {
     constructor() {
         super();
+        setLocale('zh-CN', zh_CN_Device);
+        setLocale('en-US', en_US_Device);
         this.state = {
             display_name:'block',
             display_edit:'none'
@@ -27,33 +33,33 @@ class ADBaseInfo extends Component {
     };
     render() {
         return (
-            <div>
-                <div className={styleObj.baseInfo} style={{display:this.state.display_name }}>
+            <div className={styleObj.baseInfo}>
+                <div  style={{display:this.state.display_name }}>
                     <div className={styleObj.formItem}>
-                        <div className={styleObj.labelDiv}><span>启用企业通讯录</span> </div>
+                        <div className={styleObj.labelDiv}><FormattedMessage id="EUA_EnableCorporate"/></div>
                         <div className={styleObj.wrapperDiv}>启用</div>
                     </div>
                     <div className={styleObj.formItem}>
-                        <div className={styleObj.labelDiv}><span>名称</span> </div>
+                        <div className={styleObj.labelDiv}><FormattedMessage id="EUA_Name"/></div>
                         <div className={styleObj.wrapperDiv}>南京EUA</div>
                     </div>
                     <div className={styleObj.formItem}>
-                        <div className={styleObj.labelDiv}><span>IP地址</span> </div>
+                        <div className={styleObj.labelDiv}><FormattedMessage id="EUA_IPAddress"/> </div>
                         <div className={styleObj.wrapperDiv}>10.22.22.33</div>
                     </div>
                     <div className={styleObj.formItem}>
-                        <div className={styleObj.labelDiv}><span>对接帐号</span> </div>
+                        <div className={styleObj.labelDiv}><FormattedMessage id="EUA_ConnectAccount"/> </div>
                         <div className={styleObj.wrapperDiv}>dddkkk</div>
                     </div>
                     <div className={styleObj.formItem}>
-                        <div className={styleObj.labelDiv}><span>对接密码</span> </div>
+                        <div className={styleObj.labelDiv}><FormattedMessage id="EUA_ConnectPassword"/> </div>
                         <div className={styleObj.wrapperDiv}>*******</div>
                     </div>
                     <div className={styleObj.formItem}>
-                        <div className={styleObj.labelDiv}><span>备用通讯录服务器</span> </div>
+                        <div className={styleObj.labelDiv}><FormattedMessage id="EUA_StandbyDirectory"/> </div>
                         <div className={styleObj.wrapperDiv}>********</div>
                     </div>
-                    <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}>编辑</Button>
+                    <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div style={{display:this.state.display_edit}}>
                     <FirstBaseForm></FirstBaseForm>
@@ -62,4 +68,4 @@ class ADBaseInfo extends Component {
         );
     }
 }
-export default ADBaseInfo;
+export default injectIntl(ADBaseInfo);
