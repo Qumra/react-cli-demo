@@ -17,6 +17,11 @@
     display: flex;
     align-items: center;
 }
+.mcuContentTitle .leftIcon {
+    font-size: 24px;
+    color: #0D94FF;
+    margin-right: 10px;
+}
 .mcuContentTitleMid {
     font-family: PingFangSC-Regular;
     font-size: 13px;
@@ -61,7 +66,6 @@
     right:0; 
 }
 .mcuContentTitleRight {
-    width: 243px;
     display: flex;
     font-family: PingFangSC-Regular;
     font-size: 13px;
@@ -69,6 +73,9 @@
     justify-content: space-between;
     margin-right: 25px;
     align-items: center;
+}
+.schedulingDisabled,.backUpConfiguration,.more {
+    margin-right: 20px;
 }
 .mcuContentTitleRight .schedulingDisabledIcon, .mcuContentTitleRight .backUpConfigurationIcon{
     width: 20px;
@@ -105,6 +112,7 @@
     font-size: 13px;
     color: #999999;
     padding-left: 0.7%;
+    margin-right: 20px;
 }
 .mcuBaseInfo .formItem .wrapperDiv {
     width: 280px;
@@ -144,7 +152,7 @@
     margin-bottom: 16px;
 }
 .tipParamDiv :global(.ant-form-item-label){
-    width: 140px;
+    width:205px;
     text-align: left;
     margin-right: 20px;
 }
@@ -210,7 +218,7 @@
     margin-top: 18px;
 }
 .paramConfig .formItem .labelDiv{
-    width: 160px;
+    width: 220px;
     text-align: left;
     font-family: PingFangSC-Regular;
     font-size: 13px;
@@ -227,4 +235,13 @@
 .paramConfig :global(.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title){
     color: #0D94FF;
     padding: 0 !important;
+}
+.paramConfig .editBtn {
+    margin: 40px 0 0 160px;
+}
+.paramConfig :global(.ant-btn){
+    width: 120px;
+    font-size: 13px;
+    font-family: PingFangSC-Regular;
+    border-radius: 2px;
 }
