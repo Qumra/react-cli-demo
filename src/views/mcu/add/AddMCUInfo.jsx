@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { Button, Input, Form, Tooltip, Icon} from 'antd';
 import cssObj from './AddMcu.css';
+import {zh_CN_Device} from '@/locale/zh_CN';
+import {en_US_Device} from '@/locale/en_US';
+import {setLocale} from '@/config/i18n';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const { Search } = Input;
 class AddMCUInfo extends Component {
     constructor() {
         super();
+        setLocale('zh-CN', zh_CN_Device);
+        setLocale('en-US', en_US_Device);
         this.state = {
 
         };
@@ -14,13 +20,13 @@ class AddMCUInfo extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
+        const { intl } = this.props;
         return (
             <div className={cssObj.AddMCUInfo}>
                 <Form>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="名称"
+                            label={intl.formatMessage({id: 'MCU_Name'})}
                             colon={false}
                         >
                             {getFieldDecorator('mcuName', {
@@ -30,13 +36,13 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" />
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                             )}
                         </FormItem>
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="IP地址"
+                            label={intl.formatMessage({id: 'MCU_AddressIP'})}
                             colon={false}
                         >
                             {getFieldDecorator('IP', {
@@ -46,13 +52,13 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" />
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                             )}
                         </FormItem>
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="区域"
+                            label={intl.formatMessage({id: 'MCU_Zone'})}
                             colon={false}
                         >
                             {getFieldDecorator('IP', {
@@ -75,7 +81,7 @@ class AddMCUInfo extends Component {
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="对接帐号"
+                            label={intl.formatMessage({id: 'MCU_ConnectAccount'})}
                             colon={false}
                         >
                             {getFieldDecorator('account', {
@@ -86,7 +92,7 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" />
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                             )}
                         </FormItem>
                         <Tooltip title="What do you want others to call you?">
@@ -95,7 +101,7 @@ class AddMCUInfo extends Component {
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="对接密码"
+                            label={intl.formatMessage({id: 'MCU_ConnectPassword'})}
                             colon={false}
                         >
                             {getFieldDecorator('password', {
@@ -106,7 +112,7 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" type="password"/>
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} type="password"/>
                             )}
                         </FormItem>
                         <Tooltip title="What do you want others to call you?">
@@ -115,7 +121,7 @@ class AddMCUInfo extends Component {
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="注册SC地址"
+                            label={intl.formatMessage({id: 'MCU_RegisteSC'})}
                             colon={false}
                         >
                             {getFieldDecorator('SCAdress', {
@@ -125,13 +131,13 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" />
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                             )}
                         </FormItem>
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="MCU标示"
+                            label={intl.formatMessage({id: 'MCU_MCUMark'})}
                             colon={false}
                         >
                             {getFieldDecorator('MCUMark', {
@@ -141,13 +147,13 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" />
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                             )}
                         </FormItem>
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="管理员帐号"
+                            label={intl.formatMessage({id: 'MCU_AdministratorAccount'})}
                             colon={false}
                         >
                             {getFieldDecorator('administratorAccount', {
@@ -157,7 +163,7 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入" />
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />
                             )}
                         </FormItem>
                         <Tooltip title="What do you want others to call you?">
@@ -166,7 +172,7 @@ class AddMCUInfo extends Component {
                     </div>
                     <div className={cssObj.tipDiv}>
                         <FormItem
-                            label="管理员密码"
+                            label={intl.formatMessage({id: 'MCU_AdministratorPassword'})}
                             colon={false}
                         >
                             {getFieldDecorator('administratorPassword', {
@@ -176,7 +182,7 @@ class AddMCUInfo extends Component {
                                     { pattern: '', message: '' }
                                 ]
                             })(
-                                <Input placeholder="请输入"  type="password"/>
+                                <Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}  type="password"/>
                             )}
                         </FormItem>
                         <Tooltip title="What do you want others to call you?">
@@ -189,8 +195,8 @@ class AddMCUInfo extends Component {
                             colon={false}
                         >
                             <div className={cssObj.btnGroup}>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button type="default" className={cssObj.cancelBtn}>取消</Button>
+                                <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/></Button>
+                                <Button type="default" className={cssObj.cancelBtn}><FormattedMessage id="Cancel"/></Button>
                             </div>
                         </FormItem>
                     </div>
@@ -200,4 +206,4 @@ class AddMCUInfo extends Component {
     }
 }
 AddMCUInfo = Form.create()(AddMCUInfo);
-export default AddMCUInfo;
+export default injectIntl(AddMCUInfo);
