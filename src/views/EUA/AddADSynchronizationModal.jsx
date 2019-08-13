@@ -2,11 +2,20 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, Tooltip, Icon, Button, Switch, Select, InputNumber } from 'antd';
 import cssObj from './EUADetail.css';
+import {zh_CN_Device} from '@/locale/zh_CN';
+import {en_US_Device} from '@/locale/en_US';
+import {setLocale} from '@/config/i18n';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const {Option} = Select;
 const { TextArea } = Input;
 const AddADSynchronizationModal = Form.create()(
     class extends Component {
+        constructor() {
+            super();
+            setLocale('zh-CN', zh_CN_Device);
+            setLocale('en-US', en_US_Device);
+        }
         onChange=(checked)=>{
             console.log(checked);
         };
@@ -16,6 +25,7 @@ const AddADSynchronizationModal = Form.create()(
         render() {
             const { visible, onCancel, onCreate, form, data } = this.props;
             const { getFieldDecorator } = form; 
+            const { intl } = this.props;
             const formItemLayout = {
                 labelCol: {
                     xs: { span: 4 },
@@ -31,15 +41,15 @@ const AddADSynchronizationModal = Form.create()(
                 <Modal
                     visible={visible}
                     centered
-                    title="添加AD源"
-                    okText="确定"
+                    title={intl.formatMessage({id: 'EUA_AddModalTitle'})}
+                    okText={intl.formatMessage({id: 'Confirm'})}
                     onCancel={onCancel}
                     onOk={onCreate}
                     footer={[
                         <Button key="submit" type="primary" onClick={onCreate}>
-                          确定
+                            <FormattedMessage id="Confirm"/>
                         </Button>,
-                        <Button key="cancel" onClick={onCancel}>取消</Button>
+                        <Button key="cancel" onClick={onCancel}><FormattedMessage id="Cancel"/></Button>
                             
                     ]}
                     width="900px"
@@ -54,16 +64,16 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="AD名称"
+                                    label={intl.formatMessage({id: 'EUA_ADName'})}
                                 >
                                     {getFieldDecorator('ADName', {
                                         initialValue: data.ADName
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem 
-                                    label="启用AD认证"
+                                    label={intl.formatMessage({id: 'EUA_EnableAD'})}
                                     colon={false}
                                     {...formItemLayout}
                                 >
@@ -77,7 +87,7 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="服务器类型"
+                                    label={intl.formatMessage({id: 'EUA_ServerType'})}
                                 >
                                     {getFieldDecorator('serverType', {
                                         initialValue: '1',
@@ -92,34 +102,34 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="AD服务器地址"
+                                    label={intl.formatMessage({id: 'EUA_ADIP'})}
                                 >
                                     {getFieldDecorator('ADIP', {
                                         initialValue: data.ADIP,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="AD服务器端口"
+                                    label={intl.formatMessage({id: 'EUA_ADIPPort'})}
                                 >
                                     {getFieldDecorator('ADIPPort', {
                                         initialValue: data.ADIPPort,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="基准DN"
+                                    label={intl.formatMessage({id: 'EUA_BaseDN'})}
                                 >
                                     {getFieldDecorator('baseDN', {
                                         initialValue: data.baseDN,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                                 <Tooltip title="What do you want others to call you?">
                                     <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -128,12 +138,12 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="认证帐号"
+                                    label={intl.formatMessage({id: 'EUA_AuthAccount'})}
                                 >
                                     {getFieldDecorator('account', {
                                         initialValue: data.account,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                                 <Tooltip title="What do you want others to call you?">
                                     <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -142,12 +152,12 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="AD过滤条件"
+                                    label={intl.formatMessage({id: 'EUA_ADFilter'})}
                                 >
                                     {getFieldDecorator('account', {
                                         initialValue: data.account,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<TextArea  placeholder="请输入"  className={cssObj.textArea}/>)}
+                                    })(<TextArea  placeholder={intl.formatMessage({id: 'PleaseEnter'})}  className={cssObj.textArea}/>)}
                                 </FormItem>
                                 <Tooltip title="What do you want others to call you?">
                                     <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -155,7 +165,7 @@ const AddADSynchronizationModal = Form.create()(
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem 
-                                    label="启用加密"
+                                    label={intl.formatMessage({id: 'EUA_EnableEncryption'})}
                                     colon={false}
                                     {...formItemLayout}
                                 >
@@ -171,7 +181,7 @@ const AddADSynchronizationModal = Form.create()(
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem 
-                                    label="开启自动同步"
+                                    label={intl.formatMessage({id: 'EUA_AutoSync'})}
                                     colon={false}
                                     {...formItemLayout}
                                 >
@@ -188,10 +198,10 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="下次自动同步时间 "
+                                    label={intl.formatMessage({id: 'EUA_NextAutoSync'})}
                                 >
                                     {getFieldDecorator('timeNext', {
-                                    })(<InputNumber min={1} max={10} placeholder="请输入"/>)}
+                                    })(<InputNumber min={1} max={10} placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
                                 </FormItem>
                                 <Tooltip title="What do you want others to call you?">
                                     <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -200,7 +210,7 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="同步方式"
+                                    label={intl.formatMessage({id: 'EUA_SyncMode'})}
                                 >
                                     {getFieldDecorator('syncMethod', {
                                         initialValue: '1'
@@ -214,12 +224,12 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="同步周期(分钟)"
+                                    label={intl.formatMessage({id: 'EUA_syncTimeMin'})}
                                 >
                                     {getFieldDecorator('syncTimeMin', {
                                         initialValue: data.syncTimeMin,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                                 <Tooltip title="What do you want others to call you?">
                                     <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -228,12 +238,12 @@ const AddADSynchronizationModal = Form.create()(
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="同步周期(秒)"
+                                    label={intl.formatMessage({id: 'EUA_syncTimesec'})}
                                 >
                                     {getFieldDecorator('syncTimeSec', {
                                         initialValue: data.timeSec,
                                         rules: [{ required: true, message: 'Please input the title of collection!' }]
-                                    })(<Input placeholder="请输入" />)}
+                                    })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})} />)}
                                 </FormItem>
                                 <Tooltip title="What do you want others to call you?">
                                     <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -241,7 +251,7 @@ const AddADSynchronizationModal = Form.create()(
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem 
-                                    label="开启校验AD证书"
+                                    label={intl.formatMessage({id: 'EUA_ADcertificate'})}
                                     colon={false}
                                     {...formItemLayout}
                                 >
@@ -257,7 +267,7 @@ const AddADSynchronizationModal = Form.create()(
                             </div>
                             <div className={cssObj.tipADConfigDiv}>
                                 <FormItem 
-                                    label="开启校验AD证书CN"
+                                    label={intl.formatMessage({id: 'EUA_ADcertificate'})}
                                     colon={false}
                                     {...formItemLayout}
                                 >
@@ -279,4 +289,4 @@ const AddADSynchronizationModal = Form.create()(
         }
     }
 );
-export default AddADSynchronizationModal;
+export default injectIntl(AddADSynchronizationModal);
