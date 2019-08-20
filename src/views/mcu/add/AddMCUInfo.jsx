@@ -7,23 +7,58 @@ import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const { Search } = Input;
+
+// csm.addMcu(mcu);
 class AddMCUInfo extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
 
         };
     }
-
-
+    handleSubmit= (e) => {
+        e.preventDefault();
+        console.log(csm);
+        // debugger;
+        let mcu = {
+            name:'testMcu1223',
+            mcuType:'CLOUD_MCU',
+            ipAddress:'200.90.238.90',
+            account:{
+                name:'fb',
+                password:'Change_Me',
+                role:'ROLE_USER'
+            }
+        };
+        let addMcucallback = (res)=>{
+            console.log(res);
+            if (res.status !== 201) {
+                console.log('请求失败');
+            } else {
+                console.log('请求成功');
+            }
+        };
+        csm.registOpCallback('addMcu', addMcucallback);
+        csm.addMcu(mcu);
+       
+        
+        // this.props.form.validateFields((err, values) => {
+        //     if (!err) {
+        //         csm.registOpCallback('addMcu', addMcucallback);
+        //         csm.addMcu(mcu);
+        //     }
+        // });
+    }
+    
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { intl } = this.props;
+        const { intl, onCancel } = this.props;
         return (
             <div className={cssObj.AddMCUInfo}>
-                <Form>
+                {/* onSubmit={this.handleSubmit} */}
+                <Form >
                     <div className={cssObj.tipDiv}>
                         <FormItem
                             label={intl.formatMessage({id: 'MCU_Name'})}
@@ -61,7 +96,7 @@ class AddMCUInfo extends Component {
                             label={intl.formatMessage({id: 'MCU_Zone'})}
                             colon={false}
                         >
-                            {getFieldDecorator('IP', {
+                            {getFieldDecorator('Zone', {
                                 rules: [
                                     { type: 'string', message: 'The input is not valid IP!' },
                                     { required: true, message: 'Please input your IP' },
@@ -195,8 +230,8 @@ class AddMCUInfo extends Component {
                             colon={false}
                         >
                             <div className={cssObj.btnGroup}>
-                                <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/></Button>
-                                <Button type="default" className={cssObj.cancelBtn}><FormattedMessage id="Cancel"/></Button>
+                                <Button type="primary" htmlType="submit" onClick={this.handleSubmit}><FormattedMessage id="Save"/></Button>
+                                <Button type="default" className={cssObj.cancelBtn} onClick={onCancel}><FormattedMessage id="Cancel"/></Button>
                             </div>
                         </FormItem>
                     </div>
