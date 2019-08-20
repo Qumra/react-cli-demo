@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import cssObj from './AddMcu.css';
-import { Icon, Button, Input, Form} from 'antd';
+import { Icon} from 'antd';
 import AddMCUInfo from './AddMCUInfo';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
 class AddMcu extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
     }
     goback=()=>{
         this.props.history.goBack();
+    }
+    handleCancel=()=>{
+        this.props.history.push({ pathname: '/main/Device/MCUManage' });
     }
     render() {
         return(
@@ -26,7 +29,7 @@ class AddMcu extends Component {
                     </div>
                     <div className={cssObj.mcuContentMid}>
                         <div className={cssObj.mcuContentMidpadding}>
-                            <AddMCUInfo></AddMCUInfo>
+                            <AddMCUInfo onCancel={this.handleCancel}></AddMCUInfo>
                         </div>
                     </div>
                     
