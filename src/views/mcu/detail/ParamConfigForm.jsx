@@ -1,47 +1,41 @@
 import React, { Component } from 'react';
-import {Form, Switch, Icon, Input, Button, Menu, Tooltip, Select} from 'antd';
+import {Form, Switch, Icon, Input, Button, Collapse, Tooltip, Select} from 'antd';
 import styleObj from './MCUDetail.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
-const {SubMenu} = Menu;
+const { Panel } = Collapse;
 const FormItem = Form.Item;
-const rootSubmenuKeys = ['sub1', 'sub2', 'sub3'];
 const {Option} = Select;
 class ParamConfigForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
-            openKeys: ['sub1']
         };
 
 
     }
-    onOpenChange = (openKeys) => {
-        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
-        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            this.setState({ openKeys });
-        } else {
-            this.setState({
-                openKeys: latestOpenKey ? [latestOpenKey] : []
-            });
-        }
-    }
+   
+    // 取消按钮绑定的事件
+    CancelEvent=()=>this.props.onToggleState({
+        display_edit: 'none', 
+        display_name:'block'
+    })
+    
     render() {
         const { getFieldDecorator } = this.props.form;
         const { intl } = this.props;
         return(
             <div className={styleObj.paramConfigForm}>
                 <Form>
-                    <Menu
-                        mode="inline"
-                        openKeys={this.state.openKeys}
-                        onOpenChange={this.onOpenChange}
+                    <Collapse 
+                        defaultActiveKey={['1']}
+                        bordered={false}
                     >
-                        <SubMenu key="sub1" title={<span>H.323</span>}>
+                        <Panel header="H.323" key="1">
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem 
@@ -199,8 +193,8 @@ class ParamConfigForm extends Component {
                                     </FormItem>
                                 </div>
                             </div>               
-                        </SubMenu>
-                        <SubMenu key="sub2" title={<span>SIP</span>}>
+                        </Panel>
+                        <Panel header="SIP" key="2">
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
@@ -379,11 +373,10 @@ class ParamConfigForm extends Component {
                                     </FormItem>
                                 </div>
                             </div>               
-                        </SubMenu>
-                        <SubMenu key="sub3" title={<span>ISDN</span>}>
-                                 
-                        </SubMenu>
-                        <SubMenu key="sub4" title={<span>SNMP</span>}>
+                        </Panel>
+                        <Panel header="ISDN" key="3">
+                        </Panel>
+                        <Panel header="SNMP" key="4">
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
@@ -592,8 +585,8 @@ class ParamConfigForm extends Component {
                                     </FormItem>
                                 </div>
                             </div>         
-                        </SubMenu>
-                        <SubMenu key="sub5" title={<span>DNS</span>}>
+                        </Panel>
+                        <Panel header="DNS" key="5">
                             <div className={styleObj.leftForm}>
                                 <div className={styleObj.tipParamDiv}>
                                     <FormItem
@@ -658,11 +651,11 @@ class ParamConfigForm extends Component {
                                     </FormItem>
                                 </div>        
                             </div>
-                        </SubMenu>
-                    </Menu>
+                        </Panel>
+                    </Collapse>
                     <div className={styleObj.btnGroup}>
                         <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/> </Button>
-                        <Button type="default" className={styleObj.cancelBtn}><FormattedMessage id="Cancel"/></Button>
+                        <Button type="default" className={styleObj.cancelBtn} onClick={this.CancelEvent}><FormattedMessage id="Cancel"/></Button>
                     </div>
                 </Form>
             </div>
