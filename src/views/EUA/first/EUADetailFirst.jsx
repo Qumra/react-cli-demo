@@ -31,6 +31,12 @@ class EUADetailFirst extends Component {
             });
         }
     }
+    handleCancel=()=>{
+        this.setState({
+            display_edit: 'none', 
+            display_name:'block'
+        });
+    }
     render() {
         const { intl } = this.props;
         return (
@@ -55,7 +61,7 @@ class EUADetailFirst extends Component {
                         <div className={cssObj.firstLink} style={{display:this.state.display_edit }}>
                             <Tabs defaultActiveKey="1" >
                                 <TabPane tab={intl.formatMessage({id: 'BasicInfo'})} key="1">
-                                    <FirstBaseForm></FirstBaseForm>
+                                    <FirstBaseForm onCancel={this.handleCancel}></FirstBaseForm>
                                 </TabPane>
                             </Tabs>
                         </div>
