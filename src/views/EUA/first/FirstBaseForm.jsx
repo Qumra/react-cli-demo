@@ -7,17 +7,23 @@ import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 class FirstBaseForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
     }
     onChange=(checked)=>{
         // console.log(checked);
     }
+    // 取消按钮绑定的事件
+    //  CancelEvent=()=>this.props.onToggleState({
+    //      display_edit: 'none', 
+    //      display_name:'block'
+    //  })
+    
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { intl } = this.props;
+        const { intl, onCancel } = this.props;
         return (
             <div className={cssObj.firstBaseForm}>
                 <Form>
@@ -114,7 +120,7 @@ class FirstBaseForm extends Component {
                                     { pattern:'', message: '' }
                                 ]
                             })(
-                                <Input   placeholder={intl.formatMessage({id: 'PleaseEnterIP'})}/>
+                                <Input   placeholder={intl.formatMessage({id: 'EUA_EnterIP'})}/>
                             )}
                         </FormItem>
                     </div>
@@ -125,7 +131,7 @@ class FirstBaseForm extends Component {
                         >
                             <div className={cssObj.btnGroup}>
                                 <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/></Button>
-                                <Button type="default" className={cssObj.cancelBtn}><FormattedMessage id="Cancel"/></Button>
+                                <Button type="default" className={cssObj.cancelBtn} onClick={onCancel}><FormattedMessage id="Cancel"/></Button>
                             </div>
                         </FormItem>
                     </div>
