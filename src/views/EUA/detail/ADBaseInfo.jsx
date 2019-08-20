@@ -8,8 +8,8 @@ import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
 class ADBaseInfo extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
@@ -18,6 +18,7 @@ class ADBaseInfo extends Component {
         };
        
     }
+    // 切换是否为编辑状态
     toggleEdit  = ()=>{
         if (this.state.display_name === 'none') {
             this.setState({
@@ -31,6 +32,12 @@ class ADBaseInfo extends Component {
             });
         }
     };
+    handleCancel=()=>{
+        this.setState({
+            display_edit: 'none', 
+            display_name:'block'
+        });
+    }
     render() {
         return (
             <div className={styleObj.baseInfo}>
@@ -62,7 +69,7 @@ class ADBaseInfo extends Component {
                     <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div style={{display:this.state.display_edit}}>
-                    <FirstBaseForm></FirstBaseForm>
+                    <FirstBaseForm onCancel={this.handleCancel}></FirstBaseForm>
                 </div>
             </div>
         );
