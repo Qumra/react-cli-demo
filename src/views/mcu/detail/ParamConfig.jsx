@@ -1,35 +1,24 @@
 import React, { Component } from 'react';
-import { Icon, Button, Menu} from 'antd';
+import {  Button, Collapse } from 'antd';
 import styleObj from './MCUDetail.css';
 import ParamConfigForm from './ParamConfigForm';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
-const {SubMenu} = Menu;
-const rootSubmenuKeys = ['sub1', 'sub2', 'sub3', 'sub4'];
+const { Panel } = Collapse;
 class ParamConfig extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
-            openKeys: ['sub1'],
             display_name:'block',
             display_edit:'none'
         };
 
     }
-    onOpenChange = (openKeys) => {
-        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
-        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            this.setState({ openKeys });
-        } else {
-            this.setState({
-                openKeys: latestOpenKey ? [latestOpenKey] : []
-            });
-        }
-    }
+    // 切换是否为编辑状态
     toggleEdit  = ()=>{
         if (this.state.display_name === 'none') {
             this.setState({
@@ -43,16 +32,20 @@ class ParamConfig extends Component {
             });
         }
     };
+    // 改变父组件state里的值
+    onChangeState(stateName) {
+        this.setState(stateName);
+    }
     render() {
         return(
             <div className={styleObj.paramConfig}>
                 <div style={{display:this.state.display_name }}>
-                    <Menu
-                        mode="inline"
-                        openKeys={this.state.openKeys}
-                        onOpenChange={this.onOpenChange}
+                  
+                    <Collapse 
+                        defaultActiveKey={['1']}
+                        bordered={false}
                     >
-                        <SubMenu key="sub1" title={<span>H.323</span>}>
+                        <Panel header="H.323" key="1">
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}> <FormattedMessage id="MCU_RegisterGK"/></div>
@@ -93,8 +86,8 @@ class ParamConfig extends Component {
                                     <div className={styleObj.wrapperDiv}>已注册</div>
                                 </div>
                             </div>
-                        </SubMenu>
-                        <SubMenu key="sub2" title={<span>SIP</span>}>
+                        </Panel>
+                        <Panel header="SIP" key="2">
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_LocalPort"/> </div>
@@ -147,8 +140,8 @@ class ParamConfig extends Component {
                                     <div className={styleObj.wrapperDiv}>TLS</div>
                                 </div>
                             </div>
-                        </SubMenu>
-                        <SubMenu key="sub3" title={<span>SNMP</span>}>
+                        </Panel>
+                        <Panel header="SNMP" key="3">
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Location"/></div>
@@ -209,8 +202,8 @@ class ParamConfig extends Component {
                                     <div className={styleObj.wrapperDiv}>AES</div>
                                 </div>
                             </div>
-                        </SubMenu>
-                        <SubMenu key="sub4" title={<span>DNS</span>}>
+                        </Panel>
+                        <Panel header="DNS" key="4">
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_DNSHostName"/> </div>
@@ -231,12 +224,12 @@ class ParamConfig extends Component {
                                     <div className={styleObj.wrapperDiv}>192.168.1.1</div>
                                 </div>
                             </div>
-                        </SubMenu>
-                    </Menu>
+                        </Panel>
+                    </Collapse>
                     <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div  style={{display:this.state.display_edit}}>
-                    <ParamConfigForm></ParamConfigForm>
+                    <ParamConfigForm onToggleState={this.onChangeState.bind(this)}></ParamConfigForm>
                 </div>
             </div>
         );
