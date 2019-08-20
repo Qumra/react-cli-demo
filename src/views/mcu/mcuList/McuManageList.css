@@ -51,8 +51,16 @@
     justify-content: space-between;
     align-items: center;
 }
-.mcuContentMidHeader :global(.ant-input-search .ant-input){
+.mcuContentMidHeader .searchInput :global(.ant-input){
     border-radius: 20px;
+    padding-left: 40px;
+}
+.mcuContentMidHeader .searchInput :global(.ant-input-prefix){
+   font-size: 20px;
+   color: #999;
+}
+.mcuContentMidHeader .searchInput {
+    width: 240px;
 }
 .mcuStatus {
     display: flex;
@@ -73,4 +81,8 @@
     padding: 0px 3px;
     font-size: 12px;
     font-family: PingFangSC-Regular;
+}
+.mcuContentMidpadding :global(.ant-table-thead > tr > th){
+    border-right: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
 }
