@@ -7,8 +7,8 @@ import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
 class MCUBaseInfo extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
@@ -30,6 +30,13 @@ class MCUBaseInfo extends Component {
             });
         }
     };
+   
+    handleCancel=()=>{
+        this.setState({
+            display_edit: 'none', 
+            display_name:'block'
+        });
+    }
     render() {
         return(
             <div className={styleObj.mcuBaseInfo}>
@@ -74,7 +81,8 @@ class MCUBaseInfo extends Component {
                     <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div style={{display:this.state.display_edit}}>
-                    <AddMCUInfo></AddMCUInfo>
+                    {/* onToggleState={this.onChangeState.bind(this)} */}
+                    <AddMCUInfo onCancel={this.handleCancel}></AddMCUInfo>
                 </div>
             </div>
         );
