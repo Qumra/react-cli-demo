@@ -29,7 +29,7 @@ class AddMcu extends Component {
                     </div>
                     <div className={cssObj.mcuContentMid}>
                         <div className={cssObj.mcuContentMidpadding}>
-                            <AddMCUInfo onCancel={this.handleCancel}></AddMCUInfo>
+                            <AddMCUInfo onCancel={this.handleCancel} data={{}}></AddMCUInfo>
                         </div>
                     </div>
                     
