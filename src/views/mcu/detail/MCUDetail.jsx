@@ -22,7 +22,37 @@ class MCUDetail extends Component {
         super(props);
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
-        this.state = {...this.props.location.state};
+        this.state = {...this.props.location.state,
+            hasData:false,
+            item:{
+                // mcu:{
+                //     ipAddress: '200.90.238.90',
+                //     mcuType: 'CLOUD_MCU',
+                //     name: 'testMcu12233'
+                // }
+            }
+            
+        };
+    }
+    componentWillMount() {//渲染前调用  
+        this.getOneMcuDevices();
+    }
+    getOneMcuDevices=()=>{
+        let querytOneMcucallback = (res)=>{
+            console.log(res);
+            if (res.status !== 200) {
+                console.log('请求失败');
+            } else {
+                console.log('请求成功');
+                this.setState({
+                    item:res.data.data,
+                    hasData:true
+                });
+                console.log(this.state.item);
+            }
+        };
+        csm.registOpCallback('queryOneMcu', querytOneMcucallback);
+        csm.queryOneMcu(this.state.key);
     }
     goback=()=>{
         this.props.history.goBack();
@@ -30,7 +60,7 @@ class MCUDetail extends Component {
     render() {
         const { intl } = this.props;
         return (
-            <div  className={styleObj.mcuMain}>
+            !this.state.hasData ? 'Loading' : (<div  className={styleObj.mcuMain}>
                 <div className={styleObj.mcuContent}>
                     <div className={styleObj.mcuContentTitle}>
                         <Icon type="left-circle" theme="outlined" className={styleObj.leftIcon} onClick={this.goback}/>
@@ -45,10 +75,10 @@ class MCUDetail extends Component {
                                     <div className={styleObj.mcuStatusIcon}></div>
                                     <div className={styleObj.mcuStatusIcon}></div>
                                     <div className={styleObj.mcuStatusIcon}></div>
-                                    <div  className={styleObj.mcuStatusIcon}></div>
+                                    <Icon type="warning"  style={{color:'#D0021B', marginLeft:'10px'}} />
                                 </div>
                                 <div className={styleObj.mainIp}>
-                                    <span>10.22.33.99</span>
+                                    <span>{this.state.IP}</span>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +105,7 @@ class MCUDetail extends Component {
                         <div className={styleObj.mcuContentMidpadding}>
                             <Tabs defaultActiveKey="1">
                                 <TabPane tab={intl.formatMessage({id: 'BasicInfo'})} key="1">
-                                    <MCUBaseInfo></MCUBaseInfo>
+                                    <MCUBaseInfo baseInfo={this.state.item}></MCUBaseInfo>
                                 </TabPane>
                                 <TabPane tab={intl.formatMessage({id: 'MCU_ParamConfig'})} key="2">
                                     <ParamConfig></ParamConfig>
@@ -89,7 +119,7 @@ class MCUDetail extends Component {
                         </div>
                     </div>
                 </div>   
-            </div>
+            </div>)
         );
     }
 }
