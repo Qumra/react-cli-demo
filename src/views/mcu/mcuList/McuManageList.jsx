@@ -58,10 +58,12 @@ class McuManageList extends Component {
                 let data = [];
                 const {mcuDevices} = res.data._embedded;
                 for(let i = 0;i < mcuDevices.length;i++) {
+                    let ids = mcuDevices[i]._links.self.href.split('/');
+                    let id = ids[ids.length - 1];
                     const item = {
-                        key:i,
+                        key:id,
                         MCUName:mcuDevices[i].mcu.name,
-                        deviceModel:'',
+                        deviceModel:mcuDevices[i].mcu.mcuType,
                         IP:mcuDevices[i].mcu.ipAddress,
                         MCUStatus:mcuDevices[i].status
                     }; 
@@ -158,7 +160,7 @@ class McuManageList extends Component {
         // let id =record.key
         return {
             onClick: () => {
-                if (record.key > -1) {
+                if (record.key) {
                     this.props.history.push({pathname:'/main/Device/MCUDetail', state:record});
                     // this.setState({ delDisable: false, isDisable: false, rowId: record.key });
                 }
