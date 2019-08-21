@@ -54,7 +54,7 @@ class AddMCUInfo extends Component {
     
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { intl, onCancel } = this.props;
+        const { intl, onCancel, data } = this.props;
         return (
             <div className={cssObj.AddMCUInfo}>
                 {/* onSubmit={this.handleSubmit} */}
@@ -65,6 +65,7 @@ class AddMCUInfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('mcuName', {
+                                initialValue: data.mcu.name,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid mcuName!' },
                                     { required: true, message: 'Please input your mcuName' },
@@ -81,6 +82,7 @@ class AddMCUInfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('IP', {
+                                initialValue: data.mcu.ipAddress,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid IP!' },
                                     { required: true, message: 'Please input your IP' },
@@ -97,6 +99,7 @@ class AddMCUInfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('Zone', {
+                                // initialValue: data._link.Zone,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid IP!' },
                                     { required: true, message: 'Please input your IP' },
@@ -176,6 +179,7 @@ class AddMCUInfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('MCUMark', {
+                                initialValue: data.mcu.mcuType,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid MCUMark!' },
                                     { required: true, message: 'Please input your MCUMark' },
@@ -228,6 +232,7 @@ class AddMCUInfo extends Component {
                         <FormItem
                             label=" "
                             colon={false}
+
                         >
                             <div className={cssObj.btnGroup}>
                                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}><FormattedMessage id="Save"/></Button>
