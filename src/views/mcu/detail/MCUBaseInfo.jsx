@@ -17,6 +17,7 @@ class MCUBaseInfo extends Component {
         };
        
     }
+    
     toggleEdit  = ()=>{
         if (this.state.display_name === 'none') {
             this.setState({
@@ -38,16 +39,17 @@ class MCUBaseInfo extends Component {
         });
     }
     render() {
+        const { baseInfo } = this.props.baseInfo;
         return(
             <div className={styleObj.mcuBaseInfo}>
                 <div  style={{display:this.state.display_name }}>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Name"/></div>
-                        <div className={styleObj.wrapperDiv}>南京区MCU</div>
+                        <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.name}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AddressIP"/></div>
-                        <div className={styleObj.wrapperDiv}>华为</div>
+                        <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.ipAddress}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Zone"/></div>
@@ -67,7 +69,7 @@ class MCUBaseInfo extends Component {
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_MCUMark"/> </div>
-                        <div className={styleObj.wrapperDiv}>1897644332233</div>
+                        <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.mcuType}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AdministratorAccount"/></div>
@@ -82,7 +84,7 @@ class MCUBaseInfo extends Component {
                 </div>
                 <div style={{display:this.state.display_edit}}>
                     {/* onToggleState={this.onChangeState.bind(this)} */}
-                    <AddMCUInfo onCancel={this.handleCancel}></AddMCUInfo>
+                    <AddMCUInfo onCancel={this.handleCancel} data={this.props.baseInfo}></AddMCUInfo>
                 </div>
             </div>
         );
