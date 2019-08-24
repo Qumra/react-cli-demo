@@ -30,7 +30,8 @@ class MCUDetail extends Component {
                 //     mcuType: 'CLOUD_MCU',
                 //     name: 'testMcu12233'
                 // }
-            }
+            },
+            id:''
             
         };
     }
@@ -39,13 +40,16 @@ class MCUDetail extends Component {
     }
     getOneMcuDevices=()=>{
         let querytOneMcucallback = (res)=>{
-            console.log(res);
+            console.log(res.data);
             if (res.status !== 200) {
                 console.log('请求失败');
             } else {
                 console.log('请求成功');
+                let ids = res.data._links.self.href.split('/');
+                let id = ids[ids.length - 1];
                 this.setState({
-                    item:res.data.data,
+                    item:res.data,
+                    id,
                     hasData:true
                 });
                 console.log(this.state.item);
@@ -108,7 +112,7 @@ class MCUDetail extends Component {
                                     <MCUBaseInfo baseInfo={this.state.item}></MCUBaseInfo>
                                 </TabPane>
                                 <TabPane tab={intl.formatMessage({id: 'MCU_ParamConfig'})} key="2">
-                                    <ParamConfig></ParamConfig>
+                                    <ParamConfig  McuId={this.state.id}></ParamConfig>
                                 </TabPane>
                                 <TabPane tab={intl.formatMessage({id: 'MCU_UtilizationRatio'})} key="3">
                                 Content of Tab Pane 3
