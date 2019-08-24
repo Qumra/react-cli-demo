@@ -14,9 +14,25 @@ class ParamConfig extends Component {
         setLocale('en-US', en_US_Device);
         this.state = {
             display_name:'block',
-            display_edit:'none'
+            display_edit:'none',
+            id:props.McuId
         };
 
+    }
+    componentWillMount() {//渲染前调用  
+        this.getMcuConfig();
+    }
+    getMcuConfig=()=>{
+        let queryConfigCallBack = res => {
+            console.log(res);
+            if (res.status !== 200) {
+                console.log('请求失败');
+            } else {
+                console.log('请求成功');
+            }
+        };
+        csm.registOpCallback('queryConfig', queryConfigCallBack);
+        csm.queryConfig(this.state.id);
     }
     // 切换是否为编辑状态
     toggleEdit  = ()=>{
@@ -32,9 +48,18 @@ class ParamConfig extends Component {
             });
         }
     };
-    // 改变父组件state里的值
-    onChangeState(stateName) {
-        this.setState(stateName);
+    
+    handleSwitch=(data)=>{
+        if(data) {
+            this.setState({
+                baseInfo:data
+            });
+        }
+        this.setState({
+            display_edit: 'none', 
+            display_name:'block'
+        });
+        console.log(this.state.baseInfo);
     }
     render() {
         return(
@@ -229,7 +254,7 @@ class ParamConfig extends Component {
                     <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div  style={{display:this.state.display_edit}}>
-                    <ParamConfigForm onToggleState={this.onChangeState.bind(this)}></ParamConfigForm>
+                    <ParamConfigForm onSwitch={this.handleSwitch}></ParamConfigForm>
                 </div>
             </div>
         );
