@@ -2,22 +2,12 @@
 import React, { Component } from 'react';
 import {Form, Input, Button, Select, Tooltip, Icon } from 'antd';
 import cssObj from './EUADetail.css';
-import {zh_CN_Device} from '@/locale/zh_CN';
-import {en_US_Device} from '@/locale/en_US';
-import {setLocale} from '@/config/i18n';
-import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const {Option} = Select;
 const OtherSettings = Form.create()(
     class extends Component {
-        constructor() {
-            super();
-            setLocale('zh-CN', zh_CN_Device);
-            setLocale('en-US', en_US_Device);
-        }
         render() {
             const { getFieldDecorator } = this.props.form; 
-            const { intl } = this.props;
             const formItemLayout = {
                 labelCol: {
                     xs: { span: 4 },
@@ -34,7 +24,7 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_DirectorySecurity'})}
+                                label="企业通讯录安全等级"
                                 colon={false}
                             >
                                 {getFieldDecorator('safelevel', {
@@ -54,7 +44,7 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_SortRule'})}
+                                label="排序规则"
                                 colon={false}
                             >
                                 {getFieldDecorator('sortRule', {
@@ -72,7 +62,7 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_SortingType'})}
+                                label="排序方式"
                                 colon={false}
                             >
                                 {getFieldDecorator('sortMethod', {
@@ -90,7 +80,7 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_Sortingfield1'})}
+                                label="排序字段二"
                                 colon={false}
                             >
                                 {getFieldDecorator('sortWord1', {
@@ -105,22 +95,7 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_Sortingfield2'})}
-                                colon={false}
-                            >
-                                {getFieldDecorator('sortWord1', {
-                                    initialValue: '1'
-                                })(
-                                    <Select>
-                                        <Option value="1">NULL</Option>
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </div>
-                        <div className={cssObj.tipOtherDiv}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_Sortingfield3'})}
+                                label="排序字段三"
                                 colon={false}
                             >
                                 {getFieldDecorator('sortWord1', {
@@ -135,12 +110,11 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_passwordTryTimes'})}
-                                colon={false}
+                                label="密码错误尝试次数"
                             >
                                 {getFieldDecorator('passwordTryTimes', {
                                     initialValue:'3'
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                             <Tooltip title="What do you want others to call you?">
                                 <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -149,56 +123,51 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_Telepresence'})}
-                                colon={false}
+                                label="智真节点名称"
                             >
-                                {getFieldDecorator('NodeName', {
+                                {getFieldDecorator('interNodeName', {
                                     initialValue:'VC11'
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                         </div>
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_ADNodeName'})}
-                                colon={false}
+                                label="AD节点名称"
                             >
                                 {getFieldDecorator('ADnodeName', {
                                     initialValue:''
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                         </div>
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_TMSNodeName'})}
-                                colon={false}
+                                label="TMS节点名称"
                             >
                                 {getFieldDecorator('TMSnodeName', {
                                     initialValue:''
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                         </div>
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_UCNodeName'})}
-                                colon={false}
+                                label="UC节点名称"
                             >
                                 {getFieldDecorator('UCnodeName', {
                                     initialValue:'000000·999999'
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                         </div>
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_NTPServer'})}
-                                colon={false}
+                                label="NTP服务器"
                             >
                                 {getFieldDecorator('NTPServe', {
                                     initialValue:'000000·999999'
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                             <Tooltip title="What do you want others to call you?">
                                 <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -207,23 +176,21 @@ const OtherSettings = Form.create()(
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_Projectionode'})}
-                                colon={false}
+                                label="投影码区间"
                             >
                                 {getFieldDecorator('shadowCodeDuring', {
                                     initialValue:'000000·999999'
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入"/>)}
                             </FormItem>
                         </div>
                         <div className={cssObj.tipOtherDiv}>
                             <FormItem 
                                 {...formItemLayout}
-                                label={intl.formatMessage({id: 'EUA_AddressBook'})}
-                                colon={false}
+                                label="通讯录访问权限"
                             >
                                 {getFieldDecorator('accessAuthor', {
                                     initialValue:''
-                                })(<Input placeholder={intl.formatMessage({id: 'PleaseEnter'})}/>)}
+                                })(<Input placeholder="请输入IP地址"/>)}
                             </FormItem>
                             <Tooltip title="What do you want others to call you?">
                                 <Icon type="question-circle-o" className={cssObj.quetionIconModal}/>
@@ -236,8 +203,8 @@ const OtherSettings = Form.create()(
                                 colon={false}
                             >
                                 <div className={cssObj.btnGroup}>
-                                    <Button type="primary" htmlType="submit" style={{marginRight:'19px'}}><FormattedMessage id="Save"/></Button>
-                                    <Button type="default"><FormattedMessage id=""/></Button>
+                                    <Button type="primary" htmlType="submit" style={{marginRight:'19px'}}>保存</Button>
+                                    <Button type="default">取消</Button>
                                 </div>
                             </FormItem>
                         </div>
@@ -247,4 +214,4 @@ const OtherSettings = Form.create()(
         }
     }
 );
-export default injectIntl(OtherSettings);
+export default OtherSettings;

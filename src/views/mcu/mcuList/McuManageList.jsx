@@ -5,7 +5,7 @@ import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import ResizeableTitle from '@/components/ResizeableTitle';
+// import ResizeableTitle from '@/components/ResizeableTitle';
 import Item from 'antd/lib/list/Item';
 const {Search} = Input;
 
@@ -160,11 +160,11 @@ class McuManageList extends Component {
         }
     }
     ];
-    components = {
-        header: {
-            cell: ResizeableTitle
-        }
-    };
+    // components = {
+    //     header: {
+    //         cell: ResizeableTitle
+    //     }
+    // };
     menuBtn = (
         <Menu onClick={this.handleMenuClickBtn}>
             <Menu.Item key="1"><FormattedMessage id="MCU_ChangeLink"/></Menu.Item>

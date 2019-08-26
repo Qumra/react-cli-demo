@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Input, Form, Tooltip, Icon} from 'antd';
+import { NavLink ,withRouter} from 'react-router-dom';
 import cssObj from '../add/AddMcu.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
@@ -19,11 +20,8 @@ class EditMCUImfo extends Component {
     }
     handleSubmit= (e) => {
         e.preventDefault();
-        // debugger;
-        let ids = this.props.data._links.self.href.split('/');
-        let id = ids[ids.length - 1];
         let mcuMod = {
-            id,
+            id:1,
             name:'testMcu1223333333333333',
             mcuType:'CLOUD_MCU',
             ipAddress:'200.90.238.90',
@@ -32,19 +30,35 @@ class EditMCUImfo extends Component {
                 password:'Change_Me',
                 role:'ROLE_USER'
             }
+            
         };
-        let modMcucallback = (res)=>{
-            console.log(res);
-            if (res.status !== 200) {
-                console.log('请求失败');
-            } else {
-                console.log('请求成功');
-                this.props.history.push({pathname:'/main/Device/MCUDetail', state:res.data});
-
-            }
-        };
-        csm.registOpCallback('modMcu', modMcucallback);
-        csm.modMcu(mcuMod);
+        this.props.onCancel(mcuMod)
+       
+        // // debugger;
+        // let ids = this.props.data._links.self.href.split('/');
+        // let id = ids[ids.length - 1];
+        // let mcuMod = {
+        //     id,
+        //     name:'testMcu1223333333333333',
+        //     mcuType:'CLOUD_MCU',
+        //     ipAddress:'200.90.238.90',
+        //     account:{
+        //         name:'fb',
+        //         password:'Change_Me',
+        //         role:'ROLE_USER'
+        //     }
+        // };
+        // let modMcucallback = (res)=>{
+        //     console.log(res);
+        //     if (res.status !== 200) {
+        //         console.log('请求失败');
+        //     } else {
+        //         console.log('请求成功');
+        //          this.props.onCancel(res.data)
+        //     }
+        // };
+        // csm.registOpCallback('modMcu', modMcucallback);
+        // csm.modMcu(mcuMod);
 
         // this.props.form.validateFields((err, values) => {
         //     if (!err) {
@@ -68,7 +82,7 @@ class EditMCUImfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('mcuName', {
-                                initialValue: data.mcu.name,
+                                initialValue: data.name,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid mcuName!' },
                                     { required: true, message: 'Please input your mcuName' },
@@ -85,7 +99,6 @@ class EditMCUImfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('IP', {
-                                initialValue: data.mcu.ipAddress,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid IP!' },
                                     { required: true, message: 'Please input your IP' },
@@ -182,7 +195,6 @@ class EditMCUImfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('MCUMark', {
-                                initialValue: data.mcu.mcuType,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid MCUMark!' },
                                     { required: true, message: 'Please input your MCUMark' },
@@ -238,6 +250,7 @@ class EditMCUImfo extends Component {
 
                         >
                             <div className={cssObj.btnGroup}>
+       
                                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}><FormattedMessage id="Save"/></Button>
                                 <Button type="default" className={cssObj.cancelBtn} onClick={onCancel}><FormattedMessage id="Cancel"/></Button>
                             </div>
@@ -249,4 +262,4 @@ class EditMCUImfo extends Component {
     }
 }
 EditMCUImfo = Form.create()(EditMCUImfo);
-export default injectIntl(EditMCUImfo);
+export default injectIntl(withRouter(EditMCUImfo))

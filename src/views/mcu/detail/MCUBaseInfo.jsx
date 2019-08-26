@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Button} from 'antd';
 import styleObj from './MCUDetail.css';
-import AddMCUInfo from '../add/AddMCUInfo';
+import EditMCUImfo from './EditMCUImfo';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
@@ -13,7 +13,9 @@ class MCUBaseInfo extends Component {
         setLocale('en-US', en_US_Device);
         this.state = {
             display_name:'block',
-            display_edit:'none'
+            display_edit:'none',
+            baseInfo:props.baseInfo
+
         };
        
     }
@@ -32,24 +34,29 @@ class MCUBaseInfo extends Component {
         }
     };
    
-    handleCancel=()=>{
+    handleCancel=(data)=>{
+        if(data){
+            this.setState({
+                baseInfo:data
+            })
+        }
         this.setState({
             display_edit: 'none', 
             display_name:'block'
         });
     }
+   
     render() {
-        const { baseInfo } = this.props.baseInfo;
         return(
             <div className={styleObj.mcuBaseInfo}>
                 <div  style={{display:this.state.display_name }}>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Name"/></div>
-                        <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.name}</div>
+                        <div className={styleObj.wrapperDiv}>{this.state.baseInfo.name}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AddressIP"/></div>
-                        <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.ipAddress}</div>
+                        {/* <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.ipAddress}</div> */}
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Zone"/></div>
@@ -69,7 +76,7 @@ class MCUBaseInfo extends Component {
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_MCUMark"/> </div>
-                        <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.mcuType}</div>
+                        {/* <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.mcuType}</div> */}
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AdministratorAccount"/></div>
@@ -84,7 +91,7 @@ class MCUBaseInfo extends Component {
                 </div>
                 <div style={{display:this.state.display_edit}}>
                     {/* onToggleState={this.onChangeState.bind(this)} */}
-                    <AddMCUInfo onCancel={this.handleCancel} data={this.props.baseInfo}></AddMCUInfo>
+                    <EditMCUImfo onCancel={this.handleCancel}  data={this.props.baseInfo}></EditMCUImfo>
                 </div>
             </div>
         );
