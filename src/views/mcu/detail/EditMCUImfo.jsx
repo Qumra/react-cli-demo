@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Input, Form, Tooltip, Icon} from 'antd';
-import { NavLink ,withRouter} from 'react-router-dom';
+import { NavLink, withRouter} from 'react-router-dom';
 import cssObj from '../add/AddMcu.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
@@ -20,33 +20,19 @@ class EditMCUImfo extends Component {
     }
     handleSubmit= (e) => {
         e.preventDefault();
-        let mcuMod = {
-            id:1,
-            name:'testMcu1223333333333333',
-            mcuType:'CLOUD_MCU',
-            ipAddress:'200.90.238.90',
-            account:{
-                name:'fb',
-                password:'Change_Me',
-                role:'ROLE_USER'
-            }
-            
-        };
-        this.props.onCancel(mcuMod)
-       
-        // // debugger;
+        // debugger;
         // let ids = this.props.data._links.self.href.split('/');
         // let id = ids[ids.length - 1];
         // let mcuMod = {
         //     id,
         //     name:'testMcu1223333333333333',
         //     mcuType:'CLOUD_MCU',
-        //     ipAddress:'200.90.238.90',
-        //     account:{
-        //         name:'fb',
-        //         password:'Change_Me',
-        //         role:'ROLE_USER'
-        //     }
+        //     ipAddress:'200.90.238.90'
+        //     // account:{
+        //     //     name:'fb',
+        //     //     password:'Change_Me',
+        //     //    roles:['ROLE_USER']
+        //     // }
         // };
         // let modMcucallback = (res)=>{
         //     console.log(res);
@@ -54,23 +40,43 @@ class EditMCUImfo extends Component {
         //         console.log('请求失败');
         //     } else {
         //         console.log('请求成功');
-        //          this.props.onCancel(res.data)
+        //         // this.props.history.push({pathname:'/main/Device/MCUDetail', state:res.data});
+        //         this.props.onSwitch(res.data);
+
         //     }
         // };
         // csm.registOpCallback('modMcu', modMcucallback);
         // csm.modMcu(mcuMod);
 
-        // this.props.form.validateFields((err, values) => {
-        //     if (!err) {
-        //         csm.registOpCallback('addMcu', addMcucallback);
-        //         csm.addMcu(mcu);
-        //     }
-        // });
+        this.props.form.validateFields((err, values) => {
+            let modMcucallback = (res)=>{
+                console.log(res);
+                if (res.status !== 200) {
+                    console.log('请求失败');
+                } else {
+                    console.log('请求成功');
+                    this.props.onSwitch(res.data);
+    
+                }
+            };
+            if (!err) {
+                let ids = this.props.data._links.self.href.split('/');
+                let id = ids[ids.length - 1];
+                let mcuMod = {
+                    id,
+                    name:values.mcuName,
+                    mcuType:'CLOUD_MCU',
+                    ipAddress:values.IP
+                };
+                csm.registOpCallback('modMcu', modMcucallback);
+                csm.modMcu(mcuMod);
+            }
+        });
     }
     
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { intl, onCancel} = this.props;
+        const { intl, onSwitch} = this.props;
         let {data} = this.props;
         return (
             <div className={cssObj.AddMCUInfo}>
@@ -82,7 +88,7 @@ class EditMCUImfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('mcuName', {
-                                initialValue: data.name,
+                                initialValue: data.mcu.name,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid mcuName!' },
                                     { required: true, message: 'Please input your mcuName' },
@@ -99,6 +105,7 @@ class EditMCUImfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('IP', {
+                                initialValue: data.mcu.ipAddress,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid IP!' },
                                     { required: true, message: 'Please input your IP' },
@@ -195,6 +202,7 @@ class EditMCUImfo extends Component {
                             colon={false}
                         >
                             {getFieldDecorator('MCUMark', {
+                                initialValue: data._links.mcu.href,
                                 rules: [
                                     { type: 'string', message: 'The input is not valid MCUMark!' },
                                     { required: true, message: 'Please input your MCUMark' },
@@ -250,9 +258,8 @@ class EditMCUImfo extends Component {
 
                         >
                             <div className={cssObj.btnGroup}>
-       
                                 <Button type="primary" htmlType="submit" onClick={this.handleSubmit}><FormattedMessage id="Save"/></Button>
-                                <Button type="default" className={cssObj.cancelBtn} onClick={onCancel}><FormattedMessage id="Cancel"/></Button>
+                                <Button type="default" className={cssObj.cancelBtn} onClick={onSwitch}><FormattedMessage id="Cancel"/></Button>
                             </div>
                         </FormItem>
                     </div>
@@ -262,4 +269,4 @@ class EditMCUImfo extends Component {
     }
 }
 EditMCUImfo = Form.create()(EditMCUImfo);
-export default injectIntl(withRouter(EditMCUImfo))
+export default withRouter(injectIntl(EditMCUImfo));
