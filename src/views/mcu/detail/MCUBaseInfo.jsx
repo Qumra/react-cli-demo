@@ -15,7 +15,6 @@ class MCUBaseInfo extends Component {
             display_name:'block',
             display_edit:'none',
             baseInfo:props.baseInfo
-
         };
        
     }
@@ -34,29 +33,29 @@ class MCUBaseInfo extends Component {
         }
     };
    
-    handleCancel=(data)=>{
-        if(data){
+    handleSwitch=(data)=>{
+        if(data) {
             this.setState({
                 baseInfo:data
-            })
+            });
         }
         this.setState({
             display_edit: 'none', 
             display_name:'block'
         });
+        console.log(this.state.baseInfo);
     }
-   
     render() {
         return(
             <div className={styleObj.mcuBaseInfo}>
                 <div  style={{display:this.state.display_name }}>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Name"/></div>
-                        <div className={styleObj.wrapperDiv}>{this.state.baseInfo.name}</div>
+                        <div className={styleObj.wrapperDiv}>{this.state.baseInfo.mcu.name}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AddressIP"/></div>
-                        {/* <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.ipAddress}</div> */}
+                        <div className={styleObj.wrapperDiv}>{this.state.baseInfo.mcu.ipAddress}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Zone"/></div>
@@ -76,7 +75,7 @@ class MCUBaseInfo extends Component {
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_MCUMark"/> </div>
-                        {/* <div className={styleObj.wrapperDiv}>{this.props.baseInfo.mcu.mcuType}</div> */}
+                        <div className={styleObj.wrapperDiv}>{this.state.baseInfo._links.mcu.href}</div>
                     </div>
                     <div className={styleObj.formItem}>
                         <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AdministratorAccount"/></div>
@@ -90,8 +89,7 @@ class MCUBaseInfo extends Component {
                     <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div style={{display:this.state.display_edit}}>
-                    {/* onToggleState={this.onChangeState.bind(this)} */}
-                    <EditMCUImfo onCancel={this.handleCancel}  data={this.props.baseInfo}></EditMCUImfo>
+                    <EditMCUImfo onSwitch={this.handleSwitch} data={this.state.baseInfo}></EditMCUImfo>
                 </div>
             </div>
         );
