@@ -14,20 +14,17 @@ class ParamConfigForm extends Component {
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
+           
         };
 
 
     }
-   
-    // 取消按钮绑定的事件
-    CancelEvent=()=>this.props.onToggleState({
-        display_edit: 'none', 
-        display_name:'block'
-    })
+    
     
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { intl } = this.props;
+        const { intl, onSwitch} = this.props;
+        let {data} =  this.props;
         return(
             <div className={styleObj.paramConfigForm}>
                 <Form>
@@ -55,6 +52,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('H.323ID', {
+                                            initialValue: data.Device_H323Id.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid H.323ID!' },
                                                 { pattern: '', message: '' }
@@ -109,6 +107,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('RASPort', {
+                                            initialValue: data.Device_ScRasPort.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid RASPort!' },
                                                 { pattern: '', message: '' }
@@ -126,6 +125,8 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('enableH.235', {
+                                            valuePropName: 'checked',
+                                            initialValue: data.Device_ScIsUsedH235.value
                                         })(
                                             <Switch  onChange={this.onChange} defaultChecked/>
                                         )}
@@ -183,12 +184,15 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('registeStatus', {
+                                            initialValue: data.Device_ScState.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid registeStatus!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
-                                            <span>已注册</span>
+                                            <Select>
+                                                <Option value="1">已注册</Option>
+                                            </Select>
                                         )}
                                     </FormItem>
                                 </div>
@@ -202,6 +206,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('localPort', {
+                                            initialValue: data.Device_SipLocalPort.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid localPort!' },
                                                 { pattern: '', message: '' }
@@ -217,6 +222,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('registrationInterval', {
+                                            initialValue: data.Device_SipFreshRegTimeSpan.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid registrationInterval!' },
                                                 { pattern: '', message: '' }
@@ -232,6 +238,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('authenticationUserName', {
+                                            initialValue: data.Device_SipDomainUser.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid authenticationUserName!' },
                                                 { pattern: '', message: '' }
@@ -247,8 +254,11 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('registerServer', {
+                                            valuePropName: 'checked',
+                                            initialValue: data.Device_SipSupport.value
                                         })(
-                                            <Switch  onChange={this.onChange} defaultChecked/>
+                                            <Switch  onChange={this.onChange} />
+                                            // defaultChecked
                                         )}
                                 
                                     </FormItem>
@@ -259,6 +269,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('serverIP', {
+                                            initialValue: data.Device_SipAddress.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid serverIP!' },
                                                 { pattern: '', message: '' }
@@ -274,6 +285,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('serverPort', {
+                                            initialValue: data.Device_SipServerPort.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid serverIP!' },
                                                 { pattern: '', message: '' }
@@ -291,7 +303,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('serverType', {
-                                            initialValue: '1',
+                                            initialValue: data.Device_SipType.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid serverType!' },
                                                 { pattern: '', message: '' }
@@ -309,6 +321,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('registrationRefreshInterval', {
+                                            initialValue: data.Device_SipReRegTimeSpan.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid registrationInterval!' },
                                                 { pattern: '', message: '' }
@@ -324,6 +337,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('SIPURI', {
+                                            initialValue: data.Device_SipUri.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid SIPURI!' },
                                                 { pattern: '', message: '' }
@@ -345,6 +359,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('SIPStandbyServerAddress', {
+                                            initialValue: data.Device_SipBackUpAddress.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid SIPStandbyServerAddress!' },
                                                 { pattern: '', message: '' }
@@ -360,7 +375,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('protocolType', {
-                                            initialValue: '1',
+                                            initialValue: data.Device_SipProtocolType.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid protocolType!' },
                                                 { pattern: '', message: '' }
@@ -384,6 +399,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('Location', {
+                                            initialValue: data.Device_SnmpPosition.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid Location!' },
                                                 { pattern: '', message: '' }
@@ -399,6 +415,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapTimeoutTime', {
+                                            initialValue: data.Device_TrapTimeout.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapTimeoutTime!' },
                                                 { pattern: '', message: '' }
@@ -414,6 +431,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapServerAddress1', {
+                                            initialValue: data.Device_SnmpTrapHostName1.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress1!' },
                                                 { pattern: '', message: '' }
@@ -429,6 +447,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapServerAddress3', {
+                                            initialValue: data.Device_SnmpTrapHostName3.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress3!' },
                                                 { pattern: '', message: '' }
@@ -444,6 +463,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapServerAddress5', {
+                                            initialValue: data.Device_SnmpTrapHostName5.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress5!' },
                                                 { pattern: '', message: '' }
@@ -494,6 +514,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('participant', {
+                                            initialValue: data.Device_SnmpContactPerson.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid participant!' },
                                                 { pattern: '', message: '' }
@@ -509,6 +530,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapAttempts', {
+                                            initialValue: data.Device_TrapTryTimes.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapAttempts!' },
                                                 { pattern: '', message: '' }
@@ -524,6 +546,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapServerAddress2', {
+                                            initialValue: data.Device_SnmpTrapHostName2.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress2!' },
                                                 { pattern: '', message: '' }
@@ -539,6 +562,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('TrapServerAddress4', {
+                                            initialValue: data.Device_SnmpTrapHostName4.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid TrapServerAddress4!' },
                                                 { pattern: '', message: '' }
@@ -594,6 +618,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('DNSHostName', {
+                                            initialValue: data.Device_DnsHost.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid DNSHostName!' },
                                                 { pattern: '', message: '' }
@@ -609,6 +634,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('DNSServerAddress', {
+                                            initialValue: data.Device_DnsAddress1.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid DNSServerAddress!' },
                                                 { pattern: '', message: '' }
@@ -626,6 +652,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('DomainNameSuffix', {
+                                            initialValue: data.Device_DnsSuffix.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid DomainNameSuffix!' },
                                                 { pattern: '', message: '' }
@@ -641,6 +668,7 @@ class ParamConfigForm extends Component {
                                         colon={false}
                                     >
                                         {getFieldDecorator('DNSStandbyServerAddress', {
+                                            initialValue: data.Device_DnsAddress2.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid DNSStandbyServerAddress!' },
                                                 { pattern: '', message: '' }
@@ -655,7 +683,7 @@ class ParamConfigForm extends Component {
                     </Collapse>
                     <div className={styleObj.btnGroup}>
                         <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/> </Button>
-                        <Button type="default" className={styleObj.cancelBtn} onClick={this.CancelEvent}><FormattedMessage id="Cancel"/></Button>
+                        <Button type="default" className={styleObj.cancelBtn} onClick={onSwitch}><FormattedMessage id="Cancel"/></Button>
                     </div>
                 </Form>
             </div>
