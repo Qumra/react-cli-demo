@@ -15,7 +15,9 @@ class ParamConfig extends Component {
         this.state = {
             display_name:'block',
             display_edit:'none',
-            id:props.McuId
+            id:props.McuId,
+            configInfo:'',
+            hasData:false
         };
 
     }
@@ -29,6 +31,10 @@ class ParamConfig extends Component {
                 console.log('请求失败');
             } else {
                 console.log('请求成功');
+                this.setState({
+                    configInfo:res.data.items,
+                    hasData:true
+                });
             }
         };
         csm.registOpCallback('queryConfig', queryConfigCallBack);
@@ -59,11 +65,12 @@ class ParamConfig extends Component {
             display_edit: 'none', 
             display_name:'block'
         });
-        console.log(this.state.baseInfo);
     }
     render() {
+        console.log(this.state.configInfo);
+        const {baseInfo} = this.props;
         return(
-            <div className={styleObj.paramConfig}>
+            !this.state.hasData ? 'Loading' : (<div className={styleObj.paramConfig}>
                 <div style={{display:this.state.display_name }}>
                   
                     <Collapse 
@@ -78,11 +85,11 @@ class ParamConfig extends Component {
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_H323ID"/> </div>
-                                    <div className={styleObj.wrapperDiv}>223333</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_H323Id.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_SC"/></div>
-                                    <div className={styleObj.wrapperDiv}>19660</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_ScAddress.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Authpassword"/> </div>
@@ -90,13 +97,14 @@ class ParamConfig extends Component {
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_RASPort"/></div>
-                                    <div className={styleObj.wrapperDiv}>1718</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_ScRasPort.value}</div>
                                 </div>
                             </div>
                             <div className={styleObj.rightDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_EnableEncryptionH235"/> </div>
-                                    <div className={styleObj.wrapperDiv}>1718</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_ScIsUsedH235.value}</div>
+                                    {/* 选择开关 */}
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_GKAddress"/>  </div>
@@ -108,7 +116,7 @@ class ParamConfig extends Component {
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_RegisteStatus"/> </div>
-                                    <div className={styleObj.wrapperDiv}>已注册</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_ScState.value}</div>
                                 </div>
                             </div>
                         </Panel>
@@ -116,41 +124,43 @@ class ParamConfig extends Component {
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_LocalPort"/> </div>
-                                    <div className={styleObj.wrapperDiv}>5060</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipLocalPort.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_RegisteIntervalSec"/> </div>
-                                    <div className={styleObj.wrapperDiv}>30</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipFreshRegTimeSpan.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AuthUserName"/> </div>
-                                    <div className={styleObj.wrapperDiv}></div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipDomainUser.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_RegisteServer"/> </div>
-                                    <div className={styleObj.wrapperDiv}>是</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipSupport.value}</div>
+                                    {/* 下拉框 */}
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}> <FormattedMessage id="MCU_ServerAddress"/></div>
-                                    <div className={styleObj.wrapperDiv}>200.90.34.211</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipAddress.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_ServerPort"/> </div>
-                                    <div className={styleObj.wrapperDiv}>5061</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipServerPort.value}</div>
                                 </div>
                             </div>
                             <div className={styleObj.rightDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_ServerType"/></div>
-                                    <div className={styleObj.wrapperDiv}>标准</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipType.value}</div>
+                                    {/* 下拉框 */}
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_RegisteRefreshSec"/></div>
-                                    <div className={styleObj.wrapperDiv}>300</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipReRegTimeSpan.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_SIPURI"/> </div>
-                                    <div className={styleObj.wrapperDiv}>0512123118</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipUri.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><span></span> </div>
@@ -158,11 +168,12 @@ class ParamConfig extends Component {
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_SIPStandbyServer"/></div>
-                                    <div className={styleObj.wrapperDiv}></div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipBackUpAddress.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_ProtocolType"/></div>
-                                    <div className={styleObj.wrapperDiv}>TLS</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipProtocolType.value}</div>
+                                    {/* 下拉框 */}
                                 </div>
                             </div>
                         </Panel>
@@ -170,49 +181,50 @@ class ParamConfig extends Component {
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Location"/></div>
-                                    <div className={styleObj.wrapperDiv}>HuaWei</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpPosition.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapTimeoutSec"/></div>
-                                    <div className={styleObj.wrapperDiv}>5</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_TrapTimeout.value}</div>
+                                    {/* 下拉框的值 */}
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapServerAddress1"/></div>
-                                    <div className={styleObj.wrapperDiv}>192.168.10.1</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpTrapHostName1.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapServerAddress3"/></div>
-                                    <div className={styleObj.wrapperDiv}>192.168.10.3</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpTrapHostName3.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapServerAddress5"/></div>
-                                    <div className={styleObj.wrapperDiv}>192.168.10.5</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpTrapHostName5.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapUserName"/></div>
                                     <div className={styleObj.wrapperDiv}>trapinit</div>
                                 </div>
                                 <div className={styleObj.formItem}>
-                                    <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapUserName"/></div>
+                                    <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapAuthProtocol"/></div>
                                     <div className={styleObj.wrapperDiv}>SHA</div>
                                 </div>
                             </div>
                             <div className={styleObj.rightDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_Participant"/></div>
-                                    <div className={styleObj.wrapperDiv}>HuaWei</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpContactPerson.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapRetryTimes"/></div>
-                                    <div className={styleObj.wrapperDiv}>3</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_TrapTryTimes.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapServerAddress2"/></div>
-                                    <div className={styleObj.wrapperDiv}>192.168.10.2</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpTrapHostName2.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_TrapServerAddress4"/></div>
-                                    <div className={styleObj.wrapperDiv}>192.168.10.4</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SnmpTrapHostName4.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><span></span> </div>
@@ -232,21 +244,21 @@ class ParamConfig extends Component {
                             <div className={styleObj.leftDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_DNSHostName"/> </div>
-                                    <div className={styleObj.wrapperDiv}>HUAWEI_MCU</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_DnsHost.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_DNSServerIP"/> </div>
-                                    <div className={styleObj.wrapperDiv}>192.168.1.1</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_DnsAddress1.value}</div>
                                 </div>
                             </div>
                             <div className={styleObj.rightDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_DomainSuffix"/> </div>
-                                    <div className={styleObj.wrapperDiv}>192.168.1.1</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_DnsSuffix.value}</div>
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_AlternateDNSServer"/> </div>
-                                    <div className={styleObj.wrapperDiv}>192.168.1.1</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_DnsAddress2.value}</div>
                                 </div>
                             </div>
                         </Panel>
@@ -254,9 +266,9 @@ class ParamConfig extends Component {
                     <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
                 </div>
                 <div  style={{display:this.state.display_edit}}>
-                    <ParamConfigForm onSwitch={this.handleSwitch}></ParamConfigForm>
+                    <ParamConfigForm onSwitch={this.handleSwitch} data={this.state.configInfo} baseInfo={baseInfo}></ParamConfigForm>
                 </div>
-            </div>
+            </div>)
         );
     }
 }
