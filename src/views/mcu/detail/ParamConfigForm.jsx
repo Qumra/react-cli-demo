@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Switch, Icon, Input, Button, Collapse, Tooltip, Select} from 'antd';
+import {Form, Switch, Icon, Input, Button, Collapse, Tooltip, Select, message} from 'antd';
 import styleObj from './MCUDetail.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
@@ -19,15 +19,157 @@ class ParamConfigForm extends Component {
 
 
     }
-    
-    
+    handleSubmit= (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            console.log(values);
+            let modMcuConfigcallback = (res)=>{
+                console.log(res);
+                console.log(JSON.parse(res.config.data));
+                if (res.status !== 200) {
+                    console.log('请求失败');
+                } else {
+                    console.log('请求成功');
+                    message.info('修改成功');
+                    const modData = JSON.parse(res.config.data);
+                    this.props.onSwitch(modData.config.items);
+
+                }
+            };
+            // if (!err) {
+            let ids = this.props.baseInfo._links.self.href.split('/');
+            let id = ids[ids.length - 1];
+            // Device_ScIsUsedH235
+            // Device_SipSupport
+
+            if(values.Device_ScIsUsedH235 === true) {
+                values.Device_ScIsUsedH235 = '1';
+            }else{
+                values.Device_ScIsUsedH235 = '0';
+            };
+            if(values.Device_SipSupport === true) {
+                values.Device_SipSupport = '1';
+            }else{
+                values.Device_SipSupport = '0';
+            };
+            let mcuModConfig = {
+                mcu:{
+                    id,
+                    ...this.props.baseInfo.mcu
+                },
+                config:{
+                    items:{
+                        // ...this.props.data,
+                        Device_CloudMcuExternalAddress: {value: '192.168.0.0', type: 'String'},
+                        Device_DnsAddress1: {value: values.Device_DnsAddress1, type: 'String'},
+                        Device_DnsAddress2: {value: values.Device_DnsAddress2, type: 'String'},
+                        Device_DnsHost: {value: values.Device_DnsHost, type: 'String'},
+                        Device_DnsSuffix: {value: values.Device_DnsSuffix, type: 'String'},
+                        Device_H323Id: {value: values.Device_H323Id, type: 'String'},
+                        Device_IsRegisterAgent: {value: '2', type: 'String'},
+                        Device_IsRegisterSc: {value: '2', type: 'String'},
+                        Device_IsRegisterSip: {value: '1', type: 'String'},
+                        Device_IsSupportHttps: {value: '1', type: 'String'},
+                        Device_IsUsedDns: {value: '2', type: 'String'},
+                        Device_McuDataConfSrv_Id: {value: '1', type: 'String'},
+                        Device_Model: {value: '10', type: 'String'},
+                        Device_Port: {value: '5001', type: 'String'},
+                        Device_ScAddress: {value: '200.90.238.92', type: 'String'},
+                        Device_ScBackUpAddress: {value: '', type: 'String'},
+                        Device_ScFailReason: {value: '0', type: 'String'},
+                        Device_ScIsUsedH235: {value: values.Device_ScIsUsedH235, type: 'String'},
+                        Device_ScRasPort: {value: values.Device_ScRasPort, type: 'String'},
+                        Device_ScState: {value: values.Device_ScState, type: 'String'},
+                        Device_SipAddress: {value: values.Device_SipAddress, type: 'String'},
+                        Device_SipAgentAddress: {value: '', type: 'String'},
+                        Device_SipBackUpAddress: {value: values.Device_SipBackUpAddress, type: 'String'},
+                        Device_SipBackUpAgentAddress: {value: '', type: 'String'},
+                        Device_SipDomainUser: {value: values.Device_SipDomainUser, type: 'String'},
+                        Device_SipFailReason: {value: '101', type: 'String'},
+                        Device_SipFreshRegTimeSpan: {value: values.Device_SipFreshRegTimeSpan, type: 'String'},
+                        Device_SipLocalPort: {value: values.Device_SipLocalPort, type: 'String'},
+                        Device_SipProtocolType: {value: values.Device_SipProtocolType, type: 'String'},
+                        Device_SipReRegTimeSpan: {value:  values.Device_SipReRegTimeSpan, type: 'String'},
+                        Device_SipServerPort: {value: values.Device_SipServerPort, type: 'String'},
+                        Device_SipState: {value: '2', type: 'String'},
+                        Device_SipSupport: {value: values.Device_SipSupport, type: 'String'},
+                        Device_SipSupportTrunk: {value: '2', type: 'String'},
+                        Device_SipTrunkAddress1: {value: '192.168.0.1', type: 'String'},
+                        Device_SipTrunkAddress2: {value: '192.168.0.1', type: 'String'},
+                        Device_SipTrunkAddress3: {value: '192.168.0.1', type: 'String'},
+                        Device_SipTrunkAddress4: {value: '192.168.0.1', type: 'String'},
+                        Device_SipTrunkAddress5: {value: '192.168.0.1', type: 'String'},
+                        Device_SipTrunkAddress6: {value: '192.168.0.1', type: 'String'},
+                        Device_SipTrunkMode1: {value: '0', type: 'String'},
+                        Device_SipTrunkMode2: {value: '0', type: 'String'},
+                        Device_SipTrunkMode3: {value: '0', type: 'String'},
+                        Device_SipTrunkMode4: {value: '0', type: 'String'},
+                        Device_SipTrunkMode5: {value: '0', type: 'String'},
+                        Device_SipTrunkMode6: {value: '0', type: 'String'},
+                        Device_SipTrunkPort1: {value: '5060', type: 'String'},
+                        Device_SipTrunkPort2: {value: '5060', type: 'String'},
+                        Device_SipTrunkPort3: {value: '5060', type: 'String'},
+                        Device_SipTrunkPort4: {value: '5060', type: 'String'},
+                        Device_SipTrunkPort5: {value: '5060', type: 'String'},
+                        Device_SipTrunkPort6: {value: '5060', type: 'String'},
+                        Device_SipTrunkPrefix1: {value: '', type: 'String'},
+                        Device_SipTrunkPrefix2: {value: '', type: 'String'},
+                        Device_SipTrunkPrefix3: {value: '', type: 'String'},
+                        Device_SipTrunkPrefix4: {value: '', type: 'String'},
+                        Device_SipTrunkPrefix5: {value: '', type: 'String'},
+                        Device_SipTrunkPrefix6: {value: '', type: 'String'},
+                        Device_SipTrunkProtocol1: {value: '0', type: 'String'},
+                        Device_SipTrunkProtocol2: {value: '0', type: 'String'},
+                        Device_SipTrunkProtocol3: {value: '0', type: 'String'},
+                        Device_SipTrunkProtocol4: {value: '0', type: 'String'},
+                        Device_SipTrunkProtocol5: {value: '0', type: 'String'},
+                        Device_SipTrunkProtocol6: {value: '0', type: 'String'},
+                        Device_SipType: {value: values.Device_SipType, type: 'String'},
+                        Device_SipUri: {value:values.Device_SipUri, type: 'String'},
+                        Device_SnmpContactPerson: {value: values.Device_SnmpContactPerson, type: 'String'},
+                        Device_SnmpPosition: {value: values.Device_SnmpPosition, type: 'String'},
+                        Device_SnmpTrapHostName1: {value: values.Device_SnmpTrapHostName1, type: 'String'},
+                        Device_SnmpTrapHostName2: {value: values.Device_SnmpTrapHostName2, type: 'String'},
+                        Device_SnmpTrapHostName3: {value: values.Device_SnmpTrapHostName3, type: 'String'},
+                        Device_SnmpTrapHostName4: {value: values.Device_SnmpTrapHostName4, type: 'String'},
+                        Device_SnmpTrapHostName5: {value: values.Device_SnmpTrapHostName5, type: 'String'},
+                        Device_SoftwareVer: {value: 'V600R019C10SPC100B006 May 09 2019, 07:53:26 (GMT+00)', type: 'String'},
+                        Device_TrapAddrNum: {value: '5', type: 'String'},
+                        Device_TrapTimeout: {value: values.Device_TrapTimeout, type: 'String'},
+                        Device_TrapTryTimes: {value: values.Device_TrapTryTimes, type: 'String'}
+                    }
+                }
+            };
+            csm.registOpCallback('editConfig', modMcuConfigcallback);
+            csm.editConfig(mcuModConfig);
+
+            // }
+
+        });
+    }
+    onScIsUsedH235Change=(e)=>{
+        console.log(e);
+    }
+    onSipSupportChange=(e)=>{
+        console.log(e);
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         const { intl, onSwitch} = this.props;
         let {data} =  this.props;
+        if(data.Device_SipSupport.value !== '0') {
+            data.Device_SipSupport.value = true;
+        }else{
+            data.Device_SipSupport.value = false;
+        };
+        if(data.Device_ScIsUsedH235.value !== '0') {
+            data.Device_ScIsUsedH235.value = true;
+        }else{
+            data.Device_ScIsUsedH235.value = false;
+        }
         return(
             <div className={styleObj.paramConfigForm}>
-                <Form>
+                <Form  onSubmit={this.handleSubmit}>
                     <Collapse 
                         defaultActiveKey={['1']}
                         bordered={false}
@@ -51,10 +193,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_H323ID'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('H.323ID', {
+                                        {getFieldDecorator('Device_H323Id', {
                                             initialValue: data.Device_H323Id.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid H.323ID!' },
+                                                { type: 'string', message: 'The input is not valid Device_H323Id!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -106,7 +248,7 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_RASPort'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('RASPort', {
+                                        {getFieldDecorator('Device_ScRasPort', {
                                             initialValue: data.Device_ScRasPort.value,
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid RASPort!' },
@@ -124,11 +266,11 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_EnableEncryptionH235'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('enableH.235', {
+                                        {getFieldDecorator('Device_ScIsUsedH235', {
                                             valuePropName: 'checked',
                                             initialValue: data.Device_ScIsUsedH235.value
                                         })(
-                                            <Switch  onChange={this.onChange} defaultChecked/>
+                                            <Switch  onChange={this.onScIsUsedH235Change} />
                                         )}
                                 
                                     </FormItem>
@@ -183,15 +325,16 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_RegisteStatus'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('registeStatus', {
+                                        {getFieldDecorator('Device_ScState', {
                                             initialValue: data.Device_ScState.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid registeStatus!' },
+                                                { type: 'string', message: 'The input is not valid Device_ScState!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
                                             <Select>
                                                 <Option value="1">已注册</Option>
+                                                <Option value="2">已注册</Option>
                                             </Select>
                                         )}
                                     </FormItem>
@@ -205,10 +348,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_LocalPort'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('localPort', {
+                                        {getFieldDecorator('Device_SipLocalPort', {
                                             initialValue: data.Device_SipLocalPort.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid localPort!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipLocalPort!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -221,10 +364,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_RegisteIntervalSec'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('registrationInterval', {
+                                        {getFieldDecorator('Device_SipFreshRegTimeSpan', {
                                             initialValue: data.Device_SipFreshRegTimeSpan.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid registrationInterval!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipFreshRegTimeSpan!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -237,10 +380,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_AuthUserName'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('authenticationUserName', {
+                                        {getFieldDecorator('Device_SipDomainUser', {
                                             initialValue: data.Device_SipDomainUser.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid authenticationUserName!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipDomainUser!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -253,11 +396,11 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_RegisteServer'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('registerServer', {
+                                        {getFieldDecorator('Device_SipSupport', {
                                             valuePropName: 'checked',
                                             initialValue: data.Device_SipSupport.value
                                         })(
-                                            <Switch  onChange={this.onChange} />
+                                            <Switch  onChange={this.onSipSupportChange} />
                                             // defaultChecked
                                         )}
                                 
@@ -268,10 +411,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_ServerAddress'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('serverIP', {
+                                        {getFieldDecorator('Device_SipAddress', {
                                             initialValue: data.Device_SipAddress.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid serverIP!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipAddress!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -284,10 +427,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_ServerPort'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('serverPort', {
+                                        {getFieldDecorator('Device_SipServerPort', {
                                             initialValue: data.Device_SipServerPort.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid serverIP!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipServerPort!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -302,10 +445,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_ServerType'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('serverType', {
+                                        {getFieldDecorator('Device_SipType', {
                                             initialValue: data.Device_SipType.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid serverType!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipType!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -320,10 +463,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_RegisteRefreshSec'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('registrationRefreshInterval', {
+                                        {getFieldDecorator('Device_SipReRegTimeSpan', {
                                             initialValue: data.Device_SipReRegTimeSpan.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid registrationInterval!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipReRegTimeSpan!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -336,10 +479,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_SIPURI'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('SIPURI', {
+                                        {getFieldDecorator('Device_SipUri', {
                                             initialValue: data.Device_SipUri.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid SIPURI!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipUri!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -358,10 +501,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_SIPStandbyServer'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('SIPStandbyServerAddress', {
+                                        {getFieldDecorator('Device_SipBackUpAddress', {
                                             initialValue: data.Device_SipBackUpAddress.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid SIPStandbyServerAddress!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipBackUpAddress!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -374,10 +517,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_ProtocolType'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('protocolType', {
+                                        {getFieldDecorator('Device_SipProtocolType', {
                                             initialValue: data.Device_SipProtocolType.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid protocolType!' },
+                                                { type: 'string', message: 'The input is not valid Device_SipProtocolType!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -398,10 +541,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_Location'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('Location', {
+                                        {getFieldDecorator('Device_SnmpPosition', {
                                             initialValue: data.Device_SnmpPosition.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid Location!' },
+                                                { type: 'string', message: 'The input is not valid Device_SnmpPosition!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -414,10 +557,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapTimeoutSec'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapTimeoutTime', {
+                                        {getFieldDecorator('Device_TrapTimeout', {
                                             initialValue: data.Device_TrapTimeout.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapTimeoutTime!' },
+                                                { type: 'string', message: 'The input is not valid Device_TrapTimeout!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -430,10 +573,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapServerAddress1'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress1', {
+                                        {getFieldDecorator('values.Device_SnmpTrapHostName1', {
                                             initialValue: data.Device_SnmpTrapHostName1.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapServerAddress1!' },
+                                                { type: 'string', message: 'The input is not valid values.Device_SnmpTrapHostName1!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -446,10 +589,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapServerAddress3'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress3', {
+                                        {getFieldDecorator('Device_SnmpTrapHostName3', {
                                             initialValue: data.Device_SnmpTrapHostName3.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapServerAddress3!' },
+                                                { type: 'string', message: 'The input is not valid Device_SnmpTrapHostName3!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -462,10 +605,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapServerAddress5'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress5', {
+                                        {getFieldDecorator('Device_SnmpTrapHostName5', {
                                             initialValue: data.Device_SnmpTrapHostName5.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapServerAddress5!' },
+                                                { type: 'string', message: 'The input is not valid Device_SnmpTrapHostName5!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -513,10 +656,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_Participant'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('participant', {
+                                        {getFieldDecorator('Device_SnmpContactPerson', {
                                             initialValue: data.Device_SnmpContactPerson.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid participant!' },
+                                                { type: 'string', message: 'The input is not valid Device_SnmpContactPerson!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -529,10 +672,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapRetryTimes'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapAttempts', {
+                                        {getFieldDecorator('Device_TrapTryTimes', {
                                             initialValue: data.Device_TrapTryTimes.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapAttempts!' },
+                                                { type: 'string', message: 'The input is not valid Device_TrapTryTimes!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -545,10 +688,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapServerAddress2'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress2', {
+                                        {getFieldDecorator('Device_SnmpTrapHostName2', {
                                             initialValue: data.Device_SnmpTrapHostName2.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapServerAddress2!' },
+                                                { type: 'string', message: 'The input is not valid Device_SnmpTrapHostName2!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -561,10 +704,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_TrapServerAddress4'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('TrapServerAddress4', {
+                                        {getFieldDecorator('Device_SnmpTrapHostName4', {
                                             initialValue: data.Device_SnmpTrapHostName4.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid TrapServerAddress4!' },
+                                                { type: 'string', message: 'The input is not valid Device_SnmpTrapHostName4!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -617,10 +760,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_DNSHostName'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('DNSHostName', {
+                                        {getFieldDecorator('Device_DnsHost', {
                                             initialValue: data.Device_DnsHost.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid DNSHostName!' },
+                                                { type: 'string', message: 'The input is not valid Device_DnsHost!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -633,10 +776,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_DNSServerIP'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('DNSServerAddress', {
+                                        {getFieldDecorator('Device_DnsAddress1', {
                                             initialValue: data.Device_DnsAddress1.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid DNSServerAddress!' },
+                                                { type: 'string', message: 'The input is not valid Device_DnsAddress1!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -651,10 +794,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_DomainSuffix'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('DomainNameSuffix', {
+                                        {getFieldDecorator('Device_DnsSuffix', {
                                             initialValue: data.Device_DnsSuffix.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid DomainNameSuffix!' },
+                                                { type: 'string', message: 'The input is not valid Device_DnsSuffix!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -667,10 +810,10 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_AlternateDNSServer'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('DNSStandbyServerAddress', {
+                                        {getFieldDecorator('Device_DnsAddress2', {
                                             initialValue: data.Device_DnsAddress2.value,
                                             rules: [
-                                                { type: 'string', message: 'The input is not valid DNSStandbyServerAddress!' },
+                                                { type: 'string', message: 'The input is not valid Device_DnsAddress2!' },
                                                 { pattern: '', message: '' }
                                             ]
                                         })(
@@ -683,7 +826,7 @@ class ParamConfigForm extends Component {
                     </Collapse>
                     <div className={styleObj.btnGroup}>
                         <Button type="primary" htmlType="submit"><FormattedMessage id="Save"/> </Button>
-                        <Button type="default" className={styleObj.cancelBtn} onClick={onSwitch}><FormattedMessage id="Cancel"/></Button>
+                        <Button type="default" className={styleObj.cancelBtn} onClick={()=>onSwitch()}><FormattedMessage id="Cancel"/></Button>
                     </div>
                 </Form>
             </div>
