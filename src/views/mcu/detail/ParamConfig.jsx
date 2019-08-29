@@ -31,16 +31,8 @@ class ParamConfig extends Component {
                 console.log('请求失败');
             } else {
                 console.log('请求成功');
-                if(res.data.items.Device_SipSupport.value !== '0') {
-                    res.data.items.Device_SipSupport.value = '是';
-                }else{
-                    res.data.items.Device_SipSupport.value = '否';
-                };
-                if(res.data.items.Device_ScIsUsedH235.value !== '0') {
-                    res.data.items.Device_ScIsUsedH235.value = '是';
-                }else{
-                    res.data.items.Device_ScIsUsedH235.value = '否';
-                }
+                    res.data.items.Device_SipSupport.value =res.data.items.Device_SipSupport.value !== '0'? '是':'否';
+                    res.data.items.Device_ScIsUsedH235.value = res.data.items.Device_ScIsUsedH235.value !== '0'?'是':'否';
                 this.setState({
                     configInfo:res.data.items,
                     hasData:true
@@ -68,16 +60,8 @@ class ParamConfig extends Component {
     
     handleSwitch=(data)=>{
         if(data) {
-            if(data.Device_SipSupport.value !== '0') {
-                data.Device_SipSupport.value = '是';
-            }else{
-                data.Device_SipSupport.value = '否';
-            };
-            if(data.Device_ScIsUsedH235.value !== '0') {
-                data.Device_ScIsUsedH235.value = '是';
-            }else{
-                data.Device_ScIsUsedH235.value = '否';
-            }
+            data.Device_SipSupport.value =data.Device_SipSupport.value !== '0'? '是':'否';
+            data.Device_ScIsUsedH235.value = data.Device_ScIsUsedH235.value !== '0'?'是':'否';
             this.setState({
                 configInfo:data
             });

@@ -22,6 +22,14 @@ class ParamConfigForm extends Component {
     handleSubmit= (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            delete values.registeGK;
+            delete values.authenticationPassword;
+            delete values.StandbyGK;
+            delete values.TrapUserName;
+            delete values.TrapAuthenticationProtocol;
+            delete values.EngineID;
+            delete values.encryptionProtocol;
+
             console.log(values);
             let modMcuConfigcallback = (res)=>{
                 console.log(res);
@@ -39,105 +47,97 @@ class ParamConfigForm extends Component {
             // if (!err) {
             let ids = this.props.baseInfo._links.self.href.split('/');
             let id = ids[ids.length - 1];
-            // Device_ScIsUsedH235
-            // Device_SipSupport
-
-            if(values.Device_ScIsUsedH235 === true) {
-                values.Device_ScIsUsedH235 = '1';
-            }else{
-                values.Device_ScIsUsedH235 = '0';
-            };
-            if(values.Device_SipSupport === true) {
-                values.Device_SipSupport = '1';
-            }else{
-                values.Device_SipSupport = '0';
-            };
+                values.Device_ScIsUsedH235 =values.Device_ScIsUsedH235 === true? '1':'0';
+                values.Device_SipSupport =values.Device_SipSupport === true? '1':'0';
+           
+            Object.assign(values, this.props.data);
             let mcuModConfig = {
                 mcu:{
                     id,
                     ...this.props.baseInfo.mcu
                 },
                 config:{
-                    items:{
+                    items:values
+                    // {
                         // ...this.props.data,
-                        Device_CloudMcuExternalAddress: {value: '192.168.0.0', type: 'String'},
-                        Device_DnsAddress1: {value: values.Device_DnsAddress1, type: 'String'},
-                        Device_DnsAddress2: {value: values.Device_DnsAddress2, type: 'String'},
-                        Device_DnsHost: {value: values.Device_DnsHost, type: 'String'},
-                        Device_DnsSuffix: {value: values.Device_DnsSuffix, type: 'String'},
-                        Device_H323Id: {value: values.Device_H323Id, type: 'String'},
-                        Device_IsRegisterAgent: {value: '2', type: 'String'},
-                        Device_IsRegisterSc: {value: '2', type: 'String'},
-                        Device_IsRegisterSip: {value: '1', type: 'String'},
-                        Device_IsSupportHttps: {value: '1', type: 'String'},
-                        Device_IsUsedDns: {value: '2', type: 'String'},
-                        Device_McuDataConfSrv_Id: {value: '1', type: 'String'},
-                        Device_Model: {value: '10', type: 'String'},
-                        Device_Port: {value: '5001', type: 'String'},
-                        Device_ScAddress: {value: '200.90.238.92', type: 'String'},
-                        Device_ScBackUpAddress: {value: '', type: 'String'},
-                        Device_ScFailReason: {value: '0', type: 'String'},
-                        Device_ScIsUsedH235: {value: values.Device_ScIsUsedH235, type: 'String'},
-                        Device_ScRasPort: {value: values.Device_ScRasPort, type: 'String'},
-                        Device_ScState: {value: values.Device_ScState, type: 'String'},
-                        Device_SipAddress: {value: values.Device_SipAddress, type: 'String'},
-                        Device_SipAgentAddress: {value: '', type: 'String'},
-                        Device_SipBackUpAddress: {value: values.Device_SipBackUpAddress, type: 'String'},
-                        Device_SipBackUpAgentAddress: {value: '', type: 'String'},
-                        Device_SipDomainUser: {value: values.Device_SipDomainUser, type: 'String'},
-                        Device_SipFailReason: {value: '101', type: 'String'},
-                        Device_SipFreshRegTimeSpan: {value: values.Device_SipFreshRegTimeSpan, type: 'String'},
-                        Device_SipLocalPort: {value: values.Device_SipLocalPort, type: 'String'},
-                        Device_SipProtocolType: {value: values.Device_SipProtocolType, type: 'String'},
-                        Device_SipReRegTimeSpan: {value:  values.Device_SipReRegTimeSpan, type: 'String'},
-                        Device_SipServerPort: {value: values.Device_SipServerPort, type: 'String'},
-                        Device_SipState: {value: '2', type: 'String'},
-                        Device_SipSupport: {value: values.Device_SipSupport, type: 'String'},
-                        Device_SipSupportTrunk: {value: '2', type: 'String'},
-                        Device_SipTrunkAddress1: {value: '192.168.0.1', type: 'String'},
-                        Device_SipTrunkAddress2: {value: '192.168.0.1', type: 'String'},
-                        Device_SipTrunkAddress3: {value: '192.168.0.1', type: 'String'},
-                        Device_SipTrunkAddress4: {value: '192.168.0.1', type: 'String'},
-                        Device_SipTrunkAddress5: {value: '192.168.0.1', type: 'String'},
-                        Device_SipTrunkAddress6: {value: '192.168.0.1', type: 'String'},
-                        Device_SipTrunkMode1: {value: '0', type: 'String'},
-                        Device_SipTrunkMode2: {value: '0', type: 'String'},
-                        Device_SipTrunkMode3: {value: '0', type: 'String'},
-                        Device_SipTrunkMode4: {value: '0', type: 'String'},
-                        Device_SipTrunkMode5: {value: '0', type: 'String'},
-                        Device_SipTrunkMode6: {value: '0', type: 'String'},
-                        Device_SipTrunkPort1: {value: '5060', type: 'String'},
-                        Device_SipTrunkPort2: {value: '5060', type: 'String'},
-                        Device_SipTrunkPort3: {value: '5060', type: 'String'},
-                        Device_SipTrunkPort4: {value: '5060', type: 'String'},
-                        Device_SipTrunkPort5: {value: '5060', type: 'String'},
-                        Device_SipTrunkPort6: {value: '5060', type: 'String'},
-                        Device_SipTrunkPrefix1: {value: '', type: 'String'},
-                        Device_SipTrunkPrefix2: {value: '', type: 'String'},
-                        Device_SipTrunkPrefix3: {value: '', type: 'String'},
-                        Device_SipTrunkPrefix4: {value: '', type: 'String'},
-                        Device_SipTrunkPrefix5: {value: '', type: 'String'},
-                        Device_SipTrunkPrefix6: {value: '', type: 'String'},
-                        Device_SipTrunkProtocol1: {value: '0', type: 'String'},
-                        Device_SipTrunkProtocol2: {value: '0', type: 'String'},
-                        Device_SipTrunkProtocol3: {value: '0', type: 'String'},
-                        Device_SipTrunkProtocol4: {value: '0', type: 'String'},
-                        Device_SipTrunkProtocol5: {value: '0', type: 'String'},
-                        Device_SipTrunkProtocol6: {value: '0', type: 'String'},
-                        Device_SipType: {value: values.Device_SipType, type: 'String'},
-                        Device_SipUri: {value:values.Device_SipUri, type: 'String'},
-                        Device_SnmpContactPerson: {value: values.Device_SnmpContactPerson, type: 'String'},
-                        Device_SnmpPosition: {value: values.Device_SnmpPosition, type: 'String'},
-                        Device_SnmpTrapHostName1: {value: values.Device_SnmpTrapHostName1, type: 'String'},
-                        Device_SnmpTrapHostName2: {value: values.Device_SnmpTrapHostName2, type: 'String'},
-                        Device_SnmpTrapHostName3: {value: values.Device_SnmpTrapHostName3, type: 'String'},
-                        Device_SnmpTrapHostName4: {value: values.Device_SnmpTrapHostName4, type: 'String'},
-                        Device_SnmpTrapHostName5: {value: values.Device_SnmpTrapHostName5, type: 'String'},
-                        Device_SoftwareVer: {value: 'V600R019C10SPC100B006 May 09 2019, 07:53:26 (GMT+00)', type: 'String'},
-                        Device_TrapAddrNum: {value: '5', type: 'String'},
-                        Device_TrapTimeout: {value: values.Device_TrapTimeout, type: 'String'},
-                        Device_TrapTryTimes: {value: values.Device_TrapTryTimes, type: 'String'}
-                    }
+                        // Device_CloudMcuExternalAddress: {value: '192.168.0.0', type: 'String'},
+                        // Device_DnsAddress1: {value: values.Device_DnsAddress1, type: 'String'},
+                        // Device_DnsAddress2: {value: values.Device_DnsAddress2, type: 'String'},
+                        // Device_DnsHost: {value: values.Device_DnsHost, type: 'String'},
+                        // Device_DnsSuffix: {value: values.Device_DnsSuffix, type: 'String'},
+                        // Device_H323Id: {value: values.Device_H323Id, type: 'String'},
+                        // Device_IsRegisterAgent: {value: '2', type: 'String'},
+                        // Device_IsRegisterSc: {value: '2', type: 'String'},
+                        // Device_IsRegisterSip: {value: '1', type: 'String'},
+                        // Device_IsSupportHttps: {value: '1', type: 'String'},
+                        // Device_IsUsedDns: {value: '2', type: 'String'},
+                        // Device_McuDataConfSrv_Id: {value: '1', type: 'String'},
+                        // Device_Model: {value: '10', type: 'String'},
+                        // Device_Port: {value: '5001', type: 'String'},
+                        // Device_ScAddress: {value: '200.90.238.92', type: 'String'},
+                        // Device_ScBackUpAddress: {value: '', type: 'String'},
+                        // Device_ScFailReason: {value: '0', type: 'String'},
+                        // Device_ScIsUsedH235: {value: values.Device_ScIsUsedH235, type: 'String'},
+                        // Device_ScRasPort: {value: values.Device_ScRasPort, type: 'String'},
+                        // Device_ScState: {value: values.Device_ScState, type: 'String'},
+                        // Device_SipAddress: {value: values.Device_SipAddress, type: 'String'},
+                        // Device_SipAgentAddress: {value: '', type: 'String'},
+                        // Device_SipBackUpAddress: {value: values.Device_SipBackUpAddress, type: 'String'},
+                        // Device_SipBackUpAgentAddress: {value: '', type: 'String'},
+                        // Device_SipDomainUser: {value: values.Device_SipDomainUser, type: 'String'},
+                        // Device_SipFailReason: {value: '101', type: 'String'},
+                        // Device_SipFreshRegTimeSpan: {value: values.Device_SipFreshRegTimeSpan, type: 'String'},
+                        // Device_SipLocalPort: {value: values.Device_SipLocalPort, type: 'String'},
+                        // Device_SipProtocolType: {value: values.Device_SipProtocolType, type: 'String'},
+                        // Device_SipReRegTimeSpan: {value:  values.Device_SipReRegTimeSpan, type: 'String'},
+                        // Device_SipServerPort: {value: values.Device_SipServerPort, type: 'String'},
+                        // Device_SipState: {value: '2', type: 'String'},
+                        // Device_SipSupport: {value: values.Device_SipSupport, type: 'String'},
+                        // Device_SipSupportTrunk: {value: '2', type: 'String'},
+                        // Device_SipTrunkAddress1: {value: '192.168.0.1', type: 'String'},
+                        // Device_SipTrunkAddress2: {value: '192.168.0.1', type: 'String'},
+                        // Device_SipTrunkAddress3: {value: '192.168.0.1', type: 'String'},
+                        // Device_SipTrunkAddress4: {value: '192.168.0.1', type: 'String'},
+                        // Device_SipTrunkAddress5: {value: '192.168.0.1', type: 'String'},
+                        // Device_SipTrunkAddress6: {value: '192.168.0.1', type: 'String'},
+                        // Device_SipTrunkMode1: {value: '0', type: 'String'},
+                        // Device_SipTrunkMode2: {value: '0', type: 'String'},
+                        // Device_SipTrunkMode3: {value: '0', type: 'String'},
+                        // Device_SipTrunkMode4: {value: '0', type: 'String'},
+                        // Device_SipTrunkMode5: {value: '0', type: 'String'},
+                        // Device_SipTrunkMode6: {value: '0', type: 'String'},
+                        // Device_SipTrunkPort1: {value: '5060', type: 'String'},
+                        // Device_SipTrunkPort2: {value: '5060', type: 'String'},
+                        // Device_SipTrunkPort3: {value: '5060', type: 'String'},
+                        // Device_SipTrunkPort4: {value: '5060', type: 'String'},
+                        // Device_SipTrunkPort5: {value: '5060', type: 'String'},
+                        // Device_SipTrunkPort6: {value: '5060', type: 'String'},
+                        // Device_SipTrunkPrefix1: {value: '', type: 'String'},
+                        // Device_SipTrunkPrefix2: {value: '', type: 'String'},
+                        // Device_SipTrunkPrefix3: {value: '', type: 'String'},
+                        // Device_SipTrunkPrefix4: {value: '', type: 'String'},
+                        // Device_SipTrunkPrefix5: {value: '', type: 'String'},
+                        // Device_SipTrunkPrefix6: {value: '', type: 'String'},
+                        // Device_SipTrunkProtocol1: {value: '0', type: 'String'},
+                        // Device_SipTrunkProtocol2: {value: '0', type: 'String'},
+                        // Device_SipTrunkProtocol3: {value: '0', type: 'String'},
+                        // Device_SipTrunkProtocol4: {value: '0', type: 'String'},
+                        // Device_SipTrunkProtocol5: {value: '0', type: 'String'},
+                        // Device_SipTrunkProtocol6: {value: '0', type: 'String'},
+                        // Device_SipType: {value: values.Device_SipType, type: 'String'},
+                        // Device_SipUri: {value:values.Device_SipUri, type: 'String'},
+                        // Device_SnmpContactPerson: {value: values.Device_SnmpContactPerson, type: 'String'},
+                        // Device_SnmpPosition: {value: values.Device_SnmpPosition, type: 'String'},
+                        // Device_SnmpTrapHostName1: {value: values.Device_SnmpTrapHostName1, type: 'String'},
+                        // Device_SnmpTrapHostName2: {value: values.Device_SnmpTrapHostName2, type: 'String'},
+                        // Device_SnmpTrapHostName3: {value: values.Device_SnmpTrapHostName3, type: 'String'},
+                        // Device_SnmpTrapHostName4: {value: values.Device_SnmpTrapHostName4, type: 'String'},
+                        // Device_SnmpTrapHostName5: {value: values.Device_SnmpTrapHostName5, type: 'String'},
+                        // Device_SoftwareVer: {value: 'V600R019C10SPC100B006 May 09 2019, 07:53:26 (GMT+00)', type: 'String'},
+                        // Device_TrapAddrNum: {value: '5', type: 'String'},
+                        // Device_TrapTimeout: {value: values.Device_TrapTimeout, type: 'String'},
+                        // Device_TrapTryTimes: {value: values.Device_TrapTryTimes, type: 'String'}
+                    // }
                 }
             };
             csm.registOpCallback('editConfig', modMcuConfigcallback);
@@ -157,16 +157,7 @@ class ParamConfigForm extends Component {
         const { getFieldDecorator } = this.props.form;
         const { intl, onSwitch} = this.props;
         let {data} =  this.props;
-        if(data.Device_SipSupport.value !== '0') {
-            data.Device_SipSupport.value = true;
-        }else{
-            data.Device_SipSupport.value = false;
-        };
-        if(data.Device_ScIsUsedH235.value !== '0') {
-            data.Device_ScIsUsedH235.value = true;
-        }else{
-            data.Device_ScIsUsedH235.value = false;
-        }
+       
         return(
             <div className={styleObj.paramConfigForm}>
                 <Form  onSubmit={this.handleSubmit}>
@@ -268,7 +259,7 @@ class ParamConfigForm extends Component {
                                     >
                                         {getFieldDecorator('Device_ScIsUsedH235', {
                                             valuePropName: 'checked',
-                                            initialValue: data.Device_ScIsUsedH235.value
+                                            initialValue: data.Device_ScIsUsedH235.value!=='0'?true:false
                                         })(
                                             <Switch  onChange={this.onScIsUsedH235Change} />
                                         )}
@@ -398,7 +389,7 @@ class ParamConfigForm extends Component {
                                     >
                                         {getFieldDecorator('Device_SipSupport', {
                                             valuePropName: 'checked',
-                                            initialValue: data.Device_SipSupport.value
+                                            initialValue: data.Device_SipSupport.value!=='0'?true:false
                                         })(
                                             <Switch  onChange={this.onSipSupportChange} />
                                             // defaultChecked
@@ -726,7 +717,7 @@ class ParamConfigForm extends Component {
                                         label={intl.formatMessage({id: 'MCU_EngineID'})}
                                         colon={false}
                                     >
-                                        {getFieldDecorator('Engine ID', {
+                                        {getFieldDecorator('EngineID', {
                                             rules: [
                                                 { type: 'string', message: 'The input is not valid Engine ID!' },
                                                 { pattern: '', message: '' }
