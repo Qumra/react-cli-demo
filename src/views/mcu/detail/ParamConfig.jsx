@@ -26,15 +26,26 @@ class ParamConfig extends Component {
     }
     getMcuConfig=()=>{
         let queryConfigCallBack = res => {
-            console.log(res);
+            console.log(res.data.items);
             if (res.status !== 200) {
                 console.log('请求失败');
             } else {
                 console.log('请求成功');
+                if(res.data.items.Device_SipSupport.value !== '0') {
+                    res.data.items.Device_SipSupport.value = '是';
+                }else{
+                    res.data.items.Device_SipSupport.value = '否';
+                };
+                if(res.data.items.Device_ScIsUsedH235.value !== '0') {
+                    res.data.items.Device_ScIsUsedH235.value = '是';
+                }else{
+                    res.data.items.Device_ScIsUsedH235.value = '否';
+                }
                 this.setState({
                     configInfo:res.data.items,
                     hasData:true
                 });
+               
             }
         };
         csm.registOpCallback('queryConfig', queryConfigCallBack);
@@ -57,8 +68,18 @@ class ParamConfig extends Component {
     
     handleSwitch=(data)=>{
         if(data) {
+            if(data.Device_SipSupport.value !== '0') {
+                data.Device_SipSupport.value = '是';
+            }else{
+                data.Device_SipSupport.value = '否';
+            };
+            if(data.Device_ScIsUsedH235.value !== '0') {
+                data.Device_ScIsUsedH235.value = '是';
+            }else{
+                data.Device_ScIsUsedH235.value = '否';
+            }
             this.setState({
-                baseInfo:data
+                configInfo:data
             });
         }
         this.setState({
@@ -67,8 +88,9 @@ class ParamConfig extends Component {
         });
     }
     render() {
-        console.log(this.state.configInfo);
+        // console.log(this.state.configInfo);
         const {baseInfo} = this.props;
+        
         return(
             !this.state.hasData ? 'Loading' : (<div className={styleObj.paramConfig}>
                 <div style={{display:this.state.display_name }}>
