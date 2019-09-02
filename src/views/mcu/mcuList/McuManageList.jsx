@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Table, Icon, Dropdown, Button, Input, Menu } from 'antd';
+import { Table, Icon, Dropdown, Button, Input, Menu, message } from 'antd';
 import cssObj from './McuManageList.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
-// import ResizeableTitle from '@/components/ResizeableTitle';
+import ResizeableTitle from '@/components/ResizeableTitle';
+import DelModel from './DelModel';
 import Item from 'antd/lib/list/Item';
 const {Search} = Input;
 
@@ -19,18 +20,13 @@ class McuManageList extends Component {
         this.state = {
             columns:this.columns,
             collectionData: {},
-            dataSource: [
-                // {
-                // key:0,
-                // MCUName:'江苏省部MCU',
-                // MCUStatus:'否',
-                // deviceModel:'2018/10/30  10:30',
-                // IP:'10.99.00.88'
-                // }
-            ],
+            dataSource: [],
             count:1,
-            visible:false,
-            selectRecord:{}
+            selectedRowKeys: [],
+            selectRecord:{},
+            hasData:false,
+            delModel:false,
+            delModalMore:false
         };
     }
     //渲染前调用  
@@ -40,14 +36,13 @@ class McuManageList extends Component {
     //获取设备信息
     getMcuDevices = () =>{
         let queryAllMcuCallBack = res => {
-            console.log(res);
             if (res.status !== 200) {
                 console.log('请求失败');
             } else {
-                console.log(res.data._embedded.mcuDevices);
                 console.log('请求成功');
-                const {mcuDevices} = res.data._embedded;
-                if(res.data.page.totalElements) {
+                if(res.data.page.totalElements !== 0) {
+                    // console.log(res.data._embedded.mcuDevices);
+                    const {mcuDevices} = res.data._embedded;
                     let data = [];
                     for(let i = 0;i < mcuDevices.length;i++) {
                         let ids = mcuDevices[i]._links.self.href.split('/');
@@ -62,11 +57,13 @@ class McuManageList extends Component {
                         data.push(item);
                     }
                     this.setState({
-                        dataSource:data
+                        dataSource:data,
+                        hasData:true
                     });
                 }else{
                     this.setState({
-                        dataSource:[]
+                        dataSource:[],
+                        hasData:true
                     });
                 }
                 
@@ -90,7 +87,9 @@ class McuManageList extends Component {
             } else {
                 console.log(res.request.response);
                 console.log('请求成功');
+                message.success(this.props.intl.formatMessage({id: 'MCU_delMcuSuccess'}));
                 this.getMcuDevices();
+                
             }
         };
         csm.registOpCallback('delMcu', delMcu);
@@ -99,9 +98,39 @@ class McuManageList extends Component {
     // meau的点击事件
     handleMenuClick=(e)=>{
         if(e.key === '5') {
+            this.setState({delModel:true});
+           
+        }
+    }
+    // 删除弹窗的确认事件
+    showDeleteConfirm = (flag) => {
+
+        if(flag) {
+            //后台删除用户接口
             console.log(this.state.selectRecord);
             this.Delete(this.state.selectRecord.key);
         }
+        this.setState({
+            delModel:false            
+        });
+    }
+    // 表格多选框事件
+    onSelectChange = (selectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({ selectedRowKeys });
+    }
+    showDeleteConfirmMore = (flag)=>{
+        const delKeys = this.state.selectedRowKeys;
+        if(flag && delKeys.length > 0) {
+            if(delKeys.length === 1) {
+                this.Delete(delKeys[0]);
+            }else{
+                // 批量删除多个
+            }
+        }
+        this.setState({
+            delModalMore:false            
+        });
     }
     columns = [{
         title: this.props.intl.formatMessage({id: 'MCU_MCUName'}),
@@ -141,7 +170,7 @@ class McuManageList extends Component {
                     ? (
                         
                         <div className={cssObj.operationDiv}>
-                            <div style={{textAlign:'right', marginRight:'20px'}}>
+                            <div style={{textAlign:'right', marginRight:'20px'}} onClick={this.pushEdit.bind(this, record)}>
                                 <Icon type="edit" theme="twoTone"/>
                                 <div><Button><FormattedMessage id="MCU_EditMCU"/></Button> </div>
                             </div>
@@ -160,11 +189,11 @@ class McuManageList extends Component {
         }
     }
     ];
-    // components = {
-    //     header: {
-    //         cell: ResizeableTitle
-    //     }
-    // };
+    components = {
+        header: {
+            cell: ResizeableTitle
+        }
+    };
     menuBtn = (
         <Menu onClick={this.handleMenuClickBtn}>
             <Menu.Item key="1"><FormattedMessage id="MCU_ChangeLink"/></Menu.Item>
@@ -197,34 +226,26 @@ class McuManageList extends Component {
     pushAdd=()=>{
         this.props.history.push({pathname:'/main/Device/AddMcu'});
     }
+    // 跳转到编辑页面
+    pushEdit=(item)=>{
+        this.props.history.push({pathname:'/main/Device/MCUDetail', state:item});
+    }
     // 点击表格的每条名称
     click = (item)=>{
         this.props.history.push({pathname:'/main/Device/MCUDetail', state:item});
     }
-    // onClickRow = (record) => {
-    //     // let id =record.key
-    //     return {
-    //         onClick: () => {
-    //             if (record.key) {
-    //                 this.props.history.push({pathname:'/main/Device/MCUDetail', state:record});
-    //                 // delDisable: false, isDisable: false
-    //                 this.setState({
-    //                     rowId:record.key
-    //                 });
-    //             }
-    //         }
-    //     };
-    // }
+    
     onChangeSearch=(e)=>{
         console.log(e.target.value);
     }
     render() {
-        
+        const { intl} = this.props;
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            }
+            selectedRowKeys:this.state.selectedRowKeys,
+            onChange: this.onSelectChange
         };
+        const hasSelected = this.state.selectedRowKeys.length > 0;
+
         const columns = this.state.columns.map((col, index) => ({
             ...col,
             onHeaderCell: column => ({
@@ -233,7 +254,8 @@ class McuManageList extends Component {
             })
         }));
         return(
-            <div className={cssObj.mcuManage}>
+
+            !this.state.hasData ? 'Loading' : (<div className={cssObj.mcuManage}>
                 <div className={cssObj.mcuContent}>
                     <div className={cssObj.mcuContentTitle}>
                         <FormattedMessage id="MCU_ListTitle"/>
@@ -244,7 +266,10 @@ class McuManageList extends Component {
                             <div className={cssObj.mcuContentMidHeader}>
                                 <div className={cssObj.btnGroup}>
                                     <Button type="primary" className={cssObj.addBtn} onClick={this.pushAdd}><FormattedMessage id="Add"/></Button>
-                                    <Button className={cssObj.delBtn}><FormattedMessage id="Delete"/></Button>
+                                    <Button 
+                                        className={cssObj.delBtn}
+                                        onClick={()=>hasSelected ? this.setState({delModalMore:true}) : message.info(intl.formatMessage({id: 'selectMcu'}))}
+                                    ><FormattedMessage id="Delete"/></Button>
                                     <Dropdown overlay={this.menuBtn}>
                                         <Button><FormattedMessage id="More"/></Button>
                                     </Dropdown>
@@ -271,10 +296,12 @@ class McuManageList extends Component {
                                 size="small"
                                 onRow={this.onClickRow}
                             />
+                            <DelModel delModel={this.state.delModel} showDeleteConfirm={this.showDeleteConfirm}/>
+                            <DelModel delModel={this.state.delModalMore} showDeleteConfirm={this.showDeleteConfirmMore}/>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>)
         );
     }
 }
