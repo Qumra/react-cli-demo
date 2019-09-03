@@ -6,6 +6,7 @@ import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
 import {setLocale} from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import {Link} from 'react-router-dom';
 const { Panel } = Collapse;
 class ParamConfig extends Component {
     constructor(props) {
@@ -13,11 +14,13 @@ class ParamConfig extends Component {
         setLocale('zh-CN', zh_CN_Device);
         setLocale('en-US', en_US_Device);
         this.state = {
+            baseInfo:this.props.location.state,
             display_name:'block',
             display_edit:'none',
             id:props.McuId,
             configInfo:'',
-            hasData:false
+            hasData:false,
+            configInfoForm:''
         };
 
     }
@@ -26,13 +29,10 @@ class ParamConfig extends Component {
     }
     getMcuConfig=()=>{
         let queryConfigCallBack = res => {
-            console.log(res.data.items);
             if (res.status !== 200) {
                 console.log('请求失败');
             } else {
                 console.log('请求成功');
-                    res.data.items.Device_SipSupport.value =res.data.items.Device_SipSupport.value !== '0'? '是':'否';
-                    res.data.items.Device_ScIsUsedH235.value = res.data.items.Device_ScIsUsedH235.value !== '0'?'是':'否';
                 this.setState({
                     configInfo:res.data.items,
                     hasData:true
@@ -60,8 +60,6 @@ class ParamConfig extends Component {
     
     handleSwitch=(data)=>{
         if(data) {
-            data.Device_SipSupport.value =data.Device_SipSupport.value !== '0'? '是':'否';
-            data.Device_ScIsUsedH235.value = data.Device_ScIsUsedH235.value !== '0'?'是':'否';
             this.setState({
                 configInfo:data
             });
@@ -72,9 +70,7 @@ class ParamConfig extends Component {
         });
     }
     render() {
-        // console.log(this.state.configInfo);
         const {baseInfo} = this.props;
-        
         return(
             !this.state.hasData ? 'Loading' : (<div className={styleObj.paramConfig}>
                 <div style={{display:this.state.display_name }}>
@@ -109,7 +105,7 @@ class ParamConfig extends Component {
                             <div className={styleObj.rightDiv}>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_EnableEncryptionH235"/> </div>
-                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_ScIsUsedH235.value}</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_ScIsUsedH235.value !== '0' ? '是' : '否'}</div>
                                     {/* 选择开关 */}
                                 </div>
                                 <div className={styleObj.formItem}>
@@ -142,7 +138,7 @@ class ParamConfig extends Component {
                                 </div>
                                 <div className={styleObj.formItem}>
                                     <div className={styleObj.labelDiv}><FormattedMessage id="MCU_RegisteServer"/> </div>
-                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipSupport.value}</div>
+                                    <div className={styleObj.wrapperDiv}>{this.state.configInfo.Device_SipSupport.value !== '0' ? '是' : '否'}</div>
                                     {/* 下拉框 */}
                                 </div>
                                 <div className={styleObj.formItem}>
@@ -269,11 +265,13 @@ class ParamConfig extends Component {
                             </div>
                         </Panel>
                     </Collapse>
-                    <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
+                    <Link to={{pathname:'/main/Device/MCUDetail/ParamConfigEdit', state:this.state.baseInfo}}>
+                        <Button type="primary" className={styleObj.editBtn} onClick={this.toggleEdit}><FormattedMessage id="Edit"/></Button>
+                    </Link>
                 </div>
-                <div  style={{display:this.state.display_edit}}>
+                {/* <div  style={{display:this.state.display_edit}}>
                     <ParamConfigForm onSwitch={this.handleSwitch} data={this.state.configInfo} baseInfo={baseInfo}></ParamConfigForm>
-                </div>
+                </div> */}
             </div>)
         );
     }
