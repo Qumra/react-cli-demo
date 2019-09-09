@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Table, Icon, Dropdown, Button, Input, Menu, message } from 'antd';
 import cssObj from './McuManageList.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
-import {setLocale} from '@/config/i18n';
+import {setLocale, t} from '@/config/i18n';
+import {Link} from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ResizeableTitle from '@/components/ResizeableTitle';
-import DelModel from './DelModel';
-import Item from 'antd/lib/list/Item';
-const {Search} = Input;
+import DelModel from '../components/DelModel';
 
 class McuManageList extends Component {
     constructor(props) {
@@ -25,18 +24,22 @@ class McuManageList extends Component {
             selectedRowKeys: [],
             selectRecord:{},
             hasData:false,
+            emptyData:false,
             delModel:false,
-            delModalMore:false
+            delModalMore:false,
+            mcuDevices:[]
         };
     }
+    
     //渲染前调用  
     componentWillMount() {
         this.getMcuDevices();
     }
     //获取设备信息
     getMcuDevices = () =>{
+        let statusCodeSuccess = 200;
         let queryAllMcuCallBack = res => {
-            if (res.status !== 200) {
+            if (res.status !== statusCodeSuccess) {
                 console.log('请求失败');
             } else {
                 console.log('请求成功');
@@ -48,6 +51,7 @@ class McuManageList extends Component {
                         let ids = mcuDevices[i]._links.self.href.split('/');
                         let id = ids[ids.length - 1];
                         const item = {
+                            index:i,
                             key:id,
                             MCUName:mcuDevices[i].mcu.name,
                             deviceModel:mcuDevices[i].mcu.mcuType,
@@ -58,12 +62,13 @@ class McuManageList extends Component {
                     }
                     this.setState({
                         dataSource:data,
-                        hasData:true
+                        hasData:true,
+                        mcuDevices
                     });
                 }else{
                     this.setState({
                         dataSource:[],
-                        hasData:true
+                        emptyData:true
                     });
                 }
                 
@@ -80,9 +85,10 @@ class McuManageList extends Component {
     }
     // 删除表格中的一条数据
     Delete=(id)=>{
+        let statusCodeSuccess = 200;
         let delMcu = res => {
             console.log(res);
-            if (res.status !== 200) {
+            if (res.status !== statusCodeSuccess) {
                 console.log('请求失败');
             } else {
                 console.log(res.request.response);
@@ -98,6 +104,7 @@ class McuManageList extends Component {
     // meau的点击事件
     handleMenuClick=(e)=>{
         if(e.key === '5') {
+            // 删除
             this.setState({delModel:true});
            
         }
@@ -228,11 +235,15 @@ class McuManageList extends Component {
     }
     // 跳转到编辑页面
     pushEdit=(item)=>{
-        this.props.history.push({pathname:'/main/Device/MCUDetail', state:item});
+        let ids = this.state.mcuDevices[item.index]._links.self.href.split('/');
+        let id = ids[ids.length - 1];
+        let baseInfo = Object.assign(this.state.mcuDevices[item.index], {key:id});
+        console.log(this.state.mcuDevices[item.index]);
+        this.props.history.push({pathname:'/main/Device/MCUDetail/BasicInfoEdit', state:baseInfo});
     }
     // 点击表格的每条名称
     click = (item)=>{
-        this.props.history.push({pathname:'/main/Device/MCUDetail', state:item});
+        this.props.history.push({pathname:'/main/Device/MCUDetail',  state:this.state.mcuDevices[item.index]});
     }
     
     onChangeSearch=(e)=>{
@@ -254,54 +265,71 @@ class McuManageList extends Component {
             })
         }));
         return(
-
-            !this.state.hasData ? 'Loading' : (<div className={cssObj.mcuManage}>
-                <div className={cssObj.mcuContent}>
-                    <div className={cssObj.mcuContentTitle}>
-                        <FormattedMessage id="MCU_ListTitle"/>
-                        <Icon type="question-circle" theme="outlined" className={cssObj.questionIcon}/>
+            this.state.emptyData ? (
+                <Fragment>
+                    <div style={{textAlign:'center', marginTop:'30%'}}>
+                        <span style={{fontSize: 20,
+                            color:'#333333'}}
+                        >{t('Mcu_empty')}</span><br/><br/>
+                        <span>
+                            <Link to={
+                                {pathname: '/main/Device/AddMcu'}
+                            }
+                            >
+                                <Button type="primary" style={{width:'15%'}} >{t('Add')}</Button>
+                            </Link>
+                            {/* onClick={() => this.setState({userBatchModal:true})} */}
+                            <Button type="default"  style={{marginLeft:'8%', width:'15%'}}>{t('import')}</Button></span>
                     </div>
-                    <div className={cssObj.mcuContentMid}>
-                        <div className={cssObj.mcuContentMidpadding}>
-                            <div className={cssObj.mcuContentMidHeader}>
-                                <div className={cssObj.btnGroup}>
-                                    <Button type="primary" className={cssObj.addBtn} onClick={this.pushAdd}><FormattedMessage id="Add"/></Button>
-                                    <Button 
-                                        className={cssObj.delBtn}
-                                        onClick={()=>hasSelected ? this.setState({delModalMore:true}) : message.info(intl.formatMessage({id: 'selectMcu'}))}
-                                    ><FormattedMessage id="Delete"/></Button>
-                                    <Dropdown overlay={this.menuBtn}>
-                                        <Button><FormattedMessage id="More"/></Button>
-                                    </Dropdown>
+                    {/* <DataBatchModal flag="user" dataBatchModal={this.state.userBatchModal} showDataBatchModal={this.showUserBatchModal} /> */}
+                </Fragment>) : (
+                !this.state.hasData ? 'Loading' : (<div className={cssObj.mcuManage}>
+                    <div className={cssObj.mcuContent}>
+                        <div className={cssObj.mcuContentTitle}>
+                            <FormattedMessage id="MCU_ListTitle"/>
+                            <Icon type="question-circle" theme="outlined" className={cssObj.questionIcon}/>
+                        </div>
+                        <div className={cssObj.mcuContentMid}>
+                            <div className={cssObj.mcuContentMidpadding}>
+                                <div className={cssObj.mcuContentMidHeader}>
+                                    <div className={cssObj.btnGroup}>
+                                        <Button type="primary" className={cssObj.addBtn} onClick={this.pushAdd}><FormattedMessage id="Add"/></Button>
+                                        <Button 
+                                            className={cssObj.delBtn}
+                                            onClick={()=>hasSelected ? this.setState({delModalMore:true}) : message.info(intl.formatMessage({id: 'selectMcu'}))}
+                                        ><FormattedMessage id="Delete"/></Button>
+                                        <Dropdown overlay={this.menuBtn}>
+                                            <Button><FormattedMessage id="More"/></Button>
+                                        </Dropdown>
+                                    </div>
+                                    <div >
+                                        <Input
+                                            className={cssObj.searchInput}
+                                            placeholder={this.props.intl.formatMessage({id: 'MCU_MCUName'})}
+                                            prefix={<Icon type="search" className={cssObj.searchIcon}/>}
+                                            onChange={this.onChangeSearch}
+                                        />
+                                    </div>
                                 </div>
-                                <div >
-                                    <Input
-                                        className={cssObj.searchInput}
-                                        placeholder={this.props.intl.formatMessage({id: 'MCU_MCUName'})}
-                                        prefix={<Icon type="search" className={cssObj.searchIcon}/>}
-                                        onChange={this.onChangeSearch}
-                                    />
-                                </div>
+                                <Table  
+                                    rowSelection={rowSelection} 
+                                    columns={columns} 
+                                    components={this.components}
+                                    dataSource={this.state.dataSource} 
+                                    pagination={{defaultCurrent:1, 
+                                        total:this.state.dataSource.length, 
+                                        showSizeChanger:true, 
+                                        showTotal :(total) => `Total ${total} items`,
+                                        showQuickJumper:true}}
+                                    size="small"
+                                    onRow={this.onClickRow}
+                                />
+                                <DelModel delModel={this.state.delModel} showDeleteConfirm={this.showDeleteConfirm}/>
+                                <DelModel delModel={this.state.delModalMore} showDeleteConfirm={this.showDeleteConfirmMore}/>
                             </div>
-                            <Table  
-                                rowSelection={rowSelection} 
-                                columns={columns} 
-                                components={this.components}
-                                dataSource={this.state.dataSource} 
-                                pagination={{defaultCurrent:1, 
-                                    total:this.state.dataSource.length, 
-                                    showSizeChanger:true, 
-                                    showTotal :(total) => `Total ${total} items`,
-                                    showQuickJumper:true}}
-                                size="small"
-                                onRow={this.onClickRow}
-                            />
-                            <DelModel delModel={this.state.delModel} showDeleteConfirm={this.showDeleteConfirm}/>
-                            <DelModel delModel={this.state.delModalMore} showDeleteConfirm={this.showDeleteConfirmMore}/>
                         </div>
                     </div>
-                </div>
-            </div>)
+                </div>))
         );
     }
 }
