@@ -506,3 +506,5 @@ class McuResouce extends Component {
 
 }
 export default injectIntl(McuResouce);
+
+ Body = [{"videoResourceUsage":0.0,"audioResourceUsage":0.0,"time":"2019-10-16 09:25:00.0"},{"videoResourceUsage":0.0,"audioResourceUsage":0.0,"time":"2019-10-16 09:40:00.0"},{"videoResourceUsage":0.0,"audioResourceUsage":0.0,"time":"2019-10-16 09:55:00.0"},
