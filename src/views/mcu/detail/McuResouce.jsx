@@ -3,9 +3,9 @@ import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
 import { Radio, DatePicker } from 'antd';
 import cssObj from './McuResouce.css';
-import {zh_CN_Device} from '@/locale/zh_CN';
-import {en_US_Device} from '@/locale/en_US';
-import {setLocale} from '@/config/i18n';
+import { zh_CN_Device } from '@/locale/zh_CN';
+import { en_US_Device } from '@/locale/en_US';
+import { setLocale, t } from '@/config/i18n';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
@@ -48,14 +48,11 @@ function mock(count) {
 class McuResouce extends Component {
     constructor(props) {
         super(props);
-        setLocale('zh-CN', zh_CN_Device);
-        setLocale('en-US', en_US_Device);
         this.state = {
-            // id:props.location.state.id,
+            id:props.location.state ? props.location.state.id  : '',
             xType: 'days',
             datas:[],
-            hasData:true,
-            emptyData:true
+            emptyData:false
         };
     }
 
@@ -69,27 +66,23 @@ class McuResouce extends Component {
         this.setState({
             datas : mock(dataCnt)
         });
-        // let resouceCallback = res => {
-        //     console.log(res);
-        //     if(res.data === '') {
-        //         this.setState({
-        //             emptyData:true
-        //         });
-        //     }
-        //     if (res.status !== statusCodeSuccess) {
-        //         console.log('请求失败');
-        //         this.setState({
-        //             hasData:true
-        //         });
-        //     } else {
-        //         console.log('请求成功');
-        //         console.log(res.data);
-        //         this.setState({
-        //             datas: res.data,
-        //             hasData:true
-        //         });
-        //     }
-        // };
+        let resouceCallback = res => {
+            console.log(res);
+            if(res.data === '') {
+                this.setState({
+                    emptyData:true
+                });
+            }
+            if (res.status !== statusCodeSuccess) {
+                console.log('请求失败');
+            } else {
+                console.log('请求成功');
+                console.log(res.data);
+                this.setState({
+                    datas: res.data
+                });
+            }
+        };
         // let data = { id:this.state.id, sortType: type };
         // csm.registOpCallback('queryResource', resouceCallback);
         // csm.queryResource(data);
@@ -122,7 +115,7 @@ class McuResouce extends Component {
                 }
             },
             dataZoom: [{
-                startValue: new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours() + 1)
+                startValue: new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours())
             }, {
                 type: 'inside'
             }],
@@ -132,7 +125,8 @@ class McuResouce extends Component {
             xAxis: [
                 {
                     type: 'time',
-                    splitNumber: 20
+                    splitNumber: 20,
+                    interval:3600 * 4 * 1000
                 }],
             yAxis: [{
                 type: 'value',
@@ -150,8 +144,8 @@ class McuResouce extends Component {
                     type: 'line',
                     // showSymbol:false,
                     showAllSymbol: true,
-                    symbolSize: 3 | 6,
-                    smooth: true,
+                    symbolSize: 1 | 2,
+                    smooth: false, //true 为平滑曲线，false为直线
                     hoverAnimation:true,
                     data: (() => {
                         switch (this.state.xType) {
@@ -160,7 +154,7 @@ class McuResouce extends Component {
                            
                             let len = 0;
                             while (len < this.state.datas.length) {
-                                result.push([new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours() + 1, len * 15), this.state.datas[len].videoResourceUsage.toFixed(2) * 100]);
+                                result.push([new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours(), len * 15), this.state.datas[len].videoResourceUsage.toFixed(2) * 100]);
                                 // result.push([new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours() + 1, len * 15), datas[len].videoResourceUsage.toFixed(2) * 100, datas[len].videoResourceUsage.toFixed(2) * 100]);
                                 // result.push(time.getMonth() + 1 + '月' + time.getDate() + '日' + time.getHours() + '点');
                                 len++;
@@ -210,7 +204,27 @@ class McuResouce extends Component {
                             width: 4
                         }
                     },
-                   
+                    markLine: {
+                        data: [
+                            {
+                                name: 'Y 轴值为 100 的水平线',
+                                yAxis: 85,
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'red' // 0% 处的颜色
+                                    }, {
+                                        offset: 1, color: 'blue' // 100% 处的颜色
+                                    }],
+                                    global: false // 缺省为 false
+                                }
+                            }
+                        ]
+                    },
                     itemStyle: {
                         normal: {
                             borderWidth: 3,
@@ -439,58 +453,56 @@ class McuResouce extends Component {
         });
     }
     render() {
+        const { intl } = this.props;
         return (
-            !this.state.hasData ? (!this.state.emptyData ? 
-                <div style={{margin:'auto', textAlign:'center', marginTop:'15%'}}>
-                    <h2><FormattedMessage id="MCU_Loading"/></h2></div> :
-                <div style={{margin:'auto', textAlign:'center', marginTop:'15%'}}>
-                    <h2>资源还未上报，请先上报资源</h2></div>) : 
-                (<div>
-                    <div className={cssObj.title}>
-                        <span style={{ color: '#333333', fontSize: '14px', marginRight: 25 }}>统计时段</span>
-                        <RadioGroup value={this.state.timeSlot} >
-                            {/* onChange={this.onTimeSlotChange} */}
-                            <Radio value={1}>昨天</Radio>
-                            <Radio value={2}>最近7天</Radio>
-                            <Radio value={3}>最近30天</Radio>
-                            <Radio value={4}>自定义时间
-                                <RangePicker
-                                    style={{ marginLeft: 20 }}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledRangeTime}
-                                    showTime={{
-                                        hideDisabledOptions: true,
-                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')]
-                                    }}
-                                    format="YYYY-MM-DD HH:mm:ss"
-                                /></Radio>
-                        </RadioGroup>
-                    </div>
-                    <div className={cssObj.btnGroup}>
-                        <Radio.Group defaultValue={this.state.xType} onChange={this.handleTimeChange} buttonStyle="solid">
-                            <Radio.Button value="days">按天</Radio.Button>
-                            <Radio.Button value="weeks">按周</Radio.Button>
-                            <Radio.Button value="months">按月</Radio.Button>
-                        </Radio.Group>
-                    </div>
-                    <div>
-                        <ReactEcharts
-                            option={this.getTest()}
-                            style={{ height: '425px', width: '1500px' }}
-                            className="react_for_echarts"
-                        />
-                    </div>
-                    <div>
-                        {/* <ReactEcharts
+            this.state.emptyData ? (<div style={{height:680}}>
+                <h1>{t('MCU_resourceTip')}</h1>
+            </div>) : (<div>
+                <div className={cssObj.title}>
+                    <span style={{ color: '#333333', fontSize: '14px', marginRight: 25 }}>统计时段</span>
+                    <RadioGroup value={this.state.timeSlot} >
+                        {/* onChange={this.onTimeSlotChange} */}
+                        <Radio value={1}>{t('LastDay')}</Radio>
+                        <Radio value={2}>{t('LastWeek')}</Radio>
+                        <Radio value={3}>{t('LastMonth')}</Radio>
+                        <Radio value={4}>{t('AnyDay')}
+                            <RangePicker
+                                style={{ marginLeft: 20 }}
+                                disabledDate={this.disabledDate}
+                                disabledTime={this.disabledRangeTime}
+                                showTime={{
+                                    hideDisabledOptions: true,
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')]
+                                }}
+                                format="YYYY-MM-DD HH:mm:ss"
+                            /></Radio>
+                    </RadioGroup>
+                </div>
+                <div className={cssObj.btnGroup}>
+                    <Radio.Group defaultValue={this.state.xType} onChange={this.handleTimeChange} buttonStyle="solid">
+                        <Radio.Button value="days">{t('OneDay')}</Radio.Button>
+                        <Radio.Button value="weeks">{t('OneWeek')}</Radio.Button>
+                        <Radio.Button value="months">{t('OneMonth')}</Radio.Button>
+                    </Radio.Group>
+                </div>
+                <div>
+                    <ReactEcharts
+                        option={this.getTest()}
+                        style={{ height: '425px', width: '1500px' }}
+                        className="react_for_echarts"
+                    />
+                </div>
+                <div>
+                    {/* <ReactEcharts
                         option={this.getOptionAudio()}
                         style={{ height: '425px', width: '1500px' }}
                         className="react_for_echarts"
                     /> */}
-                    </div>
+                </div>
 
-                </div>)
+            </div>)
         );
     }
 
 }
-export default McuResouce;
+export default injectIntl(McuResouce);
