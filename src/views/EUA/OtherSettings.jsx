@@ -4,6 +4,17 @@ import {Form, Input, Button, Select, Tooltip, Icon } from 'antd';
 import cssObj from './EUADetail.css';
 const FormItem = Form.Item;
 const {Option} = Select;
+ checkNodeName=(rule, val, callback)=>{
+            let reg = /^[<>'"&\\/+-\\]*$/;
+            if (!val) {
+                callback();
+            }else if(!reg.test(val)) {
+                callback();
+            }else{
+                callback(t('node_rule'));
+            }
+            
+        }
 const OtherSettings = Form.create()(
     class extends Component {
         render() {
