@@ -1,6 +1,6 @@
 // 共享组织
 import React, { Component } from 'react';
-import {Form, Switch, Button, Tree, message } from 'antd';
+import {Form, Switch, Button, Tree, message, Tooltip, Icon, Spin } from 'antd';
 import cssObj from './EUADetail.css';
 import {zh_CN_Device} from '@/locale/zh_CN';
 import {en_US_Device} from '@/locale/en_US';
@@ -30,6 +30,8 @@ const ShareNode = Form.create()(
                 // ])
                 treeData:[],
                 selectData:[],
+                checkedKeys:[],
+                treeFlag:false,
                 hasData:false,
                 treeNode:{},
                 switchFlag:false
@@ -39,6 +41,14 @@ const ShareNode = Form.create()(
         componentWillMount() {//渲染前调用  
             this.getSelectOrg();
         
+        }
+        componentWillReceiveProps(nextProps) {
+            if(nextProps.tabFlag === '4' && this.props.tabFlag !== nextProps.tabFlag) {
+                this.setState({
+                    hasData:false
+                });
+                this.getSelectOrg();
+            }
         }
         getShareAllOrg = ()=>{
             let statusCodeSuccess = 200;
@@ -50,7 +60,8 @@ const ShareNode = Form.create()(
                     console.log(res.data.organizationResultBeanList);
                     this.setState({
                         treeData:this.convert(res.data.organizationResultBeanList),
-                        hasData:true
+                        hasData:true,
+                        treeFlag:true
                     });
                     
                 }
@@ -69,9 +80,15 @@ const ShareNode = Form.create()(
                     let {data} = res.data;
                     let selectIndex = findElem(data, 'configName', 'SHARED_OU_LIST');
                     let switchIndex = findElem(data, 'configName', 'IS_CLOSE_QUERY_RIGHT_CONTROL');
+                    if(data[switchIndex].configValue === '1') {
+                        this.setState({
+                            switchFlag:true
+                        });
+                    }
                     this.setState({
                         selectData:data[selectIndex],
-                        switchData:data[switchIndex]
+                        switchData:data[switchIndex],
+                        checkedKeys:data[selectIndex].configValue ? data[selectIndex].configValue.split(',') : []
                         
                     });
                     this.getShareAllOrg();
@@ -91,12 +108,18 @@ const ShareNode = Form.create()(
                     console.log(res.data.organizationResultBeanList);
                     let {treeNode} = this.state;
                     treeNode.children = this.convert(res.data.organizationResultBeanList);
+                    // let data = this.state.expandKey;
+                    // data.push(id);
                     this.setState({
-                        treeData: [...this.state.treeData]
+                        treeData: [...this.state.treeData],
+                        treeFlag:true
                     });
                     callback();
                 }
             };
+            this.setState({
+                treeFlag:false
+            });
             csm.registOpCallback('queryEuaShareOrg', queryEuaShareOrgcallback);
             csm.queryEuaShareOrg(id);
         }
@@ -104,7 +127,7 @@ const ShareNode = Form.create()(
             console.log(e);
      
             this.setState({
-                switchFlag:!e
+                switchFlag:e
             });
             
         };
@@ -113,7 +136,8 @@ const ShareNode = Form.create()(
         convert = datas => {
             let newDatas = [];
             datas.forEach(e => {
-                newDatas.push({ title: e.ou, key: e.entryUuid, isLeaf:e.ou !== 'VC' && e.orgNameList.length === 1 });
+                // newDatas.push({ title: e.ou, key: e.entryUuid, isLeaf:e.ou !== 'VC' && e.orgNameList.length === 1 });
+                newDatas.push({ title: e.ou, key: e.entryUuid, isLeaf:true});
             });
             return newDatas;
         }
@@ -148,34 +172,46 @@ const ShareNode = Form.create()(
                 }
             });
         };
-        onLoadData = treeNode =>
-            new Promise(resolve => {
+        onLoadData =(key, treeNode) =>{
+           
+            return  new Promise(resolve => {
                 console.log(treeNode);
+                let {node} = treeNode;
                 this.setState({
-                    treeNode:treeNode.props.dataRef
+                    treeNode:node.props.dataRef
+                    
                 });
-                if (treeNode.props.children) {
+                if (node.props.children) {
                     resolve();
                     return;
                 }
-                this.getShareOneOrg(treeNode.props.dataRef.key, resolve);
+              
+                this.getShareOneOrg(node.props.dataRef.key, resolve);
             });
+        };
+        // onSelect=(selectedKeys, info)=>{
+        //     console.log(info);
+        // }
         /*
   * 动态构建机构树形菜单
   * */
         renderTreeNodes = data =>
+        // checked={this.state.selectData.configValue.split(',').includes(item.key)}
             data.map(item => {
                 if (item.children) {
                     return (
-                        <TreeNode title={item.title} key={item.key} dataRef={item} checked={this.state.selectData.configValue.split(',').includes(item.key)}>
+                        <TreeNode title={item.title} key={item.key} dataRef={item} >
                             {this.renderTreeNodes(item.children)}
                         </TreeNode>
                     );
                 }
-                return <TreeNode key={item.key} {...item} dataRef={item} checked={this.state.selectData.configValue.split(',').includes(item.key)}/>;
+                return <TreeNode key={item.key} {...item} dataRef={item} />;
             });
             onCheck=(checkedKeys)=>{
                 console.log(checkedKeys);
+                this.setState({
+                    checkedKeys
+                });
                 let {selectData} = this.state;
                 selectData.configValue = checkedKeys.join(',');
             };
@@ -183,7 +219,7 @@ const ShareNode = Form.create()(
             render() {
                 const { getFieldDecorator } = this.props.form; 
                 const { intl } = this.props;
-                console.log(this.state.switchFlag);
+                // console.log(this.state.expandKey);
                 return (
                     !this.state.hasData ? 'loading' : (<div className={cssObj.shareNode}>
                         <Form onSubmit={this.handleSubmit}>
@@ -198,23 +234,28 @@ const ShareNode = Form.create()(
                                     })(
                                         <Switch  onChange={this.onswitchChange}/>
                                     )}
-                                
+                                    <Tooltip title={intl.formatMessage({id:'EUA_RestrictQueryTip'})}>
+                                        <Icon type="question-circle-o"/>
+                                    </Tooltip>
                                 </FormItem>
-                                <span><FormattedMessage id="EUA_RestrictQueryTip"/></span>
+                                {/* <span><FormattedMessage id="EUA_RestrictQueryTip"/></span> */}
                             </div>
+                           
                             <div className={cssObj.formBody}>
-                                <Tree showLine checkable 
-                                    loadData={this.onLoadData}  
-                                    defaultCheckedKeys={this.state.selectData.configValue.split(',')}
-                                    onCheck={this.onCheck}
-                                    disabled={this.state.switchFlag}
-                                    // checkedKeys={this.state.selectData.configValue.split(',')}
-                                >{this.renderTreeNodes(this.state.treeData)}</Tree>
+                                {this.state.treeFlag ?
+                                    <Tree showLine 
+                                    // expandedKeys={this.state.expandKey}
+                                    // loadData={this.onLoadData}  
+                                        defaultExpandAll
+                                        onSelect={this.onLoadData}
+                                        onCheck={this.onCheck}
+                                        checkable={this.state.switchFlag}
+                                        checkedKeys={this.state.checkedKeys}
+                                    >{this.renderTreeNodes(this.state.treeData)}</Tree> : <div  style={{margin:'30% 45%'}}><Spin tip="Loading..." spinning={true} size="large"/></div>}
                             </div>
                             <div className={cssObj.formFooter}>
                                 <div className={cssObj.btnGroup}>
                                     <Button type="primary" htmlType="submit" className={cssObj.saveBtn}><FormattedMessage id="Save"/></Button>
-                                    <Button><FormattedMessage id="Cancel"/></Button>
                                 </div>
                             </div>
                         </Form>
